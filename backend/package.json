@@ -1,19 +1,19 @@
 {
   "name": "backend",
-  "version": "1.0.0",
-  "description": "Backend to SmartMeal",
-  "main": "index.js",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./bin/www"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/cs130-fall2020-team5/smartmeal.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/cs130-fall2020-team5/smartmeal/issues"
-  },
-  "homepage": "https://github.com/cs130-fall2020-team5/smartmeal#readme"
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "dotenv": "^8.2.0",
+    "express": "~4.16.1",
+    "http-errors": "~1.6.3",
+    "jsonwebtoken": "^8.5.1",
+    "mongo": "^0.1.0",
+    "morgan": "~1.9.1"
+  }
 }
