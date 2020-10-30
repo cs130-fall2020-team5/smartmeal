@@ -1,0 +1,26 @@
+{
+  "name": "smartmeal",
+  "version": "1.0.0",
+  "description": "Meal planning web app that shows you the nutritional and budgetary impact of your planned meals",
+  "main": "index.js",
+  "scripts": {
+    "backend": "cd backend && npm run watch",
+    "frontend": "cd frontend && npm start",
+    "start": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "postinstall": "cd backend && npm install && cd ../frontend && npm install",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cs130-fall2020-team5/smartmeal.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cs130-fall2020-team5/smartmeal/issues"
+  },
+  "homepage": "https://github.com/cs130-fall2020-team5/smartmeal#readme",
+  "devDependencies": {
+    "concurrently": "^5.3.0"
+  }
+}

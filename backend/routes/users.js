@@ -27,7 +27,7 @@ router.post("/login", function (req, res, next) {
     .toArray()
     .then((doc) => {
       if (doc.length < 1) {
-        throw "unauthorized";
+        throw "unknown user";
       }
       return bcrypt.compare(password, doc[0].password);
     })
@@ -68,6 +68,7 @@ router.get("/example", function (req, res, next) {
     .then((tokenInfo) => {
       // now that we know which user sent this request, do the required logic here
       // e.g. get meal plan for this authenticated user (in another route, of course)
+      res.json({ message: "authenticated" });
       res.status(200);
       res.end();
     })
