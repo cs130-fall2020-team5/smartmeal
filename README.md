@@ -11,6 +11,7 @@ Setup instructions:
 To run: 
 1. Start mongo: `mongod`
 2. Start both components: `cd frontend/ && npm start` and `cd backend/ && npm start`
+   * NOTE: backend doesn't have hot reload yet; should use nodemon eventually
 
 Test backend server:
 ```
