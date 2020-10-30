@@ -7,6 +7,7 @@ Directory setup:
 
 Setup instructions:
 1. Run `npm install` in `frontend/` and `backend/` separately
+2. Load sample database with `cd backend/ && mongo < db/load_db.sh`
 
 To run: 
 1. Start mongo: `mongod`
