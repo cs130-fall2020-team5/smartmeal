@@ -1,0 +1,19 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Backend to SmartMeal",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cs130-fall2020-team5/smartmeal.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cs130-fall2020-team5/smartmeal/issues"
+  },
+  "homepage": "https://github.com/cs130-fall2020-team5/smartmeal#readme"
+}
