@@ -52,8 +52,7 @@ router.post("/login", function (req, res, next) {
       );
     })
     .then((token) => {
-      // set the cookie
-      res.cookie("jwt", token);
+      res.json({ "jwt": token });
       res.status(200);
       res.end();
     })

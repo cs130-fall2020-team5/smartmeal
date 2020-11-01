@@ -1,19 +1,19 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom";
+import reportWebVitals from "./reportWebVitals";
 
 // components
-import Routes from './routes';
+import Routes from "./routes";
 
 // styles
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './styles/index.css';
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./styles/index.css";
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Routes />
-  </React.StrictMode>,
-  document.getElementById('root')
+    <React.StrictMode>
+        <Routes />
+    </React.StrictMode>,
+    document.getElementById("root")
 );
 
 // If you want to start measuring performance in your app, pass a function

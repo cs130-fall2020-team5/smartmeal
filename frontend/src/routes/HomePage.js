@@ -7,7 +7,7 @@ import Login from "../components/Login";
 // context
 import { UserContext } from "../context/user";
 
-export default function MainPage() {
+export default function HomePage() {
     const { isLoggedIn } = useContext(UserContext);
 
     return (

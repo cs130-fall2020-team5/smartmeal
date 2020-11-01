@@ -1,0 +1,49 @@
+{
+    "weeklyPlans": [
+        { 
+            "weekStart": 1604189241, 
+            "monday": {
+                "breakfast": [
+                    {
+                        "name": "cereal",
+                        "ingredientList": [ 
+                            {
+                                "name": "milk",
+                                "price": 2.39,
+                                "amount": 100,
+                                "unit": "ml",
+                                "ingredientNutrition": {
+                                    "calorieCount": 100,
+                                    "carbCount": 100,
+                                    "fatCount": 50,
+                                    "proteinCount": 2
+                                }
+                            },
+                            {
+                                "name": "cereal",
+                                "price": 3.10,
+                                "amount": 150,
+                                "unit": "g",
+                                "ingredientNutrition": {
+                                    "calorieCount": 300,
+                                    "carbCount": 150,
+                                    "fatCount": 40,
+                                    "proteinCount": 10
+                                }
+                            }
+                        ],
+                        "servings": 1
+                    }
+                ],
+                "lunch": [
+                    {
+                    }
+                ],
+                "dinner": [
+                    {
+                    }
+                ]
+            } 
+        }],
+    "userRecipes": [{}]
+}
