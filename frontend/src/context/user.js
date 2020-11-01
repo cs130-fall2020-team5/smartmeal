@@ -15,7 +15,7 @@ function UserProvider({ children }) {
     useEffect(() => {
         console.log("Checking if the user is still authenticated");
         if (loginToken) {
-            if (jwt.decode(loginToken).exp < new Date().getTime()) {
+            if (new Date(jwt.decode(loginToken).exp * 1000) > new Date()) {
                 localStorage.setItem(SESSION_JWT, loginToken);
                 setIsLoggedIn(true);
             } else {
