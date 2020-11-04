@@ -8,11 +8,7 @@ import "./styles.css";
 import MealPeriodBox from "./MealPeriodBox";
 import DailySummary from "./DailySummary";
 
-// sample data
-import SampleMealPlan from "../sample-data/plan.json";
-
-export default function MealPlanner() {
-    const currentPlan = SampleMealPlan.weeklyPlans[0]; // sample data
+export default function MealPlanner({ plan }) {
     return (
         <Container id="meal-plan">
             <Row>
@@ -41,7 +37,7 @@ export default function MealPlanner() {
             <p className="mealtime-label">Breakfast</p>
             <Row>
                 <Col>
-                    <MealPeriodBox meals={currentPlan.monday.breakfast} />
+                    <MealPeriodBox meals={plan.monday.breakfast} />
                 </Col>
                 <Col>
                     <MealPeriodBox />
@@ -113,7 +109,7 @@ export default function MealPlanner() {
             <p className="mealtime-label">Daily Summary</p>
             <Row>
                 <Col>
-                    <DailySummary day={currentPlan.monday} />
+                    <DailySummary day={plan.monday} />
                 </Col>
                 <Col>
                     <DailySummary day={null} />

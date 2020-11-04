@@ -63,10 +63,14 @@ router.post("/login", function (req, res, next) {
 });
 
 router.get("/example", function (req, res, next) {
-  isAuthenticated(req.cookies.jwt)
+  isAuthenticated(req)
     .then((tokenInfo) => {
+
       // now that we know which user sent this request, do the required logic here
       // e.g. get meal plan for this authenticated user (in another route, of course)
+      var username = tokenInfo.usr;
+      console.log(username);
+      
       res.json({ message: "authenticated" });
       res.status(200);
       res.end();
@@ -77,7 +81,8 @@ router.get("/example", function (req, res, next) {
     });
 });
 
-function isAuthenticated(token) {
+function isAuthenticated(req) {
+  var token = req.header("Authorization").split(" ")[1];
   return util.promisify(jwt.verify)(
     token,
     process.env.JWT_KEY

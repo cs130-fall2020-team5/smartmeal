@@ -49,8 +49,25 @@ function UserProvider({ children }) {
             })
     }
 
+    function testMethod() {
+        axios({
+                method: "GET",
+                url: 'http://localhost:3000/users/example',
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + loginToken
+                }
+            })
+            .then(res => {
+                //
+            })
+            .catch(err => {
+                //
+            })
+    }
+
     return (
-        <UserContext.Provider value={{isLoggedIn, errorMessage, attemptLogin}} >
+        <UserContext.Provider value={{isLoggedIn, errorMessage, attemptLogin, testMethod}} >
             { children }
         </UserContext.Provider>
     )

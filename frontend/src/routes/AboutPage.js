@@ -1,6 +1,6 @@
 import React from "react";
 
-import './AboutPage.css'
+import './styles.css'
 
 export default function AboutPage() {
     return (

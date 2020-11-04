@@ -9,6 +9,12 @@ import Routes from "./routes";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles/index.css";
 
+// icons
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faBars } from '@fortawesome/free-solid-svg-icons'
+ 
+library.add(faBars);
+
 ReactDOM.render(
     <React.StrictMode>
         <Routes />
