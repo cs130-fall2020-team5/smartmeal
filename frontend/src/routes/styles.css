@@ -2,6 +2,10 @@
     margin: 50px;
 }
 
+.color-nav {
+  background-color: #2d4059;
+}
+
 #wrapper {
     overflow-x: hidden;
 }

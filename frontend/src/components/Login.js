@@ -14,7 +14,7 @@ export default function LoginPage() {
     }
 
     return (
-        <div>
+        <div className="Login">
             <Form onSubmit={login}>
                 <Form.Group>
                     <Form.Label>Username</Form.Label>
@@ -27,7 +27,7 @@ export default function LoginPage() {
                 </Form.Group>
 
                 <Button variant="primary" type="submit">
-                    Submit
+                    Log In
                 </Button>
                 { errorMessage }
             </Form>

@@ -29,11 +29,22 @@
 
 .day-label {
     color: #5f5f5f;
+    text-align: center;
 }
 
 .nutrition-information {
     margin-bottom: 0px;
 }
+
+.Login {
+  padding: 60px 0;
+}
+
+.Login form {
+  margin: 0 auto;
+  max-width: 320px;
+}
+
 
 #meal-plan {
     /* width: 15000px; */
