@@ -13,25 +13,25 @@ export default function MealPlanner({ plan }) {
         <Container id="meal-plan">
             <Row>
                 <Col>
-                    <span className="day-label">Monday</span>
+                    <span className="day-label">Sunday</span>
                 </Col>
                 <Col>
                     <span className="day-label">Monday</span>
                 </Col>
                 <Col>
-                    <span className="day-label">Monday</span>
+                    <span className="day-label">Tuesday</span>
                 </Col>
                 <Col>
-                    <span className="day-label">Monday</span>
+                    <span className="day-label">Wednesday</span>
                 </Col>
                 <Col>
-                    <span className="day-label">Monday</span>
+                    <span className="day-label">Thursday</span>
                 </Col>
                 <Col>
-                    <span className="day-label">Monday</span>
+                    <span className="day-label">Friday</span>
                 </Col>
                 <Col>
-                    <span className="day-label">Monday</span>
+                    <span className="day-label">Saturday</span>
                 </Col>
             </Row>
             <p className="mealtime-label">Breakfast</p>
