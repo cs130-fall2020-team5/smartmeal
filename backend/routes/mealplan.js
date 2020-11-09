@@ -1,7 +1,9 @@
 var express = require("express");
 var createError = require("http-errors");
 var util = require("util");
+var jwt = require("jsonwebtoken");
 var router = express.Router();
+var { ObjectId }  = require("mongodb");
 
 var db = require("../db/db");
 
@@ -13,11 +15,10 @@ router.get("/", function (req, res, next) {
 	    db.get()
 		.collection("mealplans")
 		.find({ username: username })
+		.toArray()
 		.then((mealplans) => {
-		    if (mealplans.length < 1) {
-			throw "unknown user";
-		    }
-		    res.json(mealplans);
+			res.json(mealplans);
+			res.status(200).end();
 		})
 		.catch((err) => res.status(400).json('Error: ' + err));
 	})
@@ -41,7 +42,13 @@ router.post("/", function (req, res, next) {
 			};
 	    db.get()
 		.collection("mealplans")
-		.insert(entry);
+		.insertOne(entry)
+		.then(() => {
+			res.status(201).end();
+		})
+		.catch((err) => {
+			res.status(500).json("Error inserting into db: " + err);
+		});
 	})
 	.catch((err) => {res.status(400).json('Error: ' + err)});
 });
@@ -52,31 +59,30 @@ router.put("/:mealplanid", function (req, res, next) {
 	.then((tokenInfo) => {
 	    let mealplanid = req.params.mealplanid;
 	    let username = tokenInfo.usr;
-	    //let startdate = startdate;
-	    let sunday = req.body.sunday;
-	    let monday = req.body.monday;
-	    let tuesday = req.body.tuesday;
-	    let wednesday = req.body.wednesday;
-	    let thursday = req.body.thursday;
-	    let friday = req.body.friday;
-	    let saturday = req.body.saturday;
-	    let updates = {
-		sunday: sunday,
-		monday: monday,
-		tuesday: tuesday,
-		wednesday: wednesday,
-		thursday: thursday,
-		friday: friday,
-		saturday: saturday
-	    };
+		//let startdate = startdate;
+		let updates = {};
+		if (req.body.sunday) updates["sunday"] = JSON.parse(req.body.sunday);
+		if (req.body.monday) updates["monday"] = JSON.parse(req.body.monday);
+		if (req.body.tuesday) updates["tuesday"] = JSON.parse(req.body.tuesday);
+		if (req.body.wednesday) updates["wednesday"] = JSON.parse(req.body.wednesday);
+		if (req.body.thursday) updates["thursday"] = JSON.parse(req.body.thursday);
+		if (req.body.friday) updates["friday"] = JSON.parse(req.body.friday);
+		if (req.body.saturday) updates["saturday"] = JSON.parse(req.body.saturday);
 	    db.get()
 		.collection("mealplans")
-		.findOneAndUpdate({"_id": mealplanid}, {$set: updates});
-	    db.get().collection("mealplans")
-		.find({username: username})
-		.then((mealplans) => {
-		    res.json(mealplans);
-		});
+		.findOneAndUpdate({ _id: ObjectId(mealplanid) }, {$set: updates})
+		.then((s) => {
+			db.get().collection("mealplans")
+			.find({username: username})
+			.toArray()
+			.then((mealplans) => {
+				res.json(mealplans);
+				res.status(201).end();
+			});
+		})
+		.catch(err => {
+			console.log(err);
+		})
 	})
 	.catch((err) => {res.status(400).json('Error: ' + err)});
 });
