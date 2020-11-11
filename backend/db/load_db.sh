@@ -2,6 +2,8 @@ use SmartMeal;
 db.dropDatabase();
 use SmartMeal;
 db.createCollection("users");
+db.createCollection("mealplans");
+db.createCollection("recipes");
 
 # smallberg's password: software
 # eggert's password: engineering
