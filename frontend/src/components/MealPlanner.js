@@ -10,6 +10,8 @@ import DailySummary from "./DailySummary";
 
 export default function MealPlanner({ plan }) {
     return (
+        <>
+        { plan &&
         <Container id="meal-plan">
             <Row>
                 <Col>
@@ -130,6 +132,7 @@ export default function MealPlanner({ plan }) {
                     <DailySummary day={null} />
                 </Col>
             </Row>
-        </Container>
+        </Container> }
+        </>
     );
 }
