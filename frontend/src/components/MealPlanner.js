@@ -1,14 +1,21 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 
 // styles
 import "./styles.css";
 
+//context
+import { PopupContext } from "../context/popup-context";
+
 // components
 import MealPeriodBox from "./MealPeriodBox";
 import DailySummary from "./DailySummary";
+import RecipePopup from './RecipePopup';
+
+
 
 export default function MealPlanner({ plan }) {
+    const { showRecipePopup } = useContext(PopupContext);
     return (
         <Container id="meal-plan">
             <Row>
@@ -130,6 +137,13 @@ export default function MealPlanner({ plan }) {
                     <DailySummary day={null} />
                 </Col>
             </Row>
+            <div>
+              {showRecipePopup ? (
+                <RecipePopup />
+              ) : (
+                null
+              )}
+            </div>
         </Container>
     );
 }

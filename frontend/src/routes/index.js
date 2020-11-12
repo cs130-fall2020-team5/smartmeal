@@ -46,6 +46,7 @@ export default function router() {
                             <Nav.Link href="https://github.com/cs130-fall2020-team5/smartmeal">GitHub</Nav.Link>
                         </Nav>
                         <Nav className="ml-auto">
+                            //Still must implement resetting user login auth
                             <Nav.Link as={Link} to="/login">Sign Out</Nav.Link>
                         </Nav>
                     </Navbar.Collapse>

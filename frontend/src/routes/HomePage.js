@@ -10,6 +10,7 @@ import Login from "../components/Login";
 
 // context
 import { UserContext } from "../context/user";
+import { PopupProvider } from "../context/popup-context";
 
 // sample data
 import SampleMealPlan from "../sample-data/plan.json";
@@ -21,6 +22,7 @@ export default function HomePage() {
     const currentPlan = SampleMealPlan.weeklyPlans[0]; // sample data
 
     return (
+      <PopupProvider>
         <div>
             {isLoggedIn ? (
                 <div className={`d-flex ${showMenu ? "" : "toggled"}`} id="wrapper">
@@ -50,5 +52,6 @@ export default function HomePage() {
             )}
             {/* <Button onClick={testMethod}>Test Button</Button> */}
         </div>
+        </PopupProvider>
     );
 }
