@@ -62,6 +62,47 @@ router.post("/login", function (req, res, next) {
     });
 });
 
+/* POST user creation */
+router.post("/new", function (req, res, next) {
+  let username = req.body.username;
+  let password = req.body.password;
+
+  if (username == undefined || password == undefined) {
+    next(createError(400));
+    return;
+  }
+
+  db.get()
+    .collection("users")
+    .find({ username: username })
+    .toArray()
+    .then((doc) => {
+
+      if (doc.length >= 1) {
+        throw "user already exists";
+      }
+
+      return bcrypt.hash(password, 10);
+    })
+    .then((hash) => {
+      var entry = { "username": username, "password": hash };
+
+      return db.get().collection("users").insertOne(entry, (err, res) => {
+        if (err) {
+          throw err;
+        }
+      });
+    })
+    .then((doc) => {
+      res.status(200);
+      res.end();
+    })
+    .catch((err) => {
+      res.status(401);
+      res.end();
+    });
+});
+
 router.get("/example", function (req, res, next) {
   isAuthenticated(req)
     .then((tokenInfo) => {
