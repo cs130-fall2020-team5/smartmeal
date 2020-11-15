@@ -17,6 +17,8 @@ import RecipePopup from './RecipePopup';
 export default function MealPlanner({ plan }) {
     const { showRecipePopup } = useContext(PopupContext);
     return (
+        <>
+        { plan &&
         <Container id="meal-plan">
             <Row>
                 <Col>
@@ -144,6 +146,6 @@ export default function MealPlanner({ plan }) {
                 null
               )}
             </div>
-        </Container>
+        </Container> }
     );
 }

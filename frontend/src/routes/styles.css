@@ -1,3 +1,24 @@
+#btn-create-plan {
+    background: #8acbfe;
+    color: #000000;
+    border: #8acbfe;
+    margin-left: 30px;
+    margin-right: 30px;
+    margin-top: 20px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+#btn-create-plan:focus {
+    background-color: #2d9bee;
+}
+
+/*
+    Sidebar CSS
+*/
+
 .main-text {
     margin: 50px;
 }

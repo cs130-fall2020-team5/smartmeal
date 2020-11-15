@@ -21,12 +21,14 @@ export default function DailySummary({ day }) {
         // const dinner = day.dinner;
 
         let price = 0, calories = 0, protein = 0, fat = 0;
-        for (const meal of breakfast) {
-            for (const ingredient of meal.ingredientList) {
-                price += ingredient.price;
-                calories += ingredient.ingredientNutrition.calorieCount;
-                protein += ingredient.ingredientNutrition.proteinCount;
-                fat += ingredient.ingredientNutrition.fatCount;
+        if (breakfast && breakfast.length > 1) {
+            for (const meal of breakfast) {
+                for (const ingredient of meal.ingredientList) {
+                    price += ingredient.price;
+                    calories += ingredient.ingredientNutrition.calorieCount;
+                    protein += ingredient.ingredientNutrition.proteinCount;
+                    fat += ingredient.ingredientNutrition.fatCount;
+                }
             }
         }
 

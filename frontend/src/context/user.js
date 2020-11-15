@@ -67,7 +67,7 @@ function UserProvider({ children }) {
     }
 
     return (
-        <UserContext.Provider value={{isLoggedIn, errorMessage, attemptLogin, testMethod}} >
+        <UserContext.Provider value={{isLoggedIn, errorMessage, attemptLogin, testMethod, loginToken}} >
             { children }
         </UserContext.Provider>
     )
