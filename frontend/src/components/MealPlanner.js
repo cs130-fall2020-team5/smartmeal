@@ -11,6 +11,7 @@ import { PopupContext } from "../context/popup-context";
 import MealPeriodBox from "./MealPeriodBox";
 import DailySummary from "./DailySummary";
 import RecipePopup from './RecipePopup';
+import Popup from './Popup';
 
 
 
@@ -141,11 +142,12 @@ export default function MealPlanner({ plan }) {
             </Row>
             <div>
               {showRecipePopup ? (
-                <RecipePopup />
+                <Popup />
               ) : (
                 null
               )}
             </div>
         </Container> }
+        </>
     );
 }
