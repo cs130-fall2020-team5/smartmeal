@@ -9,9 +9,12 @@ Meal planning web app that shows you the nutritional and budgetary impact of you
 1. Run `npm install` the root directory
 2. Load sample database with `cd backend/ && mongo < db/load_db.sh`
 
-(To run mongo on the background for MAC user:
-start a server: brew services start mongodb-community@4.4
-stop a server: brew services stop mongodb-community@4.4)
+###To run mongo on the background for MAC user:
+
+1.start a server: `brew services start mongodb-community@4.4`
+
+2.stop a server: `brew services stop mongodb-community@4.4`
+
  
 ## Running: 
 ### Option 1: start frontend and backend separately
