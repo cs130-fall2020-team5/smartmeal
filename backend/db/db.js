@@ -20,7 +20,11 @@ exports.get = function () {
     return db;
 };
 
-exports.close = function () {
+exports.close = async function () {
     if (db == null) return;
-    db.close();
+    if (db.isConnected) await db.close();
 };
+
+exports.set = function (newDb) {
+    db = newDb;
+}
