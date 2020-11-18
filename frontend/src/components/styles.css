@@ -17,13 +17,13 @@
     text-align: center;
     width: 100%;
     border-radius: 10px;
-    background:#5c99c6;
+    background: #5c99c6;
     border: none;
     margin-bottom: 10px;
 }
 
 .add-meal-button {
-    background:#7db7e5;
+    background: #7db7e5;
     margin-bottom: 0px;
 }
 
@@ -37,4 +37,71 @@
 
 #meal-plan {
     /* width: 15000px; */
+}
+
+.button-row {
+    margin: 5px;
+}
+
+.grocery-item {
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+
+.check-grocery-item {
+    margin-bottom: 10px;
+    display: inline;
+}
+
+.label-grocery-item {
+    margin-left: 5px;
+    display: inline-block;
+    width: 150px;
+}
+
+.quantity-grocery-item {
+    margin-left: 5px;
+    display: inline-block;
+    width: 120px;
+}
+
+.price-grocery-item {
+    margin-left: 5px;
+    display: inline-block;
+    width: 50px;
+}
+
+.modal-outline {
+    display: block;
+    left: 0;
+    width: 100%;
+    top: 0;
+    height: 100%;
+    background: black;
+    background-color:  black;
+}
+
+.modal-r {
+    display: block;
+    position: fixed;
+    z-index: 100;
+    right: 0;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    width: max-content;
+    height: 50%;
+}
+
+.modal-content {
+    background-color: white;
+    display: block;
+    position: absolute;
+    padding: 20px;
+}
+
+.modal-content > p {
+    text-align: center;
 }

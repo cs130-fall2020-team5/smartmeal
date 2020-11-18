@@ -31,6 +31,7 @@ export default function HomePage() {
             if (res.data.length < 1) setSideBarButtons([]);
 
             let sbb = []
+            console.log("got meal plans : ", res.data);
             for (let mealPlan of res.data) {
                 let epochStartDate = parseInt(mealPlan.date); // milliseconds since epoch
                 let startDate = new Date(epochStartDate);
