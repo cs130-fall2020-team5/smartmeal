@@ -91,6 +91,57 @@ router.put("/:mealplanid", function (req, res, next) {
 	});
 });
 
+router.post("/:mealplanid/check-grocery-items", function (req, res, next) {
+    isAuthenticated(req)
+	.then((tokenInfo) => {
+	    let mealplanid = req.params.mealplanid;
+		
+		let itemsToCheck = req.body.checked;
+		let itemsToUncheck = req.body.unchecked;
+		if (!itemsToCheck || !itemsToUncheck) throw 400;
+		
+	    db.get()
+		.collection("mealplans")
+		.findOne({ _id: ObjectId(mealplanid) })
+		.then((mealplan) => {
+			const days = [ "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday" ];
+			const times = [ "breakfast", "lunch", "dinner" ];
+			for (let day of days) {
+				for (let time of times) {
+					for (let meal in mealplan[day][time]) {
+						const ingList = mealplan[day][time][meal].ingredientList;
+						for (let ing in ingList) {
+							if (itemsToCheck.includes(ingList[ing].name)) {
+								mealplan[day][time][meal].ingredientList[ing]["checked"] = true;
+							} else {
+								mealplan[day][time][meal].ingredientList[ing]["checked"] = false;
+							}
+						}
+					}
+				}
+			}
+			db.get()
+			.collection("mealplans")
+			.findOneAndUpdate({ _id: ObjectId(mealplanid) }, { $set: mealplan })
+			.then((result) => {
+				res.status(200).end();
+			})
+			.catch(err => {
+				console.log("Error updating mealplan when checking ingredients ", err);
+				res.status(500).end();
+			})
+		})
+		.catch(err => {
+			console.log("Error fetching meal plan to check ingredients in: ", err);
+			res.status(500).end();
+		})
+	})
+	.catch((err) => {
+		console.log(err);
+		res.status(400).json('Error: ' + err)
+	});
+});
+
 function isAuthenticated(req){
     var token = req.header("Authorization").split(" ")[1];
     return util.promisify(jwt.verify)(

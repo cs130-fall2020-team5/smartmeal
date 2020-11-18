@@ -1,40 +1,67 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Button } from "react-bootstrap";
+import axios from 'axios';
+
+// context
+import { UserContext } from "../context/user";
+import { MealPlanContext } from "../context/mealplan";
 
 export default function GroceryList({ mealPlan, onClose }) {
+    const { loginToken } = useContext(UserContext);
+    const { setCheckedIngredients } = useContext(MealPlanContext);
 
     const [ shoppingList, setShoppingList ] = useState({});
 
     function generateGroceryListItems() {
         const items = [];
-        let totalPrice = 0;
-
-        console.log("Shopping list: ", shoppingList);
+        let totalPrice = 0, checkedPrice = 0;
 
         for (let key in shoppingList) {
             const attributes = shoppingList[key];
             items.push(
                 <div key={key} className="grocery-item">
-                    <input className="check-grocery-item" type="checkbox" id={key + "-checkbox"} onClick={onCheckItem}/>
+                    <input className="check-grocery-item" type="checkbox" id={key + "-checkbox"} onChange={() => onCheckItem(key)} checked={attributes.checked ? true : false}/>
                     <label className="label-grocery-item" htmlFor={key + "-checkbox"}>{key}</label>
                     <span className="quantity-grocery-item">{attributes.quantity} {attributes.unit}</span>
                     <span className="price-grocery-item">${attributes.price.toFixed(2)}</span>
                 </div>
             );
             totalPrice += attributes.price;
+            if (attributes.checked) checkedPrice += attributes.price;
         }
 
         items.push(
             <div key="totals" className="grocery-item">
-                <span>Total cost: ${ totalPrice.toFixed(2) }</span>
+                <p>Total cost: ${ totalPrice.toFixed(2) }</p>
+                <p>Total in cart: ${ checkedPrice.toFixed(2) }</p>
             </div>
         );
 
         return items;
     }
 
-    function onCheckItem(e) {
-        console.log("Checked ", e.target);
+    function onCheckItem(item) {
+        let newShoppingList = JSON.parse(JSON.stringify(shoppingList))
+        newShoppingList[item]["checked"] = !newShoppingList[item]["checked"];
+        setShoppingList(newShoppingList);
+    }
+
+    function updateAndClose() {
+
+        let checked = [];
+        let unchecked = [];
+        for (let key in shoppingList) {
+            const attributes = shoppingList[key];
+            if (attributes.checked) {
+                checked.push(key);
+            } else {
+                unchecked.push(key);
+            }
+        }
+
+        setCheckedIngredients(mealPlan._id, checked, unchecked);
+
+        onClose();
     }
 
     useEffect(() => {
@@ -74,7 +101,7 @@ export default function GroceryList({ mealPlan, onClose }) {
                 groceryItem.price += ingredient.price ? ingredient.price : 0; // may need to adjust/multiply by quantity
                 // IMPORTANT: units may differ between different ingredients, possibly will need to convert so amount is correct
             } else {
-                shoppingList[ingredient.name] = { quantity: ingredient.amount ? ingredient.amount : 0, unit: ingredient.unit, price: ingredient.price ? ingredient.price : 0 };
+                shoppingList[ingredient.name] = { quantity: ingredient.amount ? ingredient.amount : 0, unit: ingredient.unit, price: ingredient.price ? ingredient.price : 0, checked: ingredient.checked };
             }
         }
 
@@ -87,7 +114,7 @@ export default function GroceryList({ mealPlan, onClose }) {
                 <div className="modal-content">
                     <p>Grocery List</p>
                     { generateGroceryListItems() }
-                    <Button onClick={onClose}>Close</Button>
+                    <Button onClick={updateAndClose}>Save</Button>
                 </div>
             </div>
         </div>

@@ -12,11 +12,13 @@ import GroceryList from "./GroceryList";
 
 // context
 import { UserContext } from "../context/user";
+import { MealPlanContext } from "../context/mealplan";
 
-export default function MealPlanner({ plan }) {
+export default function MealPlanner() {
+    const { loginToken } = useContext(UserContext);
+    const { currentPlan } = useContext(MealPlanContext);
 
     const [ showGroceryList, setShowGroceryList ] = useState(false);
-    const { isLoggedIn, loginToken } = useContext(UserContext);
     const days = [ "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday" ];
 
     function onCloseGroceryList() {
@@ -26,7 +28,7 @@ export default function MealPlanner({ plan }) {
     function sample() {
         axios({
             method: "PUT",
-            url: 'http://localhost:3000/mealplan/' + plan._id,
+            url: 'http://localhost:3000/mealplan/' + currentPlan._id,
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": "Bearer " + loginToken
@@ -51,7 +53,7 @@ export default function MealPlanner({ plan }) {
         for (let day of days) {
             boxes.push(
                 <Col key={day + time}>
-                    <MealPeriodBox meals={plan[day][time]}/>
+                    <MealPeriodBox meals={currentPlan[day][time]}/>
                 </Col>
             );
         }
@@ -61,8 +63,8 @@ export default function MealPlanner({ plan }) {
 
     return (
         <>
-        { showGroceryList && <GroceryList mealPlan={plan} onClose={onCloseGroceryList} /> }
-        { plan &&
+        { showGroceryList && <GroceryList mealPlan={currentPlan} onClose={onCloseGroceryList} /> }
+        { currentPlan &&
             <div>
                 <Container id="meal-plan">
                     <Row>
@@ -82,7 +84,7 @@ export default function MealPlanner({ plan }) {
                     </Row>
                     <p className="mealtime-label">Daily Summary</p>
                     <Row>
-                        { days.map((day) => <Col key={day}><DailySummary day={plan[day]}/></Col>)}
+                        { days.map((day) => <Col key={day}><DailySummary day={currentPlan[day]}/></Col>)}
                     </Row>
                     <Row style={{'float': 'right'}}>
                         <Button className="button-row" onClick={ () => setShowGroceryList(!showGroceryList) }>Grocery List</Button>

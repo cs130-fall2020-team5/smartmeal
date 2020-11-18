@@ -73,26 +73,18 @@
 }
 
 .modal-outline {
-    display: block;
-    left: 0;
-    width: 100%;
-    top: 0;
-    height: 100%;
-    background: black;
-    background-color:  black;
+    display: flex;
+    justify-content: center;
 }
 
 .modal-r {
-    display: block;
-    position: fixed;
+    /* display: block; */
+    position: absolute;
     z-index: 100;
-    right: 0;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    margin: auto;
-    width: max-content;
-    height: 50%;
+    /* right: 0; */
+    /* margin: auto; */
+    /* width: max-content; */
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .modal-content {
