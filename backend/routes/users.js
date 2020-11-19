@@ -98,36 +98,9 @@ router.post("/new", function (req, res, next) {
       res.end();
     })
     .catch((err) => {
-      res.status(401);
+      res.status(400);
       res.end();
     });
 });
-
-router.get("/example", function (req, res, next) {
-  isAuthenticated(req)
-    .then((tokenInfo) => {
-
-      // now that we know which user sent this request, do the required logic here
-      // e.g. get meal plan for this authenticated user (in another route, of course)
-      var username = tokenInfo.usr;
-      console.log(username);
-      
-      res.json({ message: "authenticated" });
-      res.status(200);
-      res.end();
-    })
-    .catch((err) => {
-      res.status(401);
-      res.end();
-    });
-});
-
-function isAuthenticated(req) {
-  var token = req.header("Authorization").split(" ")[1];
-  return util.promisify(jwt.verify)(
-    token,
-    process.env.JWT_KEY
-  );
-}
 
 module.exports = router;
