@@ -9,7 +9,7 @@ import "./styles.css";
 import MealPeriodBox from "./MealPeriodBox";
 import DailySummary from "./DailySummary";
 import GroceryList from "./GroceryList";
-import Popup from './Popup';
+import RecipePopup from './RecipePopup';
 
 // context
 import { UserContext } from "../context/user";
@@ -96,7 +96,7 @@ export default function MealPlanner() {
                 </Container>
                 <div>
                   {showRecipePopup ? (
-                    <Popup />
+                    <RecipePopup />
                   ) : (
                     null
                   )}

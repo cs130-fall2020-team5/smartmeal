@@ -1,85 +1,148 @@
-import React, { useContext, useState } from "react";
-import { Button, Form, Row, Col } from "react-bootstrap";
+import React, { useContext, useState, Fragment } from "react";
+import { Container, Button, Form, Row, Col } from "react-bootstrap";
 import './styles.css';
+import "bootstrap/dist/css/bootstrap.css";
 
 import { PopupContext } from "../context/popup-context";
 
-class RecipePopup extends React.Component {
+const RecipePopup = () => {
 
-static contextType = PopupContext;
+  const { recipeButtonClicked} = useContext(PopupContext);
 
-  render() {
-    const ingredientColSize = 8;
-    let context = this.context;
-    return (
-        <div className='popup'>
-          <Form>
-            <Form.Row>
-              <Col>
-              </Col>
-              <Col>
-                <Form.Group>
-                  <Form.Control size="lg" type="recipe_name" placeholder="Recipe" className="text-center"/>
-                </Form.Group>
-              </Col>
-              <Col>
-              </Col>
-            </Form.Row>
+  const [ingredientFields, setIngredientFields] = useState([
+    { name: '', qty: '', units:'' }
+  ]);
 
-            <Form.Row>
-              <Form.Group as={Col} xs={ingredientColSize}>
-                <Form.Label>Ingredient</Form.Label>
-                <Form.Control type="ingredient" placeholder="Ingredient" />
-              </Form.Group>
-              <Form.Group as={Col}>
-                <Form.Label>Qty</Form.Label>
-                <Form.Control type="quantity" placeholder="0"/>
-              </Form.Group>
-              <Form.Group as={Col}>
-                <Form.Label>Units</Form.Label>
-                <Form.Control type="units" placeholder="oz"/>
-              </Form.Group>
-            </Form.Row>
+  const [recipeName, setRecipeName] = useState("");
 
-            <Form.Row>
-              <Form.Group as={Col} xs={ingredientColSize}>
-                <Form.Control type="ingredient" placeholder="Ingredient" />
-              </Form.Group>
-              <Form.Group as={Col}>
-                <Form.Control type="quantity" placeholder="0"/>
-              </Form.Group>
-              <Form.Group as={Col}>
-                <Form.Control type="units" placeholder="oz"/>
-              </Form.Group>
-            </Form.Row>
+  const handleSubmit = e => {
+    e.preventDefault();
+    console.log("inputFields", ingredientFields);
+    console.log("Recipe Name", recipeName);
+    recipeButtonClicked();
+  };
 
-            <Form.Row>
-              <Form.Group as={Col} xs={ingredientColSize}>
-                <Form.Control type="ingredient" placeholder="Ingredient" />
-              </Form.Group>
-              <Form.Group as={Col}>
-                <Form.Control type="quantity" placeholder="0"/>
-              </Form.Group>
-              <Form.Group as={Col}>
-                <Form.Control type="units" placeholder="oz"/>
-              </Form.Group>
-            </Form.Row>
+  const handleInputChange = (index, event) => {
+    const values = [...ingredientFields];
+    if (event.target.name === "name") {
+      values[index].name = event.target.value;
+    } else if (event.target.name === "qty") {
+      values[index].qty = event.target.value;
+    } else if (event.target.name === "units") {
+      values[index].units = event.target.value;
+    } else if (event.target.name === "")
 
-            <div class="text-left">
-            <Button variant="primary" type="add_ingredient">
-              Add ingredient
-            </Button>
-            </div>
-            <div class="text-right">
-            <Button variant="primary" type="save" onClick={() => context.recipeButtonClicked()}>
-              Save
-            </Button>
-            </div>
-          </Form>
-            {/*}<button onClick={() => context.recipeButtonClicked()}>Close</button>*/}
+    setIngredientFields(values);
+  };
+
+  const handleAddFields = () => {
+    const values = [...ingredientFields];
+    values.push({ name:'', qty:'', units:'' });
+    setIngredientFields(values);
+  };
+
+  return (
+    <>
+      <div className="popup">
+      <form onSubmit={handleSubmit}>
+      <Container fluid>
+        <Row>
+          <Col>
+          </Col>
+          <Col>
+            <input
+              type="text"
+              className="form-control text-center"
+              placeholder="Recipe Name"
+              value={recipeName}
+              onChange={event => setRecipeName(event.target.value)}
+            />
+          </Col>
+          <Col>
+          </Col>
+        </Row>
+        <Row>
+          <br>
+          </br>
+        </Row>
+        <div className={"form-row"}>
+          {ingredientFields.map((ingredientField, index) => (
+            <Fragment key={`${ingredientField}~${index}`}>
+              <Row>
+                <Col>
+                  <div className= "form-group">
+                    <label className= "recipe-input-label">
+                      Ingredient
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control text-center"
+                      placeholder="Ingredient"
+                      id="name"
+                      name="name"
+                      value={ingredientField.name}
+                      onChange={event => handleInputChange(index, event)}
+                    />
+                  </div>
+                </Col>
+                <Col xs={3}>
+                  <div className="form-group ">
+                    <label className= "recipe-input-label">
+                      Qty
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control text-center"
+                      placeholder="0"
+                      id="qty"
+                      name="qty"
+                      value={ingredientField.qty}
+                      onChange={event => handleInputChange(index, event)}
+                    />
+                  </div>
+                </Col>
+                <Col xs={3}>
+                  <div className="form-group ">
+                    <label className= "recipe-input-label">
+                      Units
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control text-center"
+                      placeholder="oz"
+                      id="units"
+                      name="units"
+                      value={ingredientField.units}
+                      onChange={event => handleInputChange(index, event)}
+                    />
+                  </div>
+                </Col>
+              </Row>
+            </Fragment>
+          ))}
         </div>
-    );
-  }
+        <div className="submit-button">
+          <button
+            className="btn btn-primary mr-2"
+            type="button"
+            onClick={() => handleAddFields()}
+          >
+            Add Ingredient
+          </button>
+        </div>
+        <div className="submit-button text-right">
+          <button
+            className="btn btn-primary mr-2"
+            type="submit"
+            onSubmit={handleSubmit}
+          >
+            Save
+          </button>
+        </div>
+        </Container>
+      </form>
+      </div>
+    </>
+  );
 }
-
 export default RecipePopup;
