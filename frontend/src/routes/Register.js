@@ -4,43 +4,42 @@ import { Button, Form } from "react-bootstrap";
 // context
 import { UserContext } from "../context/user";
 
-export default function LoginPage() {
-    const { attemptLogin, errorMessage } = useContext(UserContext);
+export default function Register() {
+    const { attemptRegister, errorMessage } = useContext(UserContext);
     const [ formState, setFormState ] = useState({ username: "", password: ""});
 
-    function login(e) {
+    function register(e) {
         e.preventDefault();
-        attemptLogin(formState.username, formState.password);
+        attemptRegister(formState.username, formState.password);
     }
 
-    function goToRegister() {
-        window.location.href = "/Register";
+    function goToLogin() {
+        window.location.href = "/";
     }
 
     return (
         <div>
-            <Form onSubmit={login}>
+            <Form onSubmit={register}>
                 <Form.Group>
-                    <Form.Label>Username</Form.Label>
+                    <Form.Label>Enter your username</Form.Label>
                     <Form.Control type="text" placeholder="Enter username" onChange={ e => setFormState({...formState, username: e.target.value})}/>
                 </Form.Group>
 
                 <Form.Group controlId="formBasicPassword">
-                    <Form.Label>Password</Form.Label>
+                    <Form.Label>Enter your new password</Form.Label>
                     <Form.Control type="password" placeholder="Password" onChange={ e => setFormState({...formState, password: e.target.value})}/>
                 </Form.Group>
 
                 <>
                     <Button variant="primary" type="submit">
-                        Login
+                        Register
                     </Button>
-                    <Button variant="link" onClick={goToRegister}> New User? Register </Button>
+                    <Button variant="link" onClick={goToLogin}> Back to Login </Button>
                 </>
 
                 <div>
                     { errorMessage }
                 </div>
-                
             </Form>
             
         </div>

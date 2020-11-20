@@ -5,6 +5,7 @@ import { Navbar, Nav } from 'react-bootstrap'
 // pages
 import AboutPage from "./AboutPage";
 import HomePage from "./HomePage";
+import Register from "./Register";
 
 // context providers
 import { UserProvider } from "../context/user";
@@ -31,6 +32,9 @@ export default function router() {
                         </Route>
                         <Route path="/about">
                             <AboutPage/>
+                        </Route>
+                        <Route path="/register">
+                            <Register/>
                         </Route>
                     </Switch>
                 </MealPlanProvider>
