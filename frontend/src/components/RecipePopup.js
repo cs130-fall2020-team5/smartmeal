@@ -2,9 +2,145 @@ import React, { useContext, useState, Fragment } from "react";
 import { Container, Button, Form, Row, Col } from "react-bootstrap";
 import './styles.css';
 import "bootstrap/dist/css/bootstrap.css";
+import Autosuggest from 'react-autosuggest';
 
 import { PopupContext } from "../context/popup-context";
+const languages = [
+  {
+    name: 'apple',
+    year: 1972
+  },
+  {
+    name: 'dark chocolate',
+    year: 2000
+  },
+  {
+    name: 'bread',
+    year: 1983
+  },
+  {
+    name: 'flour',
+    year: 2007
+  },
+  {
+    name: 'sausage',
+    year: 2012
+  },
+  {
+    name: 'Salmon',
+    year: 2009
+  },
+  {
+    name: 'shrimp',
+    year: 1990
+  },
+  {
+    name: 'Pineapple',
+    year: 1995
+  },
+  {
+    name: 'orange',
+    year: 1995
+  },
+  {
+    name: 'Pearl',
+    year: 1987
+  },
+  {
+    name: 'sugar',
+    year: 1995
+  },
+  {
+    name: 'egg',
+    year: 1991
+  },
+  {
+    name: 'cucumber',
+    year: 1995
+  },
+  {
+    name: 'brocolli',
+    year: 2003
+  }
+];
 
+// https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions#Using_Special_Characters
+function escapeRegexCharacters(str) {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function getSuggestions(value) {
+  const escapedValue = escapeRegexCharacters(value.trim());
+
+  if (escapedValue === '') {
+    return [];
+  }
+
+  const regex = new RegExp('^' + escapedValue, 'i');
+
+  return languages.filter(language => regex.test(language.name));
+}
+
+function getSuggestionValue(suggestion) {
+  return suggestion.name;
+}
+
+function renderSuggestion(suggestion) {
+  return (
+    <span>{suggestion.name}</span>
+  );
+}
+
+class MyAutosuggest extends React.Component {
+  constructor() {
+    super();
+
+    this.state = {
+      value: '',
+      suggestions: []
+    };
+  }
+
+  onChange = (event, { newValue, method }) => {
+    this.setState({
+      value: newValue
+    });
+  };
+
+  onSuggestionsFetchRequested = ({ value }) => {
+    this.setState({
+      suggestions: getSuggestions(value)
+    });
+  };
+
+  onSuggestionsClearRequested = () => {
+    this.setState({
+      suggestions: []
+    });
+  };
+
+  render() {
+    const { id, placeholder } = this.props;
+    const { value, suggestions } = this.state;
+    const inputProps = {
+      placeholder,
+      value,
+      onChange: this.onChange
+    };
+
+    return (
+      <Autosuggest
+        id={id}
+        suggestions={suggestions}
+        onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+        onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+        getSuggestionValue={getSuggestionValue}
+        renderSuggestion={renderSuggestion}
+        inputProps={inputProps}
+      />
+    );
+  }
+}
 const RecipePopup = () => {
 
   const { recipeButtonClicked} = useContext(PopupContext);
@@ -74,14 +210,9 @@ const RecipePopup = () => {
                     <label className= "recipe-input-label">
                       Ingredient
                     </label>
-                    <input
-                      type="text"
-                      className="form-control text-center"
-                      placeholder="Ingredient"
-                      id="name"
-                      name="name"
-                      value={ingredientField.name}
-                      onChange={event => handleInputChange(index, event)}
+                    <MyAutosuggest
+                      id="ingre1"
+                      placeholder="Type ingredient"
                     />
                   </div>
                 </Col>
