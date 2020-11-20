@@ -37,9 +37,10 @@ export default function LoginPage() {
                     <Button variant="link" onClick={goToRegister}> New User? Register </Button>
                 </>
 
-                <div>
-                    { errorMessage }
-                </div>
+                { errorMessage && <div>
+                    <br/>
+                    <p style={{"color": "red"}}>Error: { errorMessage }</p>
+                </div> }
 
             </Form>
 

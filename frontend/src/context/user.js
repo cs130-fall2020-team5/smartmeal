@@ -64,7 +64,7 @@ function UserProvider({ children }) {
             })
             .then(res => {
                 if (res.status === 200) {
-                    setErrorMessage("Registered");
+                    setErrorMessage("Registered!");
                 }
             })
             .catch(err => {

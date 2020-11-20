@@ -23,7 +23,5 @@
   "devDependencies": {
     "concurrently": "^5.3.0"
   },
-  "dependencies": {
-    "react-autosuggest": "^10.0.3"
-  }
+  "dependencies": {}
 }

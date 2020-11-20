@@ -18,7 +18,7 @@ export default function Register() {
     }
 
     return (
-        <div>
+        <div className="Login">
             <Form onSubmit={register}>
                 <Form.Group>
                     <Form.Label>Enter your username</Form.Label>
@@ -37,9 +37,10 @@ export default function Register() {
                     <Button variant="link" onClick={goToLogin}> Back to Login </Button>
                 </>
 
-                <div>
-                    { errorMessage }
-                </div>
+                { errorMessage && <div>
+                    <br/>
+                    <p style={{"color": errorMessage === "Registered!" ? "green" : "red"}}>{ errorMessage }</p>
+                </div> }
             </Form>
             
         </div>

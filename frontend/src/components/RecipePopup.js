@@ -112,6 +112,7 @@ class MyAutosuggest extends React.Component {
     this.setState({
       value: newValue
     });
+    this.props.onChange(newValue);
   };
 
   onSuggestionsFetchRequested = ({ value }) => {
@@ -180,7 +181,7 @@ const RecipePopup = () => {
       values[index].qty = event.target.value;
     } else if (event.target.name === "units") {
       values[index].units = event.target.value;
-    } else if (event.target.name === "")
+    } 
 
     setIngredientFields(values);
   };
@@ -227,6 +228,7 @@ const RecipePopup = () => {
                     <MyAutosuggest
                       id="ingre1"
                       placeholder="Type ingredient"
+                      onChange={(value) => handleInputChange(index, { target: { value: value, name: "name" } })}
                     />
                   </div>
                 </Col>
@@ -266,7 +268,8 @@ const RecipePopup = () => {
             </Fragment>
           ))}
         </div>
-        <div className="submit-button">
+
+        <Row style={{'float': 'right'}}>
           <button
             className="btn btn-primary mr-2"
             type="button"
@@ -274,8 +277,13 @@ const RecipePopup = () => {
           >
             Add Ingredient
           </button>
-        </div>
-        <div className="submit-button text-right">
+          <button
+            className="btn btn-primary mr-2"
+            type="button"
+            onClick={recipeButtonClicked}
+          >
+            Cancel
+          </button>
           <button
             className="btn btn-primary mr-2"
             type="submit"
@@ -283,7 +291,7 @@ const RecipePopup = () => {
           >
             Save
           </button>
-        </div>
+        </Row>
         </Container>
       </form>
       </div>
