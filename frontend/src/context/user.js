@@ -49,6 +49,31 @@ function UserProvider({ children }) {
             })
     }
 
+    function attemptRegister(username, password) {
+        // attempt to register
+        axios({
+                method: "POST",
+                url: 'http://localhost:3000/users/new',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                data: {
+                    username: username,
+                    password: password
+                }
+            })
+            .then(res => {
+                if (res.status === 200) {
+                    setErrorMessage("Registered");
+                }
+            })
+            .catch(err => {
+                setErrorMessage("Username already exists");
+                // console.log(err);
+            })
+    }
+
+
     function testMethod() {
         axios({
                 method: "GET",
@@ -67,7 +92,7 @@ function UserProvider({ children }) {
     }
 
     return (
-        <UserContext.Provider value={{isLoggedIn, errorMessage, attemptLogin, testMethod, loginToken}} >
+        <UserContext.Provider value={{isLoggedIn, errorMessage, attemptLogin, attemptRegister, testMethod, loginToken}} >
             { children }
         </UserContext.Provider>
     )

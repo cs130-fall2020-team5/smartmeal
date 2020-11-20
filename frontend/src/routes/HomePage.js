@@ -21,6 +21,14 @@ export default function HomePage() {
     const [ showMenu, setShowMenu ] = useState(true);
     const [ sideBarButtons, setSideBarButtons ] = useState([]);
 
+    /**
+     * onClick for the "logout" button
+     */
+    function logoutUser() {
+        localStorage.clear();
+        window.location.href = '/';
+    }
+
     useEffect(() => {
         if (mealPlans.length < 1) setSideBarButtons([]);
 
@@ -51,6 +59,7 @@ export default function HomePage() {
                                 <span className="sidebar-heading">Select Week</span>
                                 { sideBarButtons }
                                 <Button id="btn-create-plan" variant="info" onClick={createNewMealPlan}>Create new meal plan</Button>
+                                <Button id="btn-create-plan" variant="info" onClick={logoutUser}>Logout</Button>
                             </div>
                         </div>
                     </div>
