@@ -12,6 +12,7 @@ import Login from "../components/Login";
 // context
 import { UserContext } from "../context/user";
 import { MealPlanContext } from "../context/mealplan";
+import { PopupProvider } from "../context/popup-context";
 
 export default function HomePage() {
     const { isLoggedIn } = useContext(UserContext);
@@ -44,13 +45,14 @@ export default function HomePage() {
     }, [mealPlans, newPlanSelected]);
 
     return (
+      <PopupProvider>
         <div>
             {isLoggedIn ? (
                 <div className={`d-flex ${showMenu ? "" : "toggled"}`} id="wrapper">
                     <div className="bg-light border-right">
                         <div>
                             <Button variant="light" onClick={() => setShowMenu(!showMenu)}><FontAwesomeIcon icon="bars"/></Button>
-                            
+
                         </div>
                         <div id="sidebar-wrapper">
                             <div className="list-group list-group-flush">
@@ -72,5 +74,6 @@ export default function HomePage() {
             )}
             {/* <Button onClick={testMethod}>Test Button</Button> */}
         </div>
+        </PopupProvider>
     );
 }

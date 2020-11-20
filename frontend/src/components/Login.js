@@ -18,7 +18,7 @@ export default function LoginPage() {
     }
 
     return (
-        <div>
+        <div className="Login">
             <Form onSubmit={login}>
                 <Form.Group>
                     <Form.Label>Username</Form.Label>
@@ -40,9 +40,9 @@ export default function LoginPage() {
                 <div>
                     { errorMessage }
                 </div>
-                
+
             </Form>
-            
+
         </div>
     );
 }

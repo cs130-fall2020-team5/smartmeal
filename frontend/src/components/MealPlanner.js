@@ -9,14 +9,17 @@ import "./styles.css";
 import MealPeriodBox from "./MealPeriodBox";
 import DailySummary from "./DailySummary";
 import GroceryList from "./GroceryList";
+import RecipePopup from './RecipePopup';
 
 // context
 import { UserContext } from "../context/user";
 import { MealPlanContext } from "../context/mealplan";
+import { PopupContext } from "../context/popup-context";
 
 export default function MealPlanner() {
     const { loginToken } = useContext(UserContext);
     const { currentPlan } = useContext(MealPlanContext);
+    const { showRecipePopup } = useContext(PopupContext);
 
     const [ showGroceryList, setShowGroceryList ] = useState(false);
     const days = [ "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday" ];
@@ -68,7 +71,7 @@ export default function MealPlanner() {
             <div>
                 <Container id="meal-plan">
                     <Row>
-                        { days.map((day) => <Col key={day}><span className="day-label">{day.charAt(0).toUpperCase() + day.slice(1, day.length)}</span></Col>)}   
+                        { days.map((day) => <Col key={day}><span className="day-label">{day.charAt(0).toUpperCase() + day.slice(1, day.length)}</span></Col>)}
                     </Row>
                     <p className="mealtime-label">Breakfast</p>
                     <Row>
@@ -91,6 +94,13 @@ export default function MealPlanner() {
                         <Button className="button-row" onClick={ () => sample() }>Populate with some static data</Button>
                     </Row>
                 </Container>
+                <div>
+                  {showRecipePopup ? (
+                    <RecipePopup />
+                  ) : (
+                    null
+                  )}
+                </div>
             </div>
         }
         </>

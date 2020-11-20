@@ -16,6 +16,7 @@ export default function router() {
         <Router>
             <UserProvider>
                 <MealPlanProvider>
+                    {/*}<Navbar className="color-nav" variant="dark" expand="lg">*/}
                     <Navbar bg="light" expand="lg">
                         <Navbar.Brand href="#home">SmartMeal</Navbar.Brand>
                         <Navbar.Collapse id="basic-navbar-nav">
