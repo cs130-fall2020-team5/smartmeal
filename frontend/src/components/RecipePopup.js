@@ -3,9 +3,9 @@ import { Container, Button, Form, Row, Col } from "react-bootstrap";
 import './styles.css';
 import "bootstrap/dist/css/bootstrap.css";
 import Autosuggest from 'react-autosuggest';
-
+import axios from 'axios';
 import { PopupContext } from "../context/popup-context";
-const languages = [
+/*const languages = [
   {
     name: 'apple',
     year: 1972
@@ -62,7 +62,7 @@ const languages = [
     name: 'brocolli',
     year: 2003
   }
-];
+];*/
 
 // https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions#Using_Special_Characters
 function escapeRegexCharacters(str) {
@@ -78,7 +78,14 @@ function getSuggestions(value) {
 
   const regex = new RegExp('^' + escapedValue, 'i');
 
-  return languages.filter(language => regex.test(language.name));
+  return spoonSearch(value)
+  .then((res) => {
+    return res.data.filter(language => regex.test(language.name));
+  })
+  .catch((err) => {
+    console.log("Failed to do remote ingredient search: ", err);
+    return [];
+  });
 }
 
 function getSuggestionValue(suggestion) {
@@ -108,8 +115,15 @@ class MyAutosuggest extends React.Component {
   };
 
   onSuggestionsFetchRequested = ({ value }) => {
-    this.setState({
-      suggestions: getSuggestions(value)
+    getSuggestions(value)
+    .then((res) => {
+      console.log(res);
+      this.setState({
+        suggestions: res
+      });
+    })
+    .catch((err) => {
+      console.log("Failed to do fetch suggestions: ", err);
     });
   };
 
@@ -276,4 +290,20 @@ const RecipePopup = () => {
     </>
   );
 }
+
+function spoonSearch(str) {
+  console.log("spoon");
+  return axios.get('https://api.spoonacular.com/food/ingredients/autocomplete',
+    {
+      params: {
+        apiKey: "db254b5cd61744d39a2deebd9c361444",
+        query: str,
+        number: 5,
+        metaInformation: true
+        //intolerances:
+      }
+    }
+  )
+}
+
 export default RecipePopup;
