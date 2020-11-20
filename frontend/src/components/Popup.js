@@ -5,7 +5,6 @@ import "bootstrap/dist/css/bootstrap.css";
 
 import { PopupContext } from "../context/popup-context";
 
-//class Popup extends React.Component {
 const Popup = () => {
 
   const { recipeButtonClicked} = useContext(PopupContext);
@@ -17,6 +16,7 @@ const Popup = () => {
   const handleSubmit = e => {
     e.preventDefault();
     console.log("inputFields", ingredientFields);
+    recipeButtonClicked();
   };
 
   const handleInputChange = (index, event) => {
@@ -45,7 +45,7 @@ const Popup = () => {
         <div className={"form-row"}>
           {ingredientFields.map((ingredientField, index) => (
             <Fragment key={`${ingredientField}~${index}`}>
-              <div className= "form-group col-sm-6">
+              {/*<div className= "form-group col-sm-6">
                 <input
                   type="text"
                   className="form-control"
@@ -74,7 +74,45 @@ const Popup = () => {
                   value={ingredientField.units}
                   onChange={event => handleInputChange(index, event)}
                 />
+              </div>*/}
+              <Row>
+              <Col xs="auto">
+              <div className= "form-group ">
+                <input
+                  type="text"
+                  className="form-control"
+                  id="name"
+                  name="name"
+                  value={ingredientField.name}
+                  onChange={event => handleInputChange(index, event)}
+                />
               </div>
+              </Col>
+              <Col xs={3}>
+              <div className="form-group ">
+                <input
+                  type="text"
+                  className="form-control"
+                  id="qty"
+                  name="qty"
+                  value={ingredientField.qty}
+                  onChange={event => handleInputChange(index, event)}
+                />
+              </div>
+              </Col>
+              <Col xs={2}>
+              <div className="form-group ">
+                <input
+                  type="text"
+                  className="form-control"
+                  id="units"
+                  name="units"
+                  value={ingredientField.units}
+                  onChange={event => handleInputChange(index, event)}
+                />
+              </div>
+              </Col>
+              </Row>
             </Fragment>
           ))}
         </div>
@@ -92,7 +130,6 @@ const Popup = () => {
             className="btn btn-primary mr-2"
             type="submit"
             onSubmit={handleSubmit}
-            onClick={() => recipeButtonClicked()}
           >
             Save
           </button>
