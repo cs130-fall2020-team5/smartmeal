@@ -32,36 +32,36 @@ import LoginPage from "../components/Login";
 
 // context providers
 import { UserProvider } from "../context/user";
+import { MealPlanProvider } from "../context/mealplan";
 
 export default function router() {
     return (
         <Router>
             <UserProvider>
-                <Navbar className="color-nav" variant="dark" expand="lg">
-                    <Navbar.Brand href="#home">SmartMeal</Navbar.Brand>
-                    <Navbar.Collapse id="basic-navbar-nav">
-                        <Nav className="mr-auto">
-                            <Nav.Link as={Link} to="/">Home</Nav.Link>
-                            <Nav.Link as={Link} to="/about">About</Nav.Link>
-                            <Nav.Link href="https://github.com/cs130-fall2020-team5/smartmeal">GitHub</Nav.Link>
-                        </Nav>
-                        <Nav className="ml-auto">
-                            {/*Still must implement resetting user login auth*/}
-                            <Nav.Link as={Link} to="/login">Sign Out</Nav.Link>
-                        </Nav>
-                    </Navbar.Collapse>
-                </Navbar>
-                <Switch>
-                    <Route exact path="/">
-                        <HomePage/>
-                    </Route>
-                    <Route path="/about">
-                        <AboutPage/>
-                    </Route>
-                    <Route path="/login">
-                        <LoginPage/>
-                    </Route>
-                </Switch>
+                <MealPlanProvider>
+                    <Navbar className="color-nav" variant="dark" expand="lg">
+                        <Navbar.Brand href="#home">SmartMeal</Navbar.Brand>
+                        <Navbar.Collapse id="basic-navbar-nav">
+                            <Nav className="mr-auto">
+                                <Nav.Link as={Link} to="/">Home</Nav.Link>
+                                <Nav.Link as={Link} to="/about">About</Nav.Link>
+                                <Nav.Link href="https://github.com/cs130-fall2020-team5/smartmeal">GitHub</Nav.Link>
+                            </Nav>
+                            <Nav className="ml-auto">
+                                {/*Still must implement resetting user login auth*/}
+                                <Nav.Link as={Link} to="/login">Sign Out</Nav.Link>
+                            </Nav>
+                        </Navbar.Collapse>
+                    </Navbar>
+                    <Switch>
+                        <Route exact path="/">
+                            <HomePage/>
+                        </Route>
+                        <Route path="/about">
+                            <AboutPage/>
+                        </Route>
+                    </Switch>
+                </MealPlanProvider>
             </UserProvider>
         </Router>
     );

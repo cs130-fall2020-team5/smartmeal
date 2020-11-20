@@ -16,27 +16,23 @@ export default function DailySummary({ day }) {
             return;
         }
 
-        const breakfast = day.breakfast;
-        // const lunch = day.lunch;
-        // const dinner = day.dinner;
-
         let price = 0, calories = 0, protein = 0, fat = 0;
-        if (breakfast && breakfast.length > 1) {
-            for (const meal of breakfast) {
+        function addMealNutrition(meals) {
+            for (const meal of meals) {
                 for (const ingredient of meal.ingredientList) {
-                    price += ingredient.price;
-                    calories += ingredient.ingredientNutrition.calorieCount;
-                    protein += ingredient.ingredientNutrition.proteinCount;
-                    fat += ingredient.ingredientNutrition.fatCount;
+                    price += ingredient.price ? ingredient.price : 0;
+                    calories += ingredient.calories ? ingredient.calories : 0;
+                    protein += ingredient.protein ? ingredient.protein : 0;
+                    fat += ingredient.fat ? ingredient.fat : 0;
                 }
             }
         }
 
-        // repeat the above for lunch
+        if (day.breakfast) addMealNutrition(day.breakfast);
+        if (day.lunch) addMealNutrition(day.lunch);
+        if (day.dinner) addMealNutrition(day.dinner);
 
-        // repeat the above for dinner
-
-        setNutritionInformation({ price: price, calories: calories, protein: protein, fat: fat });
+        setNutritionInformation({ price: price.toFixed(2), calories: Math.round(calories), protein: Math.round(protein), fat: Math.round(fat) });
 
     }, [ day ]); 
 
@@ -45,7 +41,7 @@ export default function DailySummary({ day }) {
             <p className="nutrition-information">Calories: {nutritionInformation.calories}</p>
             <p className="nutrition-information">Fat: {nutritionInformation.fat}</p>
             <p className="nutrition-information">Protein: {nutritionInformation.protein}</p>
-            <p className="nutrition-information">Price: {nutritionInformation.price}</p>
+            <p className="nutrition-information">Price: ${nutritionInformation.price}</p>
         </div>
     )
 }

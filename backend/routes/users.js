@@ -110,7 +110,6 @@ router.get("/example", function (req, res, next) {
       // now that we know which user sent this request, do the required logic here
       // e.g. get meal plan for this authenticated user (in another route, of course)
       var username = tokenInfo.usr;
-      console.log(username);
       
       res.json({ message: "authenticated" });
       res.status(200);

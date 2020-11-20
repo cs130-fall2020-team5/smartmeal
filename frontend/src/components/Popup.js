@@ -76,42 +76,42 @@ const Popup = () => {
                 />
               </div>*/}
               <Row>
-              <Col xs="auto">
-              <div className= "form-group ">
-                <input
-                  type="text"
-                  className="form-control"
-                  id="name"
-                  name="name"
-                  value={ingredientField.name}
-                  onChange={event => handleInputChange(index, event)}
-                />
-              </div>
-              </Col>
-              <Col xs={3}>
-              <div className="form-group ">
-                <input
-                  type="text"
-                  className="form-control"
-                  id="qty"
-                  name="qty"
-                  value={ingredientField.qty}
-                  onChange={event => handleInputChange(index, event)}
-                />
-              </div>
-              </Col>
-              <Col xs={2}>
-              <div className="form-group ">
-                <input
-                  type="text"
-                  className="form-control"
-                  id="units"
-                  name="units"
-                  value={ingredientField.units}
-                  onChange={event => handleInputChange(index, event)}
-                />
-              </div>
-              </Col>
+                <Col xs="auto">
+                  <div className= "form-group ">
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="name"
+                      name="name"
+                      value={ingredientField.name}
+                      onChange={event => handleInputChange(index, event)}
+                    />
+                  </div>
+                </Col>
+                <Col xs={3}>
+                  <div className="form-group ">
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="qty"
+                      name="qty"
+                      value={ingredientField.qty}
+                      onChange={event => handleInputChange(index, event)}
+                    />
+                  </div>
+                </Col>
+                <Col xs={2}>
+                  <div className="form-group ">
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="units"
+                      name="units"
+                      value={ingredientField.units}
+                      onChange={event => handleInputChange(index, event)}
+                    />
+                  </div>
+                </Col>
               </Row>
             </Fragment>
           ))}
