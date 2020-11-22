@@ -38,7 +38,7 @@ export default function MealPlanner() {
             },
             data: {
                 monday: { breakfast: [ { name: "cereal", ingredientList: [ { name: "milk", calories: 10, fat: 15, protein: 10, price: 2.56, unit: "liters", amount: .2 }, { name: "cereal", calories: 20, fat: 3, unit: "kilograms", amount: .1, price: 1.50 } ] } ], lunch: [ { name: "sandwich", ingredientList: [ { name: "bread", unit: "loaf", amount: 1 }, { name: "cheese", unit: "oz", amount: 4 }, { name: "ham", unit: "oz", amount: 10 } ] } ], dinner: [ { name: "pasta", ingredientList: [ { name: "noodles", amount: 1, unit: "lbs" }, { name: "tomato sauce", unit: "fl. oz", amount: 5} ] } ] },
-                tuesday: { breakfast: [ { name: "cereal", ingredientList: [ { name: "milk", calories: 10, fat: 15, protein: 10, price: 2.56, unit: "liters", amount: .2 }, { name: "cereal", calories: 20, fat: 3, unit: "kilograms", amount: .1, price: 1.50 } ] } ], lunch: [ { name: "sandwich", ingredientList: [ { name: "bread", unit: "loaf", amount: 1 }, { name: "cheese", unit: "oz", amount: 4 }, { name: "ham", unit: "oz", amount: 10 } ] } ], dinner: [ { name: "pasta", ingredientList: [ { name: "noodles", amount: 1, unit: "lbs" }, { name: "tomato sauce", unit: "fl. oz", amount: 5} ] } ] }
+                tuesday: { breakfast: [ { name: "cereal", ingredientList: [ { name: "milk", calories: 10, fat: 15, protein: 10, price: 2.56, unit: "liters", amount: .2 }, { name: "cereal", calories: 20, fat: 3, unit: "kilograms", amount: .1, price: 1.50 } ] }, { name: "cereal", ingredientList: [ { name: "milk", calories: 10, fat: 15, protein: 10, price: 2.56, unit: "liters", amount: .2 }, { name: "cereal", calories: 20, fat: 3, unit: "kilograms", amount: .1, price: 1.50 } ] } ], lunch: [ { name: "sandwich", ingredientList: [ { name: "bread", unit: "loaf", amount: 1 }, { name: "cheese", unit: "oz", amount: 4 }, { name: "ham", unit: "oz", amount: 10 } ] } ], dinner: [ { name: "pasta", ingredientList: [ { name: "noodles", amount: 1, unit: "lbs" }, { name: "tomato sauce", unit: "fl. oz", amount: 5} ] } ] }
             }
         })
         .then((result) => {
@@ -50,18 +50,27 @@ export default function MealPlanner() {
         });
     }
 
-    function generateMealPlanBoxes(time) {
-        const boxes = [];
+    function generateDayColumn(day, shouldIncludeMealPeriodLabels = false) {
 
-        for (let day of days) {
-            boxes.push(
-                <Col key={day + time}>
-                    <MealPeriodBox meals={currentPlan[day][time]}/>
-                </Col>
-            );
-        }
+        return (
+            <Col>
+                <div style={{"max-width": "180px"}}>
+                    <div className="day-label">{day.charAt(0).toUpperCase() + day.slice(1, day.length)}</div>
 
-        return boxes;
+                    <p className="mealtime-label">{ shouldIncludeMealPeriodLabels ? "Breakfast" : "" }</p>
+                    <MealPeriodBox meals={currentPlan[day]["breakfast"]}/>
+
+                    <p className="mealtime-label">{ shouldIncludeMealPeriodLabels ? "Lunch" : "" }</p>
+                    <MealPeriodBox meals={currentPlan[day]["lunch"]}/>
+
+                    <p className="mealtime-label">{ shouldIncludeMealPeriodLabels ? "Dinner" : "" }</p>
+                    <MealPeriodBox meals={currentPlan[day]["dinner"]}/>
+
+                    <p className="mealtime-label">{ shouldIncludeMealPeriodLabels ? "Daily Summary" : "" }</p>
+                    <DailySummary day={currentPlan[day]}/>
+                </div>
+            </Col>
+        );
     }
 
     return (
@@ -71,26 +80,10 @@ export default function MealPlanner() {
             <div>
                 <Container id="meal-plan">
                     <Row>
-                        { days.map((day) => <Col key={day}><span className="day-label">{day.charAt(0).toUpperCase() + day.slice(1, day.length)}</span></Col>)}
-                    </Row>
-                    <p className="mealtime-label">Breakfast</p>
-                    <Row>
-                        { generateMealPlanBoxes("breakfast") }
-                    </Row>
-                    <p className="mealtime-label">Lunch</p>
-                    <Row>
-                        { generateMealPlanBoxes("lunch") }
-                    </Row>
-                    <p className="mealtime-label">Dinner</p>
-                    <Row>
-                        { generateMealPlanBoxes("dinner") }
-                    </Row>
-                    <p className="mealtime-label">Daily Summary</p>
-                    <Row>
-                        { days.map((day) => <Col key={day}><DailySummary day={currentPlan[day]}/></Col>)}
+                        { days.map(day => generateDayColumn(day, day === "monday")) }
                     </Row>
                     <Row style={{'float': 'right'}}>
-                        <Button className="button-row" onClick={ () => setShowGroceryList(!showGroceryList) }>Grocery List</Button>
+                        <Button className="button-row" onClick={ () => { window.scrollTo(0, 0); setShowGroceryList(!showGroceryList); } }>Grocery List</Button>
                         <Button className="button-row" onClick={ () => sample() }>Populate with some static data</Button>
                     </Row>
                 </Container>

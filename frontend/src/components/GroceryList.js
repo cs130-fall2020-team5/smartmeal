@@ -1,13 +1,10 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Button } from "react-bootstrap";
-import axios from 'axios';
 
 // context
-import { UserContext } from "../context/user";
 import { MealPlanContext } from "../context/mealplan";
 
 export default function GroceryList({ mealPlan, onClose }) {
-    const { loginToken } = useContext(UserContext);
     const { setCheckedIngredients } = useContext(MealPlanContext);
 
     const [ shoppingList, setShoppingList ] = useState({});
@@ -18,12 +15,21 @@ export default function GroceryList({ mealPlan, onClose }) {
 
         for (let key in shoppingList) {
             const attributes = shoppingList[key];
+            let quantity = attributes.quantity.toFixed(2).toString();
+
+            if (quantity.charAt(quantity.length - 1) === '0') { // remove hundredths place trailing zero
+                quantity = quantity.substring(0, quantity.length - 1);
+            }
+            if (quantity.charAt(quantity.length - 1) === '0') { // remove tenths place trailing zero + decimal point
+                quantity = quantity.substring(0, quantity.length - 2);
+            }
+            
             items.push(
                 <div key={key} className="grocery-item">
                     <input className="check-grocery-item" type="checkbox" id={key + "-checkbox"} onChange={() => onCheckItem(key)} checked={attributes.checked ? true : false}/>
                     <label className="label-grocery-item" htmlFor={key + "-checkbox"}>{key}</label>
-                    <span className="quantity-grocery-item">{attributes.quantity} {attributes.unit}</span>
                     <span className="price-grocery-item">${attributes.price.toFixed(2)}</span>
+                    <div className="quantity-grocery-item">{quantity} {attributes.unit}</div>
                 </div>
             );
             totalPrice += attributes.price;
@@ -63,7 +69,6 @@ export default function GroceryList({ mealPlan, onClose }) {
 
         onClose();
     }
-
     useEffect(() => {
         
         let ingredients = [];
