@@ -99,11 +99,11 @@ function renderSuggestion(suggestion) {
 }
 
 class MyAutosuggest extends React.Component {
-  constructor() {
+  constructor(props) {
     super();
 
     this.state = {
-      value: '',
+      value: props.value,
       suggestions: []
     };
   }
@@ -250,6 +250,7 @@ const RecipePopup = ({ recipe }) => {
                     <MyAutosuggest
                       id="ingre1"
                       placeholder="Type ingredient"
+                      value={ingredientField.name}
                       className="form-control text-center"
                       onChange={(value) => handleInputChange(index, { target: { value: value, name: "name" } })}
                     />
