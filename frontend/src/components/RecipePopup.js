@@ -135,10 +135,11 @@ class MyAutosuggest extends React.Component {
   };
 
   render() {
-    const { id, placeholder } = this.props;
+    const { id, placeholder, className } = this.props;
     const { value, suggestions } = this.state;
     const inputProps = {
       placeholder,
+      className,
       value,
       onChange: this.onChange
     };
@@ -146,6 +147,7 @@ class MyAutosuggest extends React.Component {
     return (
       <Autosuggest
         id={id}
+        className={className}
         suggestions={suggestions}
         onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
         onSuggestionsClearRequested={this.onSuggestionsClearRequested}
@@ -156,21 +158,40 @@ class MyAutosuggest extends React.Component {
     );
   }
 }
-const RecipePopup = () => {
 
-  const { recipeButtonClicked} = useContext(PopupContext);
+const RecipePopup = ({ recipe }) => {
 
-  const [ingredientFields, setIngredientFields] = useState([
-    { name: '', qty: '', units:'' }
-  ]);
+  const { saveButtonClicked, cancelButtonClicked } = useContext(PopupContext);
 
-  const [recipeName, setRecipeName] = useState("");
+  const isExistingRecipe = ( recipe ) => {
+    const values = [];
+    if (recipe.name !== ""){
+      const ingredientList = recipe.ingredientList
+      if (ingredientList && ingredientList.length >= 1){
+        for (const ingredient of ingredientList){
+          values.push({name: ingredient.name, qty: ingredient.amount, units: ingredient.unit});
+          console.log("Existing Ingredients:", ingredient);
+        }
+        return values;
+      }
+    }
+    else {
+        values.push({name: '', qty:'', units:''});
+        return values;
+    }
+  }
+
+  const [ingredientFields, setIngredientFields] = useState(isExistingRecipe(recipe));
+
+  const [showHeaders, setShowHeaders] = useState(true);
+
+  const [recipeName, setRecipeName] = useState(recipe.name);
 
   const handleSubmit = e => {
     e.preventDefault();
     console.log("inputFields", ingredientFields);
     console.log("Recipe Name", recipeName);
-    recipeButtonClicked();
+    saveButtonClicked();
   };
 
   const handleInputChange = (index, event) => {
@@ -181,8 +202,7 @@ const RecipePopup = () => {
       values[index].qty = event.target.value;
     } else if (event.target.name === "units") {
       values[index].units = event.target.value;
-    } 
-
+    }
     setIngredientFields(values);
   };
 
@@ -192,6 +212,7 @@ const RecipePopup = () => {
     setIngredientFields(values);
   };
 
+
   return (
     <>
       <div className="popup">
@@ -200,6 +221,7 @@ const RecipePopup = () => {
         <Row>
           <Col>
           </Col>
+          {/* Change Recipe Name field to single column with max-width size */}
           <Col>
             <input
               type="text"
@@ -222,21 +244,22 @@ const RecipePopup = () => {
               <Row>
                 <Col>
                   <div className= "form-group">
-                    <label className= "recipe-input-label">
-                      Ingredient
-                    </label>
+                    <p className= "recipe-input-label">
+                      {index === 0  ? "Ingredient" : ""}
+                    </p>
                     <MyAutosuggest
                       id="ingre1"
                       placeholder="Type ingredient"
+                      className="form-control text-center"
                       onChange={(value) => handleInputChange(index, { target: { value: value, name: "name" } })}
                     />
                   </div>
                 </Col>
                 <Col xs={3}>
                   <div className="form-group ">
-                    <label className= "recipe-input-label">
-                      Qty
-                    </label>
+                    <p className= "recipe-input-label">
+                      {index === 0  ? "Qty" : ""}
+                    </p>
                     <input
                       type="text"
                       className="form-control text-center"
@@ -250,9 +273,9 @@ const RecipePopup = () => {
                 </Col>
                 <Col xs={3}>
                   <div className="form-group ">
-                    <label className= "recipe-input-label">
-                      Units
-                    </label>
+                    <p className= "recipe-input-label">
+                      {index === 0  ? "Units" : ""}
+                    </p>
                     <input
                       type="text"
                       className="form-control text-center"
@@ -280,7 +303,7 @@ const RecipePopup = () => {
           <button
             className="btn btn-primary mr-2"
             type="button"
-            onClick={recipeButtonClicked}
+            onClick={cancelButtonClicked}
           >
             Cancel
           </button>
