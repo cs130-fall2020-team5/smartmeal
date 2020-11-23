@@ -172,13 +172,15 @@ const RecipePopup = ({ recipe }) => {
           values.push({name: ingredient.name, qty: ingredient.amount, units: ingredient.unit});
           console.log("Existing Ingredients:", ingredient);
         }
-        return values;
+      }
+      else {
+        values.push({name: '', qty:'', units:''});
       }
     }
     else {
         values.push({name: '', qty:'', units:''});
-        return values;
     }
+    return values;
   }
 
   const [ingredientFields, setIngredientFields] = useState(isExistingRecipe(recipe));
