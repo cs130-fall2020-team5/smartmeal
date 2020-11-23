@@ -14,11 +14,11 @@ export default function MealPeriodBox({ meals }) {
         let i = 0;
         if (meals && meals.length >= 1) {
             for (const meal of meals) {
-                mealButtons.push(<button key={i++} className="meal-button" onClick={() => recipeButtonClicked()}>{meal.name}</button>)
+                mealButtons.push(<button key={i++} className="meal-button" onClick={() => recipeButtonClicked(meal)}>{meal.name}</button>)
             }
         }
 
-        mealButtons.push(<button key={i} className="meal-button add-meal-button" onClick={() => recipeButtonClicked()}>+</button>)
+        mealButtons.push(<button key={i} className="meal-button add-meal-button" onClick={() => recipeButtonClicked(null)}>+</button>)
         return mealButtons;
     }
 

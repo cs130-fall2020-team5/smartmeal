@@ -19,7 +19,7 @@ import { PopupContext } from "../context/popup-context";
 export default function MealPlanner() {
     const { loginToken } = useContext(UserContext);
     const { currentPlan } = useContext(MealPlanContext);
-    const { showRecipePopup } = useContext(PopupContext);
+    const { showRecipePopup, recipeInfo } = useContext(PopupContext);
 
     const [ showGroceryList, setShowGroceryList ] = useState(false);
     const days = [ "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday" ];
@@ -89,7 +89,7 @@ export default function MealPlanner() {
                 </Container>
                 <div>
                   {showRecipePopup ? (
-                    <RecipePopup />
+                    <RecipePopup recipe={recipeInfo}/>
                   ) : (
                     null
                   )}
