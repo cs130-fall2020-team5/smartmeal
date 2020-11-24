@@ -5,6 +5,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import Autosuggest from 'react-autosuggest';
 import axios from 'axios';
 import { PopupContext } from "../context/popup-context";
+import { UserContext } from "../context/user";
 /*const languages = [
   {
     name: 'apple',
@@ -161,6 +162,8 @@ class MyAutosuggest extends React.Component {
 
 const RecipePopup = ({ recipe }) => {
 
+  const { loginToken } = useContext(UserContext);
+
   const { saveButtonClicked, cancelButtonClicked } = useContext(PopupContext);
 
   const isExistingRecipe = ( recipe ) => {
@@ -187,10 +190,32 @@ const RecipePopup = ({ recipe }) => {
 
   const [recipeName, setRecipeName] = useState(recipe.name);
 
+  function saveRecipe(recipe_name, ingredient_list){
+      axios({
+	  method: "POST",
+	  url: "http://localhost:3000/recipe/",
+	  headers: {
+	      "Content-Type": "application/json",
+	      "Authorization": "Bearer " + loginToken
+	  },
+	  data: {
+	      name: recipe_name,
+	      ingredients: JSON.stringify(ingredient_list)
+	  }
+      })
+          .then(() => {
+	      console.log("Successfully saved new recipe");
+	  })
+          .catch((err) =>{
+	      console.log("Failed to save new recipe: ", err);
+	  })
+  }
+
   const handleSubmit = e => {
     e.preventDefault();
     console.log("inputFields", ingredientFields);
     console.log("Recipe Name", recipeName);
+    saveRecipe(recipeName, ingredientFields);
     saveButtonClicked();
   };
 
