@@ -200,7 +200,7 @@ const RecipePopup = ({ recipe }) => {
 	  },
 	  data: {
 	      name: recipe_name,
-	      ingredients: ingredient_list
+	      ingredients: JSON.stringify(ingredient_list)
 	  }
       })
           .then(() => {
