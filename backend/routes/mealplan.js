@@ -20,9 +20,9 @@ router.get("/", function (req, res, next) {
 			res.json(mealplans);
 			res.status(200).end();
 		})
-		.catch((err) => res.status(400).json('Error: ' + err));
+		.catch((err) => res.status(500).json('Error: ' + err));
 	})
-	.catch((err) => {res.status(400).json('Error: ' + err)});
+	.catch((err) => {res.status(401).json('Error: ' + err)});
 });
 
 /* Create new meal plan */
@@ -31,7 +31,7 @@ router.post("/", function (req, res, next) {
 	.then((tokenInfo) => {
 	    let username = tokenInfo.usr;
 		let startdate = req.body.startdate;
-		if (!startdate) throw "missing startdate";
+		if (!startdate) throw 400;
 	    let entry = {username: username, date: startdate,
 			 sunday: { breakfast: [], lunch: [], dinner: [] },
 			 monday: { breakfast: [], lunch: [], dinner: [] },
@@ -51,7 +51,9 @@ router.post("/", function (req, res, next) {
 			res.status(500).json("Error inserting into db: " + err);
 		});
 	})
-	.catch((err) => {res.status(400).json('Error: ' + err)});
+	.catch((err) => {
+		res.status(err === 400 ? 400 : 401).json('Error: ' + err);
+	});
 });
 
 /* Update a meal plan - 1 body parameter - stringified JSON representing update fields */
@@ -98,7 +100,9 @@ router.post("/:mealplanid/check-grocery-items", function (req, res, next) {
 		
 		let itemsToCheck = req.body.checked;
 		let itemsToUncheck = req.body.unchecked;
-		if (!itemsToCheck || !itemsToUncheck) throw 400;
+		if (!itemsToCheck && !itemsToUncheck) throw 400;
+		if (!itemsToCheck) itemsToCheck = [];
+		if (!itemsToUncheck) itemsToUncheck = [];
 		
 	    db.get()
 		.collection("mealplans")
@@ -113,7 +117,9 @@ router.post("/:mealplanid/check-grocery-items", function (req, res, next) {
 						for (let ing in ingList) {
 							if (itemsToCheck.includes(ingList[ing].name)) {
 								mealplan[day][time][meal].ingredientList[ing]["checked"] = true;
-							} else {
+							}
+
+							if (itemsToUncheck.includes(ingList[ing].name)) {
 								mealplan[day][time][meal].ingredientList[ing]["checked"] = false;
 							}
 						}

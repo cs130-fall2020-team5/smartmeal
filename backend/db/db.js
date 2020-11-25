@@ -1,4 +1,5 @@
 var MongoClient = require("mongodb").MongoClient;
+var mongodb_mock = require('mongo-mock');
 
 // database setup
 let db = null;
@@ -19,6 +20,11 @@ exports.connect = function (url, dbname, callback) {
 exports.get = function () {
     return db;
 };
+
+// SHOULD ONLY BE USED FOR TESTING
+exports.set = function (db_handle) {
+    db = db_handle;
+}
 
 exports.close = async function () {
     if (db == null) return;

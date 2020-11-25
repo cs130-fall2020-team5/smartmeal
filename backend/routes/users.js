@@ -98,7 +98,7 @@ router.post("/new", function (req, res, next) {
       res.end();
     })
     .catch((err) => {
-      res.status(401);
+      res.status(400);
       res.end();
     });
 });

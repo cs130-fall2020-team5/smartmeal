@@ -17,8 +17,7 @@ router.get("/", function (req, res, next) {
 		.find({username: username})
 		.toArray()
 		.then((recipes) => {
-			res.json(recipes);
-			res.status(200).end();
+			res.status(200).json(recipes).end();
 		});
 	})
 	.catch((err) => {res.status(400).json('Error: ' + err)});
@@ -28,12 +27,10 @@ router.get("/", function (req, res, next) {
 router.get("/:recipeid", function (req, res, next) {
     isAuthenticated(req)
 	.then((tokenInfo) => {
-	    let username = tokenInfo.usr;
 	    let recipeid = req.params.recipeid;
 	    db.get()
 		.collection("recipes")
-		.find({ _id: ObjectId(recipeid), username: username })
-		.toArray()
+		.findOne({ _id: ObjectId(recipeid) })
 		.then((recipe) => {
 		    res.json(recipe);
 			res.status(200).end();
@@ -62,8 +59,7 @@ router.put("/:recipeid", function (req, res, next) {
 			.find({username : username})
 			.toArray()
 			.then((recipes) => {
-				res.json(recipes);
-				res.status(201).end();
+				res.status(200).json(recipes).end();
 			});
 		})
 	})
@@ -75,20 +71,20 @@ router.post("/", function (req, res, next) {
     isAuthenticated(req)
 	.then((tokenInfo) => {
 		let username = tokenInfo.usr;
-		if (!req.body.name || !req.body.ingredients) throw "missing body parameters (recipe name and ingredients)"
+		if (!req.body.name || !req.body.ingredients) throw { status: 400, msg: "missing body parameters (recipe name and ingredients)" }
 		let entry = { username: username, name: req.body.name };
 		if (req.body.ingredients) entry["ingredients"] = JSON.parse(req.body.ingredients);
 	    db.get()
 		.collection("recipes")
 		.insertOne(entry)
-		.then(() => {
-			res.status(201).end();
+		.then((insertRes) => {
+			res.status(201).json({ id: insertRes.insertedId }).end();
 		})
 		.catch((err) => {
-			res.status(400).json("Error: " + err).end();
+			res.status(500).json("Error: " + err).end();
 		})
 	})
-	.catch((err) => {res.status(400).json('Error: ' + err)});
+	.catch((err) => {res.status(err.status ? err.status : 401).json('Error: ' + err)});
 });
 
 /* Remove a recipe form users recipe list */
