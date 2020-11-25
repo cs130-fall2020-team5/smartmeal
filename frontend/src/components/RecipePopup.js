@@ -81,6 +81,7 @@ function getSuggestions(value) {
 
   return spoonSearch(value)
   .then((res) => {
+    console.log(res.data);
     return res.data.filter(language => regex.test(language.name));
   })
   .catch((err) => {
@@ -113,7 +114,9 @@ class MyAutosuggest extends React.Component {
     this.setState({
       value: newValue
     });
-    this.props.onChange(newValue);
+
+    const spoonIngredient = this.state.suggestions.find(item => item.name === newValue);
+    this.props.onChange(newValue, spoonIngredient ? spoonIngredient.possibleUnits : undefined);
   };
 
   onSuggestionsFetchRequested = ({ value }) => {
@@ -223,6 +226,9 @@ const RecipePopup = ({ recipe }) => {
     const values = [...ingredientFields];
     if (event.target.name === "name") {
       values[index].name = event.target.value;
+      if (event.target.units) {
+        console.log(event.target.units);
+      }
     } else if (event.target.name === "qty") {
       values[index].qty = event.target.value;
     } else if (event.target.name === "units") {
@@ -277,7 +283,7 @@ const RecipePopup = ({ recipe }) => {
                       placeholder="Type ingredient"
                       value={ingredientField.name}
                       className="form-control text-center"
-                      onChange={(value) => handleInputChange(index, { target: { value: value, name: "name" } })}
+                      onChange={(value, units) => handleInputChange(index, { target: { value: value, name: "name", units: units } })}
                     />
                   </div>
                 </Col>
