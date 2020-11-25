@@ -10,6 +10,7 @@ import MealPeriodBox from "./MealPeriodBox";
 import DailySummary from "./DailySummary";
 import GroceryList from "./GroceryList";
 import RecipePopup from './RecipePopup';
+import WeeklyTotals from "./WeeklyTotals";
 
 // context
 import { UserContext } from "../context/user";
@@ -21,8 +22,13 @@ export default function MealPlanner() {
     const { currentPlan } = useContext(MealPlanContext);
     const { showRecipePopup, recipeInfo } = useContext(PopupContext);
 
+    const [ showWeeklyTotals, setShowWeeklyTotals ] = useState(false);
     const [ showGroceryList, setShowGroceryList ] = useState(false);
     const days = [ "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday" ];
+
+    function onCloseWeeklyTotals() {
+        setShowWeeklyTotals(false);
+    }
 
     function onCloseGroceryList() {
         setShowGroceryList(false);
@@ -75,6 +81,7 @@ export default function MealPlanner() {
 
     return (
         <>
+        { showWeeklyTotals && <WeeklyTotals mealPlan={currentPlan} onClose={onCloseWeeklyTotals} /> }
         { showGroceryList && <GroceryList mealPlan={currentPlan} onClose={onCloseGroceryList} /> }
         { currentPlan &&
             <div>
@@ -83,6 +90,7 @@ export default function MealPlanner() {
                         { days.map(day => generateDayColumn(day, day === "monday")) }
                     </Row>
                     <Row style={{'float': 'right'}}>
+                        <Button className="button-row" onClick={ () => { window.scrollTo(0, 0); setShowWeeklyTotals(!showWeeklyTotals); } }>Weekly Totals</Button>
                         <Button className="button-row" onClick={ () => { window.scrollTo(0, 0); setShowGroceryList(!showGroceryList); } }>Grocery List</Button>
                         <Button className="button-row" onClick={ () => sample() }>Populate with some static data</Button>
                     </Row>
