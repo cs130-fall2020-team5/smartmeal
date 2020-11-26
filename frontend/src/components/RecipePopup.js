@@ -6,78 +6,10 @@ import Autosuggest from 'react-autosuggest';
 import axios from 'axios';
 import { PopupContext } from "../context/popup-context";
 import { UserContext } from "../context/user";
-/*const languages = [
-  {
-    name: 'apple',
-    year: 1972
-  },
-  {
-    name: 'dark chocolate',
-    year: 2000
-  },
-  {
-    name: 'bread',
-    year: 1983
-  },
-  {
-    name: 'flour',
-    year: 2007
-  },
-  {
-    name: 'sausage',
-    year: 2012
-  },
-  {
-    name: 'Salmon',
-    year: 2009
-  },
-  {
-    name: 'shrimp',
-    year: 1990
-  },
-  {
-    name: 'Pineapple',
-    year: 1995
-  },
-  {
-    name: 'orange',
-    year: 1995
-  },
-  {
-    name: 'Pearl',
-    year: 1987
-  },
-  {
-    name: 'sugar',
-    year: 1995
-  },
-  {
-    name: 'egg',
-    year: 1991
-  },
-  {
-    name: 'cucumber',
-    year: 1995
-  },
-  {
-    name: 'brocolli',
-    year: 2003
-  }
-];*/
+
 
 // https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions#Using_Special_Characters
 
-var subjectObject = {
-  "Front-end": {
-    "HTML": ["Links", "Images", "Tables", "Lists"],
-    "CSS": ["Borders", "Margins", "Backgrounds", "Float"],
-    "JavaScript": ["Variables", "Operators", "Functions", "Conditions"]
-  },
-  "Back-end": {
-    "PHP": ["Variables", "Strings", "Arrays"],
-    "SQL": ["SELECT", "UPDATE", "DELETE"]
-  }
-}
 function escapeRegexCharacters(str) {
   return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
@@ -258,6 +190,15 @@ const RecipePopup = ({ recipe }) => {
     const values = [...ingredientFields];
     values.push({ name:'', qty:'', units:'',possibleUnits:[] });
     setIngredientFields(values);
+    console.log(values);
+  };
+
+  const handleRemoveFields = (ing) => {
+    const values = [...ingredientFields];
+    if (values.length>1)
+    {values.pop();
+    setIngredientFields(values);}
+    console.log(values)
   };
 
 
@@ -320,7 +261,7 @@ const RecipePopup = ({ recipe }) => {
                     />
                   </div>
                 </Col>
-                <Col xs={3}>
+                <Col xs={4}>
                   <div className="form-group ">
                     <p className= "recipe-input-label">
                       {index === 0  ? "Units" : ""}
@@ -330,6 +271,7 @@ const RecipePopup = ({ recipe }) => {
                     </select>
                   </div>
                 </Col>
+
               </Row>
             </Fragment>
           ))}
@@ -342,6 +284,13 @@ const RecipePopup = ({ recipe }) => {
             onClick={() => handleAddFields()}
           >
             Add Ingredient
+          </button>
+          <button
+            className="btn btn-primary mr-2"
+            type="button"
+            onClick={() => handleRemoveFields()}
+          >
+            Remove Ingredient
           </button>
           <button
             className="btn btn-primary mr-2"
