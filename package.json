@@ -8,7 +8,7 @@
     "frontend": "cd frontend && npm start",
     "start": "concurrently \"npm run backend\" \"npm run frontend\"",
     "postinstall": "cd backend && npm install && cd ../frontend && npm install",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "cd backend && npm test"
   },
   "repository": {
     "type": "git",
