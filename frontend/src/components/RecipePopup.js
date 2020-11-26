@@ -66,6 +66,18 @@ import { UserContext } from "../context/user";
 ];*/
 
 // https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions#Using_Special_Characters
+
+var subjectObject = {
+  "Front-end": {
+    "HTML": ["Links", "Images", "Tables", "Lists"],
+    "CSS": ["Borders", "Margins", "Backgrounds", "Float"],
+    "JavaScript": ["Variables", "Operators", "Functions", "Conditions"]
+  },
+  "Back-end": {
+    "PHP": ["Variables", "Strings", "Arrays"],
+    "SQL": ["SELECT", "UPDATE", "DELETE"]
+  }
+}
 function escapeRegexCharacters(str) {
   return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
@@ -113,16 +125,26 @@ class MyAutosuggest extends React.Component {
     this.setState({
       value: newValue
     });
-    this.props.onChange(newValue);
+    var units=this.state.suggestions.filter(a=> a.name===newValue);
+    var unit;
+    if (units.length===0){
+      unit=[];
+    }
+    else{
+    unit=units[0].possibleUnits;
+    }
+    this.props.onChange(newValue,unit);
+
   };
 
   onSuggestionsFetchRequested = ({ value }) => {
     getSuggestions(value)
     .then((res) => {
-      console.log(res);
       this.setState({
         suggestions: res
+
       });
+
     })
     .catch((err) => {
       console.log("Failed to do fetch suggestions: ", err);
@@ -172,14 +194,14 @@ const RecipePopup = ({ recipe }) => {
       const ingredientList = recipe.ingredientList
       if (ingredientList && ingredientList.length >= 1){
         for (const ingredient of ingredientList){
-          values.push({name: ingredient.name, qty: ingredient.amount, units: ingredient.unit});
+          values.push({name: ingredient.name, qty: ingredient.amount, units: ingredient.unit, possibleUnits: ingredient.possibleUnits ? ingredient.possibleUnits : [] });
           console.log("Existing Ingredients:", ingredient);
         }
         return values;
       }
     }
     else {
-        values.push({name: '', qty:'', units:''});
+        values.push({name: '', qty:'', units:'', possibleUnits:[]});
         return values;
     }
   }
@@ -223,6 +245,7 @@ const RecipePopup = ({ recipe }) => {
     const values = [...ingredientFields];
     if (event.target.name === "name") {
       values[index].name = event.target.value;
+      values[index].possibleUnits=event.target.possibleUnits;
     } else if (event.target.name === "qty") {
       values[index].qty = event.target.value;
     } else if (event.target.name === "units") {
@@ -233,7 +256,7 @@ const RecipePopup = ({ recipe }) => {
 
   const handleAddFields = () => {
     const values = [...ingredientFields];
-    values.push({ name:'', qty:'', units:'' });
+    values.push({ name:'', qty:'', units:'',possibleUnits:[] });
     setIngredientFields(values);
   };
 
@@ -277,7 +300,7 @@ const RecipePopup = ({ recipe }) => {
                       placeholder="Type ingredient"
                       value={ingredientField.name}
                       className="form-control text-center"
-                      onChange={(value) => handleInputChange(index, { target: { value: value, name: "name" } })}
+                      onChange={(value,possibleUnits) => handleInputChange(index, { target: { value: value, name: "name", possibleUnits: possibleUnits } })}
                     />
                   </div>
                 </Col>
@@ -302,15 +325,9 @@ const RecipePopup = ({ recipe }) => {
                     <p className= "recipe-input-label">
                       {index === 0  ? "Units" : ""}
                     </p>
-                    <input
-                      type="text"
-                      className="form-control text-center"
-                      placeholder="oz"
-                      id="units"
-                      name="units"
-                      value={ingredientField.units}
-                      onChange={event => handleInputChange(index, event)}
-                    />
+                    <select name="units" class="form-control text-center">
+          {ingredientField.possibleUnits.map(unit => <option value={unit}>{unit}</option> )}
+                    </select>
                   </div>
                 </Col>
               </Row>
@@ -357,7 +374,6 @@ function spoonSearch(str) {
         query: str,
         number: 5,
         metaInformation: true
-        //intolerances:
       }
     }
   )
