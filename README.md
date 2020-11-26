@@ -1,6 +1,12 @@
 # SmartMeal
 Meal planning web app that shows you the nutritional and budgetary impact of your planned meals. Users can create weekly meal plans, save custom recipes, and get auto-generated shopping lists to use at the grocery store.
 
+## Documentation
+* SmartMeal's documentation is split into 2 parts: `frontend` and `backend`
+* Backend documentation is generated with Postman and can be viewed [on this webpage](https://documenter.getpostman.com/view/7688755/TVetcSDp)
+  * Full URL: https://documenter.getpostman.com/view/7688755/TVetcSDp
+* Frontend
+
 ## Directory organization:
 * This project contains two node.js projects, separating the frontend and the backend
 * `frontend`: React webapp
@@ -21,7 +27,7 @@ $ npm install nodemon -g
 (Linux/macOS) 
 $ mongo < backend/db/load_db.sh
 (Windows)   
-$ cd "C:\Program Files\MongoDB\Server\4.4\bin"
+$ cd "C:\Program Files\MongoDB\Server\4.4\bin" (your absolute path may differ)
 $ Get-Content C:\Users\Axel\Documents\smartmeal\backend\db\load_db.sh | .\mongo
 ```
 ## Running
@@ -41,11 +47,6 @@ $ cd backend
 $ npm test
 ```
 ![Sample testing output](./res/backend-tests.png)
-* Frontend
-
-## Documentation
-* Backend documentation is generated with Postman and can be viewed at 
-* Frontend
 
 ## Extra useful information:
 * Frontend runs on port 4000 (app viewable at `localhost:4000`)
