@@ -144,7 +144,7 @@ router.post("/:mealplanid/check-grocery-items", function (req, res, next) {
 	})
 	.catch((err) => {
 		console.log(err);
-		res.status(400).json('Error: ' + err)
+		res.status(err === 400 ? 400 : 401).json('Error: ' + err)
 	});
 });
 
