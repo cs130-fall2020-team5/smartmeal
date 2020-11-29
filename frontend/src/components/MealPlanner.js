@@ -34,43 +34,21 @@ export default function MealPlanner() {
         setShowGroceryList(false);
     }
 
-    function sample() {
-        axios({
-            method: "PUT",
-            url: 'http://localhost:3000/mealplan/' + currentPlan._id,
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer " + loginToken
-            },
-            data: {
-                monday: { breakfast: [ { name: "cereal", ingredientList: [ { name: "milk", calories: 10, fat: 15, protein: 10, price: 2.56, unit: "liters", amount: .2 }, { name: "cereal", calories: 20, fat: 3, unit: "kilograms", amount: .1, price: 1.50 } ] } ], lunch: [ { name: "sandwich", ingredientList: [ { name: "bread", unit: "loaf", amount: 1 }, { name: "cheese", unit: "oz", amount: 4 }, { name: "ham", unit: "oz", amount: 10 } ] } ], dinner: [ { name: "pasta", ingredientList: [ { name: "noodles", amount: 1, unit: "lbs" }, { name: "tomato sauce", unit: "fl. oz", amount: 5} ] } ] },
-                tuesday: { breakfast: [ { name: "cereal", ingredientList: [ { name: "milk", calories: 10, fat: 15, protein: 10, price: 2.56, unit: "liters", amount: .2 }, { name: "cereal", calories: 20, fat: 3, unit: "kilograms", amount: .1, price: 1.50 } ] }, { name: "cereal", ingredientList: [ { name: "milk", calories: 10, fat: 15, protein: 10, price: 2.56, unit: "liters", amount: .2 }, { name: "cereal", calories: 20, fat: 3, unit: "kilograms", amount: .1, price: 1.50 } ] } ], lunch: [ { name: "sandwich", ingredientList: [ { name: "bread", unit: "loaf", amount: 1 }, { name: "cheese", unit: "oz", amount: 4 }, { name: "ham", unit: "oz", amount: 10 } ] } ], dinner: [ { name: "pasta", ingredientList: [ { name: "noodles", amount: 1, unit: "lbs" }, { name: "tomato sauce", unit: "fl. oz", amount: 5} ] } ] }
-            }
-        })
-        .then((result) => {
-            console.log(result);
-            alert("Reload your window");
-        })
-        .catch((err) => {
-            console.log("Failed to create new meal plan: ", err);
-        });
-    }
-
     function generateDayColumn(day, shouldIncludeMealPeriodLabels = false) {
 
         return (
-            <Col>
-                <div style={{"max-width": "180px"}}>
+            <Col key={day}>
+                <div style={{"maxWidth": "180px"}}>
                     <div className="day-label">{day.charAt(0).toUpperCase() + day.slice(1, day.length)}</div>
 
                     <p className="mealtime-label">{ shouldIncludeMealPeriodLabels ? "Breakfast" : "" }</p>
-                    <MealPeriodBox meals={currentPlan[day]["breakfast"]}/>
+                    <MealPeriodBox meals={currentPlan[day]["breakfast"]} day={day} time="breakfast"/>
 
                     <p className="mealtime-label">{ shouldIncludeMealPeriodLabels ? "Lunch" : "" }</p>
-                    <MealPeriodBox meals={currentPlan[day]["lunch"]}/>
+                    <MealPeriodBox meals={currentPlan[day]["lunch"]} day={day} time="lunch"/>
 
                     <p className="mealtime-label">{ shouldIncludeMealPeriodLabels ? "Dinner" : "" }</p>
-                    <MealPeriodBox meals={currentPlan[day]["dinner"]}/>
+                    <MealPeriodBox meals={currentPlan[day]["dinner"]} day={day} time="dinner"/>
 
                     <p className="mealtime-label">{ shouldIncludeMealPeriodLabels ? "Daily Summary" : "" }</p>
                     <DailySummary day={currentPlan[day]}/>
@@ -90,9 +68,8 @@ export default function MealPlanner() {
                         { days.map(day => generateDayColumn(day, day === "monday")) }
                     </Row>
                     <Row style={{'float': 'right'}}>
-                        <Button className="button-row" onClick={ () => { window.scrollTo(0, 0); setShowWeeklyTotals(!showWeeklyTotals); } }>Weekly Totals</Button>
-                        <Button className="button-row" onClick={ () => { window.scrollTo(0, 0); setShowGroceryList(!showGroceryList); } }>Grocery List</Button>
-                        <Button className="button-row" onClick={ () => sample() }>Populate with some static data</Button>
+                        <Button className="button-row" disabled={showGroceryList} onClick={ () => { window.scrollTo(0, 0); setShowWeeklyTotals(!showWeeklyTotals); } }>Weekly Totals</Button>
+                        <Button className="button-row" disabled={showWeeklyTotals} onClick={ () => { window.scrollTo(0, 0); setShowGroceryList(!showGroceryList); } }>Grocery List</Button>
                     </Row>
                 </Container>
                 <div>

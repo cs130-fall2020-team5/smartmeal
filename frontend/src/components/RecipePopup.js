@@ -1,11 +1,12 @@
 import React, { useContext, useState, Fragment } from "react";
-import { Container, Button, Form, Row, Col } from "react-bootstrap";
+import { Container, Row, Col } from "react-bootstrap";
 import './styles.css';
 import "bootstrap/dist/css/bootstrap.css";
 import Autosuggest from 'react-autosuggest';
 import axios from 'axios';
 import { PopupContext } from "../context/popup-context";
 import { UserContext } from "../context/user";
+import { MealPlanContext } from "../context/mealplan";
 
 
 // https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions#Using_Special_Characters
@@ -119,6 +120,7 @@ const RecipePopup = ({ recipe }) => {
   const { loginToken } = useContext(UserContext);
 
   const { saveButtonClicked, cancelButtonClicked } = useContext(PopupContext);
+  const { updateCurrentMealPlan } = useContext(MealPlanContext);
 
   const isExistingRecipe = ( recipe ) => {
     const values = [];
@@ -126,49 +128,44 @@ const RecipePopup = ({ recipe }) => {
       const ingredientList = recipe.ingredientList
       if (ingredientList && ingredientList.length >= 1){
         for (const ingredient of ingredientList){
-          values.push({name: ingredient.name, qty: ingredient.amount, units: ingredient.unit, possibleUnits: ingredient.possibleUnits ? ingredient.possibleUnits : [] });
-          console.log("Existing Ingredients:", ingredient);
+          values.push({name: ingredient.name, amount: ingredient.amount, unit: ingredient.unit, possibleUnits: ingredient.possibleUnits ? ingredient.possibleUnits : [] });
         }
         return values;
       }
     }
     else {
-        values.push({name: '', qty:'', units:'', possibleUnits:[]});
+        values.push({name: '', amount:'', unit:'', possibleUnits:[]});
         return values;
     }
   }
 
   const [ingredientFields, setIngredientFields] = useState(isExistingRecipe(recipe));
 
-  const [showHeaders, setShowHeaders] = useState(true);
-
   const [recipeName, setRecipeName] = useState(recipe.name);
 
-  function saveRecipe(recipe_name, ingredient_list){
-      axios({
-	  method: "POST",
-	  url: "http://localhost:3000/recipe/",
-	  headers: {
-	      "Content-Type": "application/json",
-	      "Authorization": "Bearer " + loginToken
-	  },
-	  data: {
-	      name: recipe_name,
-	      ingredients: JSON.stringify(ingredient_list)
-	  }
+  function saveRecipe(recipe_name, ingredient_list) {
+    const isExistingRecipe = recipe._id ? true : false;
+    axios({
+        method: isExistingRecipe ? "PUT" : "POST",
+        url: "http://localhost:3000/recipe/" + (isExistingRecipe ? recipe._id : ""),
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + loginToken
+        },
+        data: {
+            name: recipe_name,
+            ingredients: JSON.stringify(ingredient_list)
+        }
+      }).then((res) => {
+        updateCurrentMealPlan({ name: recipeName, ingredientList: ingredientFields, _id: isExistingRecipe ? recipe._id : res.data.id }, isExistingRecipe)
+      }).catch((err) =>{
+        console.log("Failed to save new recipe: ", err);
       })
-          .then(() => {
-	      console.log("Successfully saved new recipe");
-	  })
-          .catch((err) =>{
-	      console.log("Failed to save new recipe: ", err);
-	  })
+
   }
 
   const handleSubmit = e => {
     e.preventDefault();
-    console.log("inputFields", ingredientFields);
-    console.log("Recipe Name", recipeName);
     saveRecipe(recipeName, ingredientFields);
     saveButtonClicked();
   };
@@ -178,27 +175,26 @@ const RecipePopup = ({ recipe }) => {
     if (event.target.name === "name") {
       values[index].name = event.target.value;
       values[index].possibleUnits=event.target.possibleUnits;
-    } else if (event.target.name === "qty") {
-      values[index].qty = event.target.value;
-    } else if (event.target.name === "units") {
-      values[index].units = event.target.value;
+    } else if (event.target.name === "amount") {
+      values[index].amount = event.target.value;
+    } else if (event.target.name === "unit") {
+      values[index].unit = event.target.value;
     }
     setIngredientFields(values);
   };
 
   const handleAddFields = () => {
     const values = [...ingredientFields];
-    values.push({ name:'', qty:'', units:'',possibleUnits:[] });
+    values.push({ name:'', amount:'', unit:'',possibleUnits:[] });
     setIngredientFields(values);
-    console.log(values);
   };
 
   const handleRemoveFields = (ing) => {
     const values = [...ingredientFields];
-    if (values.length>1)
-    {values.pop();
-    setIngredientFields(values);}
-    console.log(values)
+    if (values.length > 1) {
+      values.pop();
+      setIngredientFields(values);
+    }
   };
 
 
@@ -255,8 +251,8 @@ const RecipePopup = ({ recipe }) => {
                       className="form-control text-center"
                       placeholder="0"
                       id="qty"
-                      name="qty"
-                      value={ingredientField.qty}
+                      name="amount"
+                      value={ingredientField.amount}
                       onChange={event => handleInputChange(index, event)}
                     />
                   </div>
@@ -266,8 +262,8 @@ const RecipePopup = ({ recipe }) => {
                     <p className= "recipe-input-label">
                       {index === 0  ? "Units" : ""}
                     </p>
-                    <select name="units" class="form-control text-center">
-          {ingredientField.possibleUnits.map(unit => <option value={unit}>{unit}</option> )}
+                    <select name="unit" className="form-control text-center" onChange={event => handleInputChange(index, event)}>
+          {ingredientField.possibleUnits.map(unit => <option value={unit} key={unit}>{unit}</option> )}
                     </select>
                   </div>
                 </Col>
@@ -304,7 +300,7 @@ const RecipePopup = ({ recipe }) => {
             type="submit"
             onSubmit={handleSubmit}
           >
-            Save
+            { recipe._id ? "Update" : "Save"}
           </button>
         </Row>
         </Container>
@@ -315,7 +311,6 @@ const RecipePopup = ({ recipe }) => {
 }
 
 function spoonSearch(str) {
-  console.log("spoon");
   return axios.get('https://api.spoonacular.com/food/ingredients/autocomplete',
     {
       params: {

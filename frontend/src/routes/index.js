@@ -10,11 +10,13 @@ import Register from "./Register";
 // context providers
 import { UserProvider } from "../context/user";
 import { MealPlanProvider } from "../context/mealplan";
+import { PopupProvider } from "../context/popup-context";
 
 export default function router() {
     return (
         <Router>
             <UserProvider>
+                <PopupProvider>
                 <MealPlanProvider>
                     {/*}<Navbar className="color-nav" variant="dark" expand="lg">*/}
                     <Navbar bg="light" expand="lg">
@@ -39,6 +41,7 @@ export default function router() {
                         </Route>
                     </Switch>
                 </MealPlanProvider>
+                </PopupProvider>
             </UserProvider>
         </Router>
     );

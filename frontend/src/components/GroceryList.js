@@ -102,11 +102,11 @@ export default function GroceryList({ mealPlan, onClose }) {
         for (let ingredient of ingredients) {
             if (shoppingList[ingredient.name]) {
                 const groceryItem = shoppingList[ingredient.name];
-                groceryItem.quantity += ingredient.amount ? ingredient.amount : 0; // see proposal report class diagram
+                groceryItem.quantity += ingredient.amount ? parseInt(ingredient.amount) : 0; // see proposal report class diagram
                 groceryItem.price += ingredient.price ? ingredient.price : 0; // may need to adjust/multiply by quantity
                 // IMPORTANT: units may differ between different ingredients, possibly will need to convert so amount is correct
             } else {
-                shoppingList[ingredient.name] = { quantity: ingredient.amount ? ingredient.amount : 0, unit: ingredient.unit, price: ingredient.price ? ingredient.price : 0, checked: ingredient.checked };
+                shoppingList[ingredient.name] = { quantity: ingredient.amount ? parseInt(ingredient.amount) : 0, unit: ingredient.unit, price: ingredient.price ? ingredient.price : 0, checked: ingredient.checked };
             }
         }
 
