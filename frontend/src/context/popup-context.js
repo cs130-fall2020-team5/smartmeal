@@ -1,22 +1,24 @@
-import React, { useState, createContext, useEffect } from "react";
+import React, { useState, createContext } from "react";
 
 const PopupContext = createContext();
 
 function PopupProvider({ children }) {
   const [ showRecipePopup, setShowRecipePopup ] = useState(false);
+  const [ popupDay, setPopupDay ] = useState("");
+  const [ popupTime, setPopupTime ] = useState("");
   const [ recipeInfo, setRecipeInfo ] = useState([
     { name: '', ingredientList: [] }
   ]);
 
-  function recipeButtonClicked(recipe) {
+  function recipeButtonClicked(day, time, recipe) {
     setShowRecipePopup(!showRecipePopup);
-    console.log("Recipe Fields", recipe);
     if (recipe !== null){
-      setRecipeInfo({ name: recipe.name, ingredientList: recipe.ingredientList });
+      setRecipeInfo(recipe);
     } else {
       setRecipeInfo({name: "", ingredientList: []})
     }
-    console.log("Recipe Info:", recipeInfo);
+    setPopupDay(day);
+    setPopupTime(time);
   }
 
   function saveButtonClicked() {
@@ -28,7 +30,7 @@ function PopupProvider({ children }) {
   }
 
   return (
-    <PopupContext.Provider value={{showRecipePopup, recipeButtonClicked, saveButtonClicked, cancelButtonClicked, recipeInfo}}>
+    <PopupContext.Provider value={{showRecipePopup, recipeButtonClicked, saveButtonClicked, cancelButtonClicked, recipeInfo, popupDay, popupTime}}>
         { children }
     </PopupContext.Provider>
   )
