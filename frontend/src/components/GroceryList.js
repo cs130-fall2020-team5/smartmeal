@@ -10,8 +10,8 @@ export default function GroceryList({ mealPlan, onClose }) {
     const [ shoppingList, setShoppingList ] = useState({});
     const [ customList, setCustomList ] = useState({
         name: "",
-        price: 0,
-        amount: 0,
+        price: "",
+        amount: "",
         unit: ""
     });
 
@@ -67,12 +67,16 @@ export default function GroceryList({ mealPlan, onClose }) {
             setCustomList({...customList, unit: event.target.value});
             //event.target.value = "";
         }
-
-        console.log(customList);
     }
 
     function newCustomIngredient() {
         updateCustomIngredients(customList);
+        setCustomList({
+            name: "",
+            price: "",
+            amount: "",
+            unit: ""
+        });
     }
 
     function onCheckItem(item) {
@@ -154,12 +158,12 @@ export default function GroceryList({ mealPlan, onClose }) {
                     <p>Grocery List</p>
                     { generateGroceryListItems() }
                     <div className="custom-item">
-                        <input name="name" type="text" placeholder="Name" onChange={handleInput}/><br></br>
-                        <input name="price" type="text" placeholder="Price" onChange={handleInput}/><br></br>
-                        <input name="amount" type="text" placeholder="Quantity" onChange={handleInput}/><br></br>
-                        <input name="unit" type="text" placeholder="Unit type" onChange={handleInput}/>
+                        <input name="name" type="text" placeholder="Name" value={customList.name} onChange={handleInput}/><br></br>
+                        <input name="price" type="text" placeholder="Price" value={customList.price} onChange={handleInput}/><br></br>
+                        <input name="amount" type="text" placeholder="Quantity" value={customList.amount} onChange={handleInput}/><br></br>
+                        <input name="unit" type="text" placeholder="Unit type" value={customList.unit} onChange={handleInput}/>
                     </div>
-                    <Button onClick={newCustomIngredient}>Add Custom Ingredient</Button>
+                    <Button onClick={newCustomIngredient} style={{ "marginBottom": "10px", "marginTop": "10px" }}>Add Custom Ingredient</Button>
                     <Button onClick={updateAndClose}>Save</Button>
                 </div>
             </div>

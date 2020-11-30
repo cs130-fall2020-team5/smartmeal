@@ -74,6 +74,7 @@ const sample_mealplans = [
       "_id": "5fc309bb2d42f4d58ff4a84c",
       "username": "axel",
       "date": 1606790331505,
+      "customIngredients": [],
       "sunday": {
         "breakfast": [],
         "lunch": [],

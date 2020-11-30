@@ -32,23 +32,21 @@ export default function HomePage() {
 
         let sbb = [];
         for (let mealPlan of mealPlans) {
-            let epochStartDate = parseInt(mealPlan.date); // milliseconds since epoch
-            let startDate = new Date(epochStartDate);
-            let endDate = new Date(new Date(startDate).setDate(startDate.getDate() + 7));
-            let formattedDateText = (startDate.getMonth() + 1) + "/" + startDate.getDate() + "-" + (endDate.getMonth() + 1) + "/" + endDate.getDate();
-            sbb.push(<Button variant="light" key={mealPlan._id} onClick={() => newPlanSelected(mealPlan._id)}>Week of {formattedDateText}</Button>)
+            let backgroundColor = currentPlan._id === mealPlan._id ? "#c9c9c9" : "#ffffff"
+            sbb.push(<Button variant="light" style={{ "background": `${backgroundColor}` }} key={mealPlan._id} onClick={() => newPlanSelected(mealPlan._id)}>{mealPlan.name ? mealPlan.name : "New meal plan"}</Button>)
         }
 
         setSideBarButtons(sbb);
-    }, [mealPlans, newPlanSelected]);
+    }, [currentPlan._id, mealPlans, newPlanSelected]);
 
     return (
         <div>
             {isLoggedIn ? (
+                <>
+                <Button variant="light" onClick={() => setShowMenu(!showMenu)}><FontAwesomeIcon icon="bars"/></Button>
                 <div className={`d-flex ${showMenu ? "" : "toggled"}`} id="wrapper">
                     <div className="bg-light border-right">
                         <div>
-                            <Button variant="light" onClick={() => setShowMenu(!showMenu)}><FontAwesomeIcon icon="bars"/></Button>
 
                         </div>
                         <div id="sidebar-wrapper">
@@ -66,6 +64,7 @@ export default function HomePage() {
                         </div>
                     </div>
                 </div>
+                </>
             ) : (
                 <Login />
             )}
