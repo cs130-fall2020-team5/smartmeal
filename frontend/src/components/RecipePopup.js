@@ -315,7 +315,7 @@ function spoonSearch(str) {
       params: {
         apiKey: "db254b5cd61744d39a2deebd9c361444",
         query: str,
-        number: 100,
+        number: 50,
         metaInformation: true
       }
     }
