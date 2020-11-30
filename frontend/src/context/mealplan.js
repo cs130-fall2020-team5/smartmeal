@@ -39,6 +39,33 @@ function MealPlanProvider({ children }) {
         });
     }, [loginToken]);
 
+    function updateCustomIngredients(newIng) {
+        let newMealPlan = JSON.parse(JSON.stringify(currentPlan));
+        newMealPlan.customIngredients.push(newIng);
+        axios({
+            method: "PUT",
+            url: 'http://localhost:3000/mealplan/' + currentPlan._id,
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + loginToken
+            },
+            data: newMealPlan
+        })
+        .then(res => {
+            if (res.data.length < 1) {
+                setMealPlans([]);
+                setCurrentPlan(null);
+            }
+            else {
+                setMealPlans(res.data);
+                setCurrentPlan(res.data.filter(mp => mp._id === currentPlan._id)[0]);
+            }
+        })
+        .catch((err) => {
+            console.log("Failed to update meal plan: ", err);
+        });
+    }
+
     function updateCurrentMealPlan(newRecipe, isUpdateToExistingMeal) {
         let newMealPlan = JSON.parse(JSON.stringify(currentPlan))
         if (isUpdateToExistingMeal) {
@@ -143,7 +170,7 @@ function MealPlanProvider({ children }) {
     }, [getMealPlans, isLoggedIn, loginToken]);
 
     return (
-        <MealPlanContext.Provider value={{mealPlans, currentPlan, createNewMealPlan, setCheckedIngredients, newPlanSelected, updateCurrentMealPlan}} >
+        <MealPlanContext.Provider value={{mealPlans, currentPlan, createNewMealPlan, setCheckedIngredients, newPlanSelected, updateCurrentMealPlan, updateCustomIngredients}} >
             { children }
         </MealPlanContext.Provider>
     )
