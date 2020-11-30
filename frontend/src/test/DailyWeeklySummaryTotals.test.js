@@ -1,8 +1,6 @@
 import React from "react";
-import { render, screen, waitFor, cleanup } from "@testing-library/react";
-import userEvent from '@testing-library/user-event';
+import { render, screen, cleanup } from "@testing-library/react";
 import '@testing-library/jest-dom'
-import axios from 'axios';
 
 import { UserProvider } from "../context/user";
 import { MealPlanProvider } from "../context/mealplan";
@@ -10,11 +8,12 @@ import { PopupProvider } from "../context/popup-context";
 // import { MealPlanProvider } from "../context/mealplan";
 // import { PopupProvider } from "../context/popup-context";
 // import HomePage from "../routes/HomePage";
-import GroceryList from "../components/GroceryList";
+import DailySummary from "../components/DailySummary";
+import WeeklyTotals from "../components/WeeklyTotals";
 
 jest.mock('axios');
 
-describe("grocery list component", () => {
+describe("nutrition summary components", () => {
 
     afterEach(cleanup);
 
@@ -30,42 +29,41 @@ describe("grocery list component", () => {
       );
     }
 
-    test("grocery list correctly displays items", async () => {
-        wrapProviders( <GroceryList mealPlan={ sample_mealplans[0] }/> )
+    test("daily summary contains expected values", async () => {
+        wrapProviders( <DailySummary day={ sample_mealplans[0].monday }/>)
 
-        expect(screen.getByText("meat")).toBeInTheDocument();
-        expect(screen.getByText("bread")).toBeInTheDocument();
-        expect(screen.getByText("mustard")).toBeInTheDocument();
-        expect(screen.getByText("fettuccine")).toBeInTheDocument();
-        expect(screen.getByText("bean coffee")).toBeInTheDocument();
-        expect(screen.getByText("bean sprouts")).toBeInTheDocument();
-        expect(screen.getByText("noodle")).toBeInTheDocument();
-
+        expect(screen.getByText(/^Calories: /).textContent).toEqual("Calories: 30");
+        expect(screen.getByText(/^Protein: /).textContent).toEqual("Protein: 15");
+        expect(screen.getByText(/^Fat: /).textContent).toEqual("Fat: 6");
+        expect(screen.getByText(/^Price: /).textContent).toEqual("Price: $3.50");
     });
 
-    test("grocery list correctly sums quantities for duplicate ingredients", async () => {
-        wrapProviders( <GroceryList mealPlan={ sample_mealplans[0] }/> )
+    test("daily summary correctly handles missing values", async () => {
+        wrapProviders( <DailySummary day={ sample_mealplans[0].tuesday }/>)
 
-        expect(screen.getByTestId("meat-qty").textContent).toEqual("4 oz");
-        expect(screen.getByTestId("bread-qty").textContent).toEqual("1324 g");
-        expect(screen.getByTestId("mustard-qty").textContent).toEqual("3 oz");
-        expect(screen.getByTestId("fettuccine-qty").textContent).toEqual("3 bag");
-        expect(screen.getByTestId("bean coffee-qty").textContent).toEqual("3 oz");
-        expect(screen.getByTestId("bean sprouts-qty").textContent).toEqual("3 cup");
-        expect(screen.getByTestId("noodle-qty").textContent).toEqual("123 serving");
+        expect(screen.getByText(/^Calories: /).textContent).toEqual("Calories: 0");
+        expect(screen.getByText(/^Protein: /).textContent).toEqual("Protein: 0");
+        expect(screen.getByText(/^Fat: /).textContent).toEqual("Fat: 0");
+        expect(screen.getByText(/^Price: /).textContent).toEqual("Price: $0.00");
     });
 
-    test("clicking the save button closes the grocery list", async () => {
-        const onClickClose = jest.fn();
-        wrapProviders( <GroceryList mealPlan={ sample_mealplans[0]} onClose={onClickClose} /> )
+    test("weekly summary contains expected values", async () => {
+        wrapProviders( <WeeklyTotals mealPlan={ sample_mealplans[0] }/>)
 
-        axios.mockImplementation(() =>
-            Promise.resolve({ data: [] })
-        );
+        expect(screen.getByText(/^Calories: /).textContent).toEqual("Calories: 60");
+        expect(screen.getByText(/^Protein: /).textContent).toEqual("Protein: 30");
+        expect(screen.getByText(/^Fat: /).textContent).toEqual("Fat: 12");
+        expect(screen.getByText(/^Price: /).textContent).toEqual("Price: $3.50");
+    });
 
-        await waitFor(() => userEvent.click(screen.getByText("Save"), { button: 1 })) // left click to save changes
+    test("weekly summary correctly handles missing values", async () => {
+        const empty = { breakfast: [], lunch: [], dinner: [] };
+        wrapProviders( <WeeklyTotals mealPlan={ { monday: empty, tuesday: empty, wednesday: empty, thursday: empty, friday: empty, saturday: empty, sunday: empty } }/>)
 
-        expect(onClickClose.mock.calls.length).toBe(1); // call onClose
+        expect(screen.getByText(/^Calories: /).textContent).toEqual("Calories: 0");
+        expect(screen.getByText(/^Protein: /).textContent).toEqual("Protein: 0");
+        expect(screen.getByText(/^Fat: /).textContent).toEqual("Fat: 0");
+        expect(screen.getByText(/^Price: /).textContent).toEqual("Price: $0.00");
     });
 });
 
@@ -88,6 +86,10 @@ const sample_mealplans = [
                 "name": "meat",
                 "amount": "3",
                 "unit": "oz",
+                "calories": 10,
+                "protein": 5,
+                "fat": 2,
+                "price": 2,
                 "possibleUnits": [
                   "unit",
                   "piece",
@@ -103,6 +105,10 @@ const sample_mealplans = [
                 "name": "bread",
                 "amount": "1324",
                 "unit": "g",
+                "calories": 10,
+                "protein": 5,
+                "fat": 2,
+                "price": 1,
                 "possibleUnits": [
                   "piece",
                   "slice",
@@ -118,6 +124,10 @@ const sample_mealplans = [
                 "name": "mustard",
                 "amount": "3",
                 "unit": "oz",
+                "calories": 10,
+                "protein": 5,
+                "fat": 2,
+                "price": 0.5,
                 "possibleUnits": [
                   "g",
                   "oz",
@@ -149,6 +159,9 @@ const sample_mealplans = [
                 "name": "meat",
                 "amount": "1",
                 "unit": "breast",
+                "calories": 10,
+                "protein": 5,
+                "fat": 2,
                 "possibleUnits": [
                   "unit",
                   "piece",
@@ -176,6 +189,9 @@ const sample_mealplans = [
                 "name": "fettuccine",
                 "amount": "3",
                 "unit": "bag",
+                "calories": 10,
+                "protein": 5,
+                "fat": 2,
                 "possibleUnits": [
                   "package",
                   "g",
@@ -220,6 +236,9 @@ const sample_mealplans = [
                 "name": "bean sprouts",
                 "amount": "3",
                 "unit": "cup",
+                "calories": 10,
+                "protein": 5,
+                "fat": 2,
                 "possibleUnits": [
                   "package",
                   "g",

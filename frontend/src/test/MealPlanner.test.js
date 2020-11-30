@@ -2,7 +2,6 @@ import React from "react";
 import { render, screen, waitFor, cleanup } from "@testing-library/react";
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom'
-import axios from 'axios';
 
 import { UserProvider } from "../context/user";
 import { MealPlanProvider } from "../context/mealplan";
@@ -10,11 +9,11 @@ import { PopupProvider } from "../context/popup-context";
 // import { MealPlanProvider } from "../context/mealplan";
 // import { PopupProvider } from "../context/popup-context";
 // import HomePage from "../routes/HomePage";
-import GroceryList from "../components/GroceryList";
+import MealPlanner from "../components/MealPlanner";
 
 jest.mock('axios');
 
-describe("grocery list component", () => {
+describe("meal planner component", () => {
 
     afterEach(cleanup);
 
@@ -30,45 +29,12 @@ describe("grocery list component", () => {
       );
     }
 
-    test("grocery list correctly displays items", async () => {
-        wrapProviders( <GroceryList mealPlan={ sample_mealplans[0] }/> )
-
-        expect(screen.getByText("meat")).toBeInTheDocument();
-        expect(screen.getByText("bread")).toBeInTheDocument();
-        expect(screen.getByText("mustard")).toBeInTheDocument();
-        expect(screen.getByText("fettuccine")).toBeInTheDocument();
-        expect(screen.getByText("bean coffee")).toBeInTheDocument();
-        expect(screen.getByText("bean sprouts")).toBeInTheDocument();
-        expect(screen.getByText("noodle")).toBeInTheDocument();
-
-    });
-
-    test("grocery list correctly sums quantities for duplicate ingredients", async () => {
-        wrapProviders( <GroceryList mealPlan={ sample_mealplans[0] }/> )
-
-        expect(screen.getByTestId("meat-qty").textContent).toEqual("4 oz");
-        expect(screen.getByTestId("bread-qty").textContent).toEqual("1324 g");
-        expect(screen.getByTestId("mustard-qty").textContent).toEqual("3 oz");
-        expect(screen.getByTestId("fettuccine-qty").textContent).toEqual("3 bag");
-        expect(screen.getByTestId("bean coffee-qty").textContent).toEqual("3 oz");
-        expect(screen.getByTestId("bean sprouts-qty").textContent).toEqual("3 cup");
-        expect(screen.getByTestId("noodle-qty").textContent).toEqual("123 serving");
-    });
-
-    test("clicking the save button closes the grocery list", async () => {
-        const onClickClose = jest.fn();
-        wrapProviders( <GroceryList mealPlan={ sample_mealplans[0]} onClose={onClickClose} /> )
-
-        axios.mockImplementation(() =>
-            Promise.resolve({ data: [] })
-        );
-
-        await waitFor(() => userEvent.click(screen.getByText("Save"), { button: 1 })) // left click to save changes
-
-        expect(onClickClose.mock.calls.length).toBe(1); // call onClose
+    test("renders correctly", async () => {
+        wrapProviders( <MealPlanner /> )
     });
 });
 
+// eslint-disable-next-line no-unused-vars
 const sample_mealplans = [
     {
       "_id": "5fc309bb2d42f4d58ff4a84c",

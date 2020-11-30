@@ -2,70 +2,93 @@ import React from "react";
 import { render, screen, waitFor, cleanup } from "@testing-library/react";
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom'
-import axios from 'axios';
 
 import { UserProvider } from "../context/user";
 import { MealPlanProvider } from "../context/mealplan";
-import { PopupProvider } from "../context/popup-context";
+import { PopupProvider, PopupContext } from "../context/popup-context";
 // import { MealPlanProvider } from "../context/mealplan";
 // import { PopupProvider } from "../context/popup-context";
 // import HomePage from "../routes/HomePage";
-import GroceryList from "../components/GroceryList";
+import MealPeriodBox from "../components/MealPeriodBox";
 
 jest.mock('axios');
 
-describe("grocery list component", () => {
+describe("meal planner box component", () => {
 
     afterEach(cleanup);
 
-    function wrapProviders(children) {
-      return render(
-        <PopupProvider>
-            <UserProvider>
-                <MealPlanProvider>
-                    { children }
-                </MealPlanProvider>
-            </UserProvider>
-        </PopupProvider>
-      );
-    }
-
-    test("grocery list correctly displays items", async () => {
-        wrapProviders( <GroceryList mealPlan={ sample_mealplans[0] }/> )
-
-        expect(screen.getByText("meat")).toBeInTheDocument();
-        expect(screen.getByText("bread")).toBeInTheDocument();
-        expect(screen.getByText("mustard")).toBeInTheDocument();
-        expect(screen.getByText("fettuccine")).toBeInTheDocument();
-        expect(screen.getByText("bean coffee")).toBeInTheDocument();
-        expect(screen.getByText("bean sprouts")).toBeInTheDocument();
-        expect(screen.getByText("noodle")).toBeInTheDocument();
-
-    });
-
-    test("grocery list correctly sums quantities for duplicate ingredients", async () => {
-        wrapProviders( <GroceryList mealPlan={ sample_mealplans[0] }/> )
-
-        expect(screen.getByTestId("meat-qty").textContent).toEqual("4 oz");
-        expect(screen.getByTestId("bread-qty").textContent).toEqual("1324 g");
-        expect(screen.getByTestId("mustard-qty").textContent).toEqual("3 oz");
-        expect(screen.getByTestId("fettuccine-qty").textContent).toEqual("3 bag");
-        expect(screen.getByTestId("bean coffee-qty").textContent).toEqual("3 oz");
-        expect(screen.getByTestId("bean sprouts-qty").textContent).toEqual("3 cup");
-        expect(screen.getByTestId("noodle-qty").textContent).toEqual("123 serving");
-    });
-
-    test("clicking the save button closes the grocery list", async () => {
-        const onClickClose = jest.fn();
-        wrapProviders( <GroceryList mealPlan={ sample_mealplans[0]} onClose={onClickClose} /> )
-
-        axios.mockImplementation(() =>
-            Promise.resolve({ data: [] })
+    test("click + button to trigger popup context to open recipe popup", async () => {
+        render(
+            <PopupProvider>
+                <UserProvider>
+                    <MealPlanProvider>
+                        <MealPeriodBox day="monday" time="breakfast" meals={ sample_mealplans[0].monday.breakfast }/>
+                        <PopupContext.Consumer>
+                            { value => 
+                                <>
+                                    <span data-testid="showRecipePopup">{value.showRecipePopup ? "true" : "false"}</span>
+                                    <span data-testid="popupDay">{value.popupDay}</span>
+                                    <span data-testid="popupTime">{value.popupTime}</span>
+                                </>
+                            }
+                        </PopupContext.Consumer>
+                    </MealPlanProvider>
+                </UserProvider>
+            </PopupProvider>
         );
 
-        await waitFor(() => userEvent.click(screen.getByText("Save"), { button: 1 })) // left click to save changes
+        const plusButton = screen.getByText("+");
+        expect(plusButton).toBeInTheDocument();
+        await waitFor(() => userEvent.click(plusButton, { button: 1 }));
+        expect(screen.getByTestId("showRecipePopup").textContent).toEqual("true");
+        expect(screen.getByTestId("popupDay").textContent).toEqual("monday");
+        expect(screen.getByTestId("popupTime").textContent).toEqual("breakfast");
+    });
 
-        expect(onClickClose.mock.calls.length).toBe(1); // call onClose
+    test("click existing recipe autopopulates popup context", async () => {
+        render(
+            <PopupProvider>
+                <UserProvider>
+                    <MealPlanProvider>
+                        <MealPeriodBox day="monday" time="breakfast" meals={ sample_mealplans[0].monday.breakfast }/>
+                        <PopupContext.Consumer>
+                            { value => 
+                                <>
+                                    <span data-testid="recipeInfo">{JSON.stringify(value.recipeInfo)}</span>
+                                </>
+                            }
+                        </PopupContext.Consumer>
+                    </MealPlanProvider>
+                </UserProvider>
+            </PopupProvider>
+        );
+
+        const mealButton = screen.getByText(sample_mealplans[0].monday.breakfast[0].name);
+        expect(mealButton).toBeInTheDocument();
+        await waitFor(() => userEvent.click(mealButton, { button: 1 }));
+        expect(screen.getByTestId("recipeInfo").textContent).toEqual(JSON.stringify(sample_mealplans[0].monday.breakfast[0]))
+    });
+
+    test("always render + button even if no recipes", async () => {
+        render(
+            <PopupProvider>
+                <UserProvider>
+                    <MealPlanProvider>
+                        <MealPeriodBox day="monday" time="breakfast" meals={ [] }/>
+                        <PopupContext.Consumer>
+                            { value => 
+                                <>
+                                    <span data-testid="recipeInfo">{JSON.stringify(value.recipeInfo)}</span>
+                                </>
+                            }
+                        </PopupContext.Consumer>
+                    </MealPlanProvider>
+                </UserProvider>
+            </PopupProvider>
+        );
+
+        const mealButton = screen.getByText("+");
+        expect(mealButton).toBeInTheDocument();
     });
 });
 

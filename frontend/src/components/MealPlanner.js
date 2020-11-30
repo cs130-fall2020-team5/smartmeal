@@ -1,6 +1,5 @@
 import React, { useState, useContext } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
-import axios from 'axios';
 
 // styles
 import "./styles.css";
@@ -13,12 +12,10 @@ import RecipePopup from './RecipePopup';
 import WeeklyTotals from "./WeeklyTotals";
 
 // context
-import { UserContext } from "../context/user";
 import { MealPlanContext } from "../context/mealplan";
 import { PopupContext } from "../context/popup-context";
 
 export default function MealPlanner() {
-    const { loginToken } = useContext(UserContext);
     const { currentPlan } = useContext(MealPlanContext);
     const { showRecipePopup, recipeInfo } = useContext(PopupContext);
 
