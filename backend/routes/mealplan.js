@@ -39,7 +39,8 @@ router.post("/", function (req, res, next) {
 			 wednesday: { breakfast: [], lunch: [], dinner: [] },
 			 thursday: { breakfast: [], lunch: [], dinner: [] },
 			 friday: { breakfast: [], lunch: [], dinner: [] },
-			 saturday: { breakfast: [], lunch: [], dinner: [] }
+			 saturday: { breakfast: [], lunch: [], dinner: [] },
+			 customIngredients: []
 		};
 	    db.get()
 		.collection("mealplans")
@@ -72,6 +73,7 @@ router.put("/:mealplanid", function (req, res, next) {
 		if (body.thursday) updates["thursday"] = body.thursday;
 		if (body.friday) updates["friday"] = body.friday;
 		if (body.saturday) updates["saturday"] = body.saturday;
+		if (body.customIngredients) updates["customIngredients"] = body.customIngredients;
 	    db.get()
 		.collection("mealplans")
 		.findOneAndUpdate({ _id: ObjectId(mealplanid) }, {$set: updates})
@@ -126,6 +128,19 @@ router.post("/:mealplanid/check-grocery-items", function (req, res, next) {
 					}
 				}
 			}
+
+			// Check/uncheck the custom ingredients
+			const customIngList = mealplan.customIngredients;
+			for (let ing in customIngList) {
+				if (itemsToCheck.includes(customIngList[ing].name)) {
+					mealplan.customIngredients[ing]["checked"] = true;
+				}
+
+				if (itemsToUncheck.includes(customIngList[ing].name)) {
+					mealplan.customIngredients[ing]["checked"] = false;
+				}
+			}
+
 			db.get()
 			.collection("mealplans")
 			.findOneAndUpdate({ _id: ObjectId(mealplanid) }, { $set: mealplan })
