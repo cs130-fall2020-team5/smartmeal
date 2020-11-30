@@ -321,9 +321,8 @@ function spoonSearch(str) {
     }
   ).then((res) => {
     res.data = res.data.map((ing) => {
-      let tmp = ing;
-      tmp.name = tmp.name.toLowerCase();
-      return tmp;
+      ing.name = ing.name.toLowerCase();
+      return ing;
     });
     
     res.data.sort((first, second) => {
