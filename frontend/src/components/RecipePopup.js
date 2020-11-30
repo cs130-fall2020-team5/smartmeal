@@ -7,7 +7,7 @@ import axios from 'axios';
 import { PopupContext } from "../context/popup-context";
 import { UserContext } from "../context/user";
 import { MealPlanContext } from "../context/mealplan";
-
+var util = require("util");
 
 // https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions#Using_Special_Characters
 
@@ -26,7 +26,7 @@ function getSuggestions(value) {
 
   return spoonSearch(value)
   .then((res) => {
-    return res.data.filter(language => regex.test(language.name));
+    return res.data.filter(language => regex.test(language.name)).slice(0, 5);
   })
   .catch((err) => {
     console.log("Failed to do remote ingredient search: ", err);
@@ -316,11 +316,23 @@ function spoonSearch(str) {
       params: {
         apiKey: "db254b5cd61744d39a2deebd9c361444",
         query: str,
-        number: 5,
+        number: 100,
         metaInformation: true
       }
     }
-  )
+  ).then((res) => {
+    res.data = res.data.map((ing) => {
+      let tmp = ing;
+      tmp.name = tmp.name.toLowerCase();
+      return tmp;
+    });
+    
+    res.data.sort((first, second) => {
+      return first.name > second.name;
+    });
+
+    return res;
+  });
 }
 
 export default RecipePopup;
