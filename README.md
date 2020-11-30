@@ -1,51 +1,56 @@
-# smartmeal
-Meal planning web app that shows you the nutritional and budgetary impact of your planned meals
+# SmartMeal
+Meal planning web app that shows you the nutritional and budgetary impact of your planned meals. Users can create weekly meal plans, save custom recipes, and get auto-generated shopping lists to use at the grocery store.
 
-## Directory setup:
+## Documentation
+* SmartMeal's documentation is split into 2 parts: `frontend` and `backend`
+* Backend documentation is generated with Postman and can be viewed [on this webpage](https://documenter.getpostman.com/view/7688755/TVetcSDp)
+  * Full URL: https://documenter.getpostman.com/view/7688755/TVetcSDp
+* Frontend
+
+## Directory organization:
+* This project contains two node.js projects, separating the frontend and the backend
 * `frontend`: React webapp
 * `backend`: Node.js server running Express and MongoDB
+  * `backend/test`: testing scripts for the backend
 
-## Setting up:
-1. Run `npm install` the root directory
-2. Load sample database with `cd backend/ && mongo < db/load_db.sh`
+## First-time setup:
+1. Install the latest [MongoDB](https://docs.mongodb.com/manual/installation/) (installation differs on Linux, Windows, macOS; select the correct one)
+2. Install the latest node.js (recommended to use [nvm](https://github.com/nvm-sh/nvm) on Linux and macOS, [nvm-windows](https://github.com/coreybutler/nvm-windows) on Windows, )
+3. Run `npm install` the root directory to install dependencies in both `frontend` and `backend`
+4. Install `nodemon` globally if you don't yet have it, as we use it for hot-reloading the backend
+```
+$ npm install nodemon -g
+```
+4. The first time you run the webapp, you'll need to create a new user, since the database will be empty. This was previously done with a shell script, but can now be done using the existing UI. If you're feeling adventurous, you can load the script we used using the following commands  on Windows after starting the `mongod` service (see step 1 in the next section).
 
-###To run mongo on the background for MAC user:
+```
+(Linux/macOS) 
+$ mongo < backend/db/load_db.sh
+(Windows)   
+$ cd "C:\Program Files\MongoDB\Server\4.4\bin" (your absolute path may differ)
+$ Get-Content C:\Users\Axel\Documents\smartmeal\backend\db\load_db.sh | .\mongo
+```
+## Running
+1. Start the MongoDB server: 
+   * Linux: `mongod`
+   * macOS: `brew services start mongodb-community@4.4` (assuming you used `homebrew`)
+   * Windows: `cd "C:\Program Files\MongoDB\Server\4.4\bin"`, then `.\mongod`
+2. Start the webapp:
+   * Method 1: run `npm start` in `frontend/`, and `npm run watch` (hot-reload) or `npm start` (no hot-reload) in `backend/`
+   * Method 3 (preferred): run `npm start` in the root directory. This starts the front- and backend simultaneously in a single terminal using a custom `npm` script
 
-1.start a server: `brew services start mongodb-community@4.4`
-
-2.stop a server: `brew services stop mongodb-community@4.4`
-
- 
-## Running: 
-### Option 1: start frontend and backend separately
-1. Start mongo: `mongod`
-2. Run `npm start` in the `frontend/` and `backend/` folders separately
-
-### Option 2 (preferred): start everything at once
-1. Start mongo: `mongod`
-2. Run `npm start` in the root directory
-   * This requires you have `nodemon` installed globally: `npm install nodemon -g` (I manually added nodemon to an npm script for the node server)
+## Running tests
+* Backend: uses `Jest` to test API endpoints with `supertest`
+  * 3 test suites, one for each set of endpoints (users API, mealplans API, recipes API)
+```
+$ cd backend
+$ npm test
+```
+![Sample testing output](./res/backend-tests.png)
 
 ## Extra useful information:
-* Database loading script sets up 2 users
-  * username: "smallberg", password: "software"
-  * username: "eggert", password: "engineering"
-  * frontend requires that you login with one of these two accounts before gaining access to the app
-  * there's currently 1 endpoint to support logging in: `POST http://localhost:3000/users/login`
 * Frontend runs on port 4000 (app viewable at `localhost:4000`)
 * Backend runs on port 3000
 
-## Thoughts/Todos
-* I made some dummy data in `./frontend/sample-data/plan.json` using the class diagram
-
-List of endpoints needed:
-(this is all I could come up with, feel free to add or change these)
-
-* `GET /mealplan`: get all meal plans for the user
-* `POST /mealplan`: create new meal plan for the user, return all meal plans for user including the new one
-* `PUT /mealplan/:mealplanid`: update the meal plan with id `mealplanid`
-
-* `POST /users/new`: create a new user
-* `POST /users/login`: attempt to login, returns session token to authenticate with for /mealplan/*
 
 

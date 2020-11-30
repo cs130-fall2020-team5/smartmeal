@@ -48,7 +48,7 @@ app.use(function(err, req, res, next) {
   res.end();
 });
 
-db.connect("mongodb://localhost:27017", "SmartMeal")
+if (process.env.NODE_ENV !== 'test') db.connect("mongodb://localhost:27017", "SmartMeal")
   .then(() => {
     console.log("Connected to Mongo");
   })

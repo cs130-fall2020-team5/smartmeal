@@ -3,11 +3,13 @@ import axios from 'axios';
 
 // context
 import { UserContext } from "../context/user";
+import { PopupContext } from "../context/popup-context";
 
 const MealPlanContext = createContext();
 
 function MealPlanProvider({ children }) {
     const { isLoggedIn, loginToken } = useContext(UserContext);
+    const { popupDay, popupTime } = useContext(PopupContext);
     const [ mealPlans, setMealPlans ] = useState([]);
     const [ currentPlan, setCurrentPlan ] = useState(null);
 
@@ -36,6 +38,41 @@ function MealPlanProvider({ children }) {
             setCurrentPlan(null);
         });
     }, [loginToken]);
+
+    function updateCurrentMealPlan(newRecipe, isUpdateToExistingMeal) {
+        let newMealPlan = JSON.parse(JSON.stringify(currentPlan))
+        if (isUpdateToExistingMeal) {
+            for (let meal in newMealPlan[popupDay][popupTime]) {
+                if (newMealPlan[popupDay][popupTime][meal]._id === newRecipe._id) {
+                    newMealPlan[popupDay][popupTime][meal] = newRecipe;
+                }
+            }
+        } else {
+            newMealPlan[popupDay][popupTime].push(newRecipe);
+        }
+        axios({
+            method: "PUT",
+            url: 'http://localhost:3000/mealplan/' + currentPlan._id,
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + loginToken
+            },
+            data: newMealPlan
+        })
+        .then(res => {
+            if (res.data.length < 1) {
+                setMealPlans([]);
+                setCurrentPlan(null);
+            }
+            else {
+                setMealPlans(res.data);
+                setCurrentPlan(res.data.filter(mp => mp._id === currentPlan._id)[0])
+            }
+        })
+        .catch((err) => {
+            console.log("Failed to update meal plan: ", err);
+        });
+    }
 
     function createNewMealPlan() {
 
@@ -106,7 +143,7 @@ function MealPlanProvider({ children }) {
     }, [getMealPlans, isLoggedIn, loginToken]);
 
     return (
-        <MealPlanContext.Provider value={{mealPlans, currentPlan, createNewMealPlan, setCheckedIngredients, newPlanSelected}} >
+        <MealPlanContext.Provider value={{mealPlans, currentPlan, createNewMealPlan, setCheckedIngredients, newPlanSelected, updateCurrentMealPlan}} >
             { children }
         </MealPlanContext.Provider>
     )

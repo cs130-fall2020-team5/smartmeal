@@ -1,6 +1,5 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Button } from 'react-bootstrap'
-import axios from 'axios';
 import  { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import "./styles.css";
@@ -12,7 +11,6 @@ import Login from "../components/Login";
 // context
 import { UserContext } from "../context/user";
 import { MealPlanContext } from "../context/mealplan";
-import { PopupProvider } from "../context/popup-context";
 
 export default function HomePage() {
     const { isLoggedIn } = useContext(UserContext);
@@ -45,7 +43,6 @@ export default function HomePage() {
     }, [mealPlans, newPlanSelected]);
 
     return (
-      <PopupProvider>
         <div>
             {isLoggedIn ? (
                 <div className={`d-flex ${showMenu ? "" : "toggled"}`} id="wrapper">
@@ -74,6 +71,5 @@ export default function HomePage() {
             )}
             {/* <Button onClick={testMethod}>Test Button</Button> */}
         </div>
-        </PopupProvider>
     );
 }
