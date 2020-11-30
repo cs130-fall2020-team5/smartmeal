@@ -29,7 +29,7 @@ export default function GroceryList({ mealPlan, onClose }) {
                     <input className="check-grocery-item" type="checkbox" id={key + "-checkbox"} onChange={() => onCheckItem(key)} checked={attributes.checked ? true : false}/>
                     <label className="label-grocery-item" htmlFor={key + "-checkbox"}>{key}</label>
                     <span className="price-grocery-item">${attributes.price.toFixed(2)}</span>
-                    <div className="quantity-grocery-item">{quantity} {attributes.unit}</div>
+                    <div data-testid={key + "-qty"} className="quantity-grocery-item">{quantity} {attributes.unit}</div>
                 </div>
             );
             totalPrice += attributes.price;
