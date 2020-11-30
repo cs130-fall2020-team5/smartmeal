@@ -7,7 +7,6 @@ import axios from 'axios';
 import { PopupContext } from "../context/popup-context";
 import { UserContext } from "../context/user";
 import { MealPlanContext } from "../context/mealplan";
-var util = require("util");
 
 // https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions#Using_Special_Characters
 
