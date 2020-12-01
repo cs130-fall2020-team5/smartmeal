@@ -225,7 +225,7 @@ const RecipePopup = ({ recipe }) => {
         <div className={"form-row"}>
           {ingredientFields.map((ingredientField, index) => (
             <Fragment key={`${ingredientField}~${index}`}>
-              <Row>
+              <Row data-testid="fragment">
                 <Col>
                   <div className= "form-group">
                     <p className= "recipe-input-label">

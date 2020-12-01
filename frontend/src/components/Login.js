@@ -22,12 +22,12 @@ export default function LoginPage() {
             <Form onSubmit={login}>
                 <Form.Group>
                     <Form.Label>Username</Form.Label>
-                    <Form.Control type="text" placeholder="Enter username" onChange={ e => setFormState({...formState, username: e.target.value})}/>
+                    <Form.Control data-testid="username" type="text" placeholder="Enter username" onChange={ e => setFormState({...formState, username: e.target.value})}/>
                 </Form.Group>
 
                 <Form.Group controlId="formBasicPassword">
                     <Form.Label>Password</Form.Label>
-                    <Form.Control type="password" placeholder="Password" onChange={ e => setFormState({...formState, password: e.target.value})}/>
+                    <Form.Control data-testid="password" type="password" placeholder="Password" onChange={ e => setFormState({...formState, password: e.target.value})}/>
                 </Form.Group>
 
                 <>
