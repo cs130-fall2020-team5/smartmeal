@@ -46,7 +46,7 @@ describe("grocery list component", () => {
     test("grocery list correctly sums quantities for duplicate ingredients", async () => {
         wrapProviders( <GroceryList mealPlan={ sample_mealplans[0] }/> )
 
-        expect(screen.getByTestId("meat-qty").textContent).toEqual("4 oz");
+        expect(screen.getByTestId("meat-qty").textContent).toEqual("meat (4 oz)");
         expect(screen.getByTestId("bread-qty").textContent).toEqual("1324 g");
         expect(screen.getByTestId("mustard-qty").textContent).toEqual("3 oz");
         expect(screen.getByTestId("fettuccine-qty").textContent).toEqual("3 bag");

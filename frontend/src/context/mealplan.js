@@ -43,9 +43,7 @@ function MealPlanProvider({ children }) {
         });
     }, [loginToken]);
 
-    function updateCustomIngredients(newIng) {
-        let newMealPlan = JSON.parse(JSON.stringify(currentPlan));
-        newMealPlan.customIngredients.push(newIng);
+    function updateCustomIngredients(customIngredients) {
         axios({
             method: "PUT",
             url: 'http://localhost:3000/mealplan/' + currentPlan._id,
@@ -53,7 +51,7 @@ function MealPlanProvider({ children }) {
                 "Content-Type": "application/json",
                 "Authorization": "Bearer " + loginToken
             },
-            data: newMealPlan
+            data: { customIngredients: customIngredients }
         })
         .then(res => {
             if (res.data.length < 1) {
@@ -160,7 +158,7 @@ function MealPlanProvider({ children }) {
     }
 
     function setCheckedIngredients(mealPlanId, checked, unchecked) {
-        axios({
+        return axios({
             method: "POST",
             url: 'http://localhost:3000/mealplan/' + mealPlanId + "/check-grocery-items",
             headers: {
@@ -174,6 +172,7 @@ function MealPlanProvider({ children }) {
         })
         .then((result) => {
             getMealPlans(currentPlan ? currentPlan._id : null);
+            return new Promise(function (resolve, reject) { resolve(true) })
         })
         .catch((err) => {
             console.log("Failed to set checked ingredients ", err);

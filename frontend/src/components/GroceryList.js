@@ -33,9 +33,8 @@ export default function GroceryList({ mealPlan, onClose }) {
             items.push(
                 <div key={key} className="grocery-item">
                     <input className="check-grocery-item" type="checkbox" id={key + "-checkbox"} onChange={() => onCheckItem(key)} checked={attributes.checked ? true : false}/>
-                    <label className="label-grocery-item" htmlFor={key + "-checkbox"}>{key}</label>
+                    <label data-testid={key + "-qty"} className="label-grocery-item" htmlFor={key + "-checkbox"}>{key} ({amount} {attributes.unit})</label>
                     <span className="price-grocery-item">${attributes.price.toFixed(2)}</span>
-                    <div data-testid={key + "-qty"} className="amount-grocery-item">{amount} {attributes.unit}</div>
                 </div>
             );
 
@@ -45,8 +44,7 @@ export default function GroceryList({ mealPlan, onClose }) {
 
         items.push(
             <div key="totals" className="grocery-item">
-                <p>Total cost: ${ totalPrice.toFixed(2) }</p>
-                <p>Total in cart: ${ checkedPrice.toFixed(2) }</p>
+                <p style={{ "marginTop": "10px"}}>Total: ${ totalPrice.toFixed(2) }&nbsp;&nbsp;&nbsp;In cart: ${ checkedPrice.toFixed(2) }</p>
             </div>
         );
 
@@ -58,10 +56,10 @@ export default function GroceryList({ mealPlan, onClose }) {
             setCustomList({...customList, name: event.target.value});
             //event.target.value = "";
         } else if (event.target.name === "price") {
-            setCustomList({...customList, price: parseInt(event.target.value)}); // EC
+            setCustomList({...customList, price: event.target.value}); // EC
             //event.target.value = "";
         } else if (event.target.name === "amount") {
-            setCustomList({...customList, amount: parseInt(event.target.value)}); // EC
+            setCustomList({...customList, amount: event.target.value}); // EC
             //event.target.value = "";
         } else if (event.target.name === "unit") {
             setCustomList({...customList, unit: event.target.value});
@@ -70,13 +68,39 @@ export default function GroceryList({ mealPlan, onClose }) {
     }
 
     function newCustomIngredient() {
-        updateCustomIngredients(customList);
-        setCustomList({
-            name: "",
-            price: "",
-            amount: "",
-            unit: ""
-        });
+
+        // set what we've checked so far otherwise we lose it
+        let checked = [];
+        let unchecked = [];
+        for (let key in shoppingList) {
+            const attributes = shoppingList[key];
+            if (attributes.checked) {
+                checked.push(key);
+            } else {
+                unchecked.push(key);
+            }
+        }
+
+        setCheckedIngredients(mealPlan._id, checked, unchecked)
+            .then(() => {
+                // now forward the new custom ingredient
+                let customIngredients = mealPlan.customIngredients;
+                for (let ing of customIngredients) {
+                    if (checked.filter(key => key === ing.name).length > 0) {
+                        ing.checked = true;
+                    } else {
+                        ing.checked = false;
+                    }
+                }
+                customIngredients.push(customList);
+                updateCustomIngredients(customIngredients);
+                setCustomList({
+                    name: "",
+                    price: "",
+                    amount: "",
+                    unit: ""
+                });
+            })
     }
 
     function onCheckItem(item) {
@@ -140,11 +164,11 @@ export default function GroceryList({ mealPlan, onClose }) {
         for (let ingredient of ingredients) {
             if (shoppingList[ingredient.name]) {
                 const groceryItem = shoppingList[ingredient.name];
-                groceryItem.amount += ingredient.amount ? parseInt(ingredient.amount) : 0; // see proposal report class diagram
-                groceryItem.price += ingredient.price ? ingredient.price : 0; // may need to adjust/multiply by amount
+                groceryItem.amount += ingredient.amount ? parseFloat(ingredient.amount) : 0; // see proposal report class diagram
+                groceryItem.price += ingredient.price ? parseFloat(ingredient.price) : 0; // may need to adjust/multiply by amount
                 // IMPORTANT: units may differ between different ingredients, possibly will need to convert so amount is correct
             } else {
-                shoppingList[ingredient.name] = { amount: ingredient.amount ? parseInt(ingredient.amount) : 0, unit: ingredient.unit, price: ingredient.price ? ingredient.price : 0, checked: ingredient.checked };
+                shoppingList[ingredient.name] = { amount: ingredient.amount ? parseFloat(ingredient.amount) : 0, unit: ingredient.unit, price: ingredient.price ? parseFloat(ingredient.price) : 0, checked: ingredient.checked };
             }
         }
 

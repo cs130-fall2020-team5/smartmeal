@@ -35,7 +35,7 @@ router.post("/", function (req, res, next) {
 
         let epochStartDate = parseInt(startdate); // milliseconds since epoch
         let startDate = new Date(epochStartDate);
-        let endDate = new Date(new Date(startDate).setDate(startDate.getDate() + 7));
+        let endDate = new Date(new Date(startDate).setDate(startDate.getDate() + 6));
         let formattedDateText = (startDate.getMonth() + 1) + "/" + startDate.getDate() + "-" + (endDate.getMonth() + 1) + "/" + endDate.getDate();
         const defaultMealPlanName = "Week of " + formattedDateText;
 

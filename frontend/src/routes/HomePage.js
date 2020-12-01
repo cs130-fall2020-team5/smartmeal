@@ -32,12 +32,12 @@ export default function HomePage() {
 
         let sbb = [];
         for (let mealPlan of mealPlans) {
-            let backgroundColor = currentPlan._id === mealPlan._id ? "#c9c9c9" : "#ffffff"
+            let backgroundColor = currentPlan && currentPlan._id === mealPlan._id ? "#c9c9c9" : "#ffffff"
             sbb.push(<Button variant="light" style={{ "background": `${backgroundColor}` }} key={mealPlan._id} onClick={() => newPlanSelected(mealPlan._id)}>{mealPlan.name ? mealPlan.name : "New meal plan"}</Button>)
         }
 
         setSideBarButtons(sbb);
-    }, [currentPlan._id, mealPlans, newPlanSelected]);
+    }, [currentPlan, mealPlans, newPlanSelected]);
 
     return (
         <div>
