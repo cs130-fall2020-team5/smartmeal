@@ -87,14 +87,13 @@ class RecipeSuggest extends React.Component {
     });
     //console.log(this.state.suggestions);
     var ingres=this.state.suggestions.filter(a=> a.name===newValue);
-    var ingre;
     if (ingres.length===0){
-      ingre=[];
+      //
     }
     else{
-      ingre=[{name:'apple', amount:'1', unit:'oz',possibleUnits:['oz','unit','kg']},{name:'pineapple', amount:'3', unit:'kg',possibleUnits:['plate','unit','kg']}];
+      // ingre=[{name:'apple', amount:'1', unit:'oz',possibleUnits:['oz','unit','kg']},{name:'pineapple', amount:'3', unit:'kg',possibleUnits:['plate','unit','kg']}];
+      this.props.onChange2(ingres[0]);
     }
-    this.props.onChange2(ingre);
   };
   
 
@@ -128,7 +127,6 @@ class RecipeSuggest extends React.Component {
       token,
       onChange: this.onChange
     };
-
 
     
     return (
@@ -192,8 +190,8 @@ class MyAutosuggest extends React.Component {
   };
 
   render() {
-    const { id, placeholder, className } = this.props;
-    const { value, suggestions } = this.state;
+    const { value, id, placeholder, className } = this.props;
+    const { suggestions } = this.state;
     const inputProps = {
       placeholder,
       className,
@@ -298,36 +296,9 @@ const RecipePopup = ({ recipe }) => {
     }
   };
 
-  const handlePopulateIngredients = (ingredient_fileds) => {
-    var new_len=ingredient_fileds.length;
-    if(new_len>0){
-    const values = [...ingredientFields];
-    //console.log("original, ",values.length);
-    //console.log("ingre, ",ingredient_fileds.length);
-    var old_len=values.length;
-    if(new_len>old_len){
-      for(var i=0; i<(new_len-old_len);i++){
-        values.push({ name:'', amount:'', unit:'',possibleUnits:[] });}
-    }
-    else{
-      values.length=new_len;
-    }
-    for(var i=0; i<new_len;i++){
-      console.log(ingredient_fileds[i]);
-      values[i].name = ingredient_fileds[i].name;
-      values[i].possibleUnits=ingredient_fileds[i].possibleUnits;
-      values[i].amount = ingredient_fileds[i].amount;
-      values[i].unit = ingredient_fileds[i].unit;
-      setIngredientFields(values);
-
-    }
-    values[0].name = ingredient_fileds[0].name;
-    setIngredientFields(values);
-    console.log("no 1",values[0].name);
-
-    
-  }
-    //console.log(values);
+  const handlePopulateIngredients = (recipe) => {
+    setIngredientFields(isExistingRecipe({ name: recipe.name, ingredientList: recipe.ingredients }))
+    setRecipeName(recipe.name);
   };
 
   return (
@@ -368,6 +339,7 @@ const RecipePopup = ({ recipe }) => {
                     <p className= "recipe-input-label">
                       {index === 0  ? "Ingredient" : ""}
                     </p>
+                    {console.log("myunit", ingredientField)}
                     <MyAutosuggest
                       id="ingre1"
                       placeholder="Type ingredient"
@@ -398,11 +370,9 @@ const RecipePopup = ({ recipe }) => {
                     <p className= "recipe-input-label">
                       {index === 0  ? "Units" : ""}
                     </p>
-                    <select name="unit" className="form-control text-center" onChange={event => handleInputChange(index, event)}>
-                    {console.log("myunit", ingredientField)}
-                    {ingredientField.possibleUnits.map(unit =>
-                      (!ingredientField.unit || unit!=ingredientField.unit)?(<option value={unit}>{unit}</option>):(<option value={unit} selected="selected">{unit}</option>)
-                      )}                    </select>
+                    <select name="unit" className="form-control text-center" value={ingredientField.unit} onChange={event => handleInputChange(index, event)}>
+                      {ingredientField.possibleUnits.map(unit => <option key={unit} value={unit}>{unit}</option> )}
+                      </select>
                   </div>
                 </Col>
 
