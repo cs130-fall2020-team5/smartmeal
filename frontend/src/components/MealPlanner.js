@@ -21,8 +21,8 @@ export default function MealPlanner() {
 
     const [ showWeeklyTotals, setShowWeeklyTotals ] = useState(false);
     const [ showGroceryList, setShowGroceryList ] = useState(false);
-    const [ mealPlanName, setMealPlanName ] = useState(currentPlan.name ? currentPlan.name : "");
-    const [ mealPlanStartDay, setMealPlanStartDay ] = useState(currentPlan.startday ? currentPlan.startday : "sunday");
+    const [ mealPlanName, setMealPlanName ] = useState("");
+    const [ mealPlanStartDay, setMealPlanStartDay ] = useState("");
 
     useEffect(() => {
         if (currentPlan) {
@@ -33,7 +33,15 @@ export default function MealPlanner() {
 
     function getDaysOfWeek() {
         let defaultDays = [ "sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday" ];
-        while (defaultDays[0] !== currentPlan.startday) {
+
+        let desiredStartDay = "";
+        if (defaultDays.filter(day => day === currentPlan.startday).length === 0) {
+            desiredStartDay = "sunday";
+        } else {
+            desiredStartDay = currentPlan.startday;
+        }
+
+        while (defaultDays[0] !== desiredStartDay) {
             let firstday = defaultDays.shift();
             defaultDays.push(firstday);
         }
@@ -57,7 +65,7 @@ export default function MealPlanner() {
         return (
             <Col key={day}>
                 <div style={{"maxWidth": "180px"}}>
-                    <div className="day-label">{capitalize(day)}</div>
+                    <div className="day-label" data-testid="day-label">{capitalize(day)}</div>
 
                     <p className="mealtime-label">{ shouldIncludeMealPeriodLabels ? "Breakfast" : "" }</p>
                     <MealPeriodBox meals={currentPlan[day]["breakfast"]} day={day} time="breakfast"/>
@@ -89,10 +97,11 @@ export default function MealPlanner() {
                                 type="text"
                                 name="mealplan-name"
                                 value={mealPlanName}
+                                data-testid="mealplan-name"
                                 onChange={ (event) => setMealPlanName(event.target.value) }
                             />
                             <label htmlFor="mealplan-startday" style={{ "margin": "10px"}}>Start day: </label>
-                            <select name="mealplan-startday" value={mealPlanStartDay} onChange={ (event) => setMealPlanStartDay(event.target.value) }>
+                            <select data-testid="mealplan-startday" name="mealplan-startday" value={mealPlanStartDay} onChange={ (event) => setMealPlanStartDay(event.target.value) }>
                                 { [ "sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday" ].map(day => <option key={day} value={day}>{capitalize(day)}</option>)}
                             </select>
                             <Button className="button-row" onClick={ (e) => { e.preventDefault(); updateMealPlanMetadata(mealPlanName, mealPlanStartDay) } } style={{ "marginLeft": "10px"}}>Save Meal Plan</Button>

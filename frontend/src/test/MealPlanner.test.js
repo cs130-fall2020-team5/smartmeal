@@ -2,6 +2,7 @@ import React from "react";
 import { render, screen, waitFor, cleanup } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
+import axios from 'axios';
 
 import { UserProvider } from "../context/user";
 import { MealPlanContext } from "../context/mealplan";
@@ -21,7 +22,7 @@ describe("meal planner component", () => {
         return render(
             <PopupProvider>
                 <UserProvider>
-                    <MealPlanContext.Provider value={{ currentPlan: sample_mealplans[0] }}>
+                    <MealPlanContext.Provider value={{ currentPlan: sample_mealplans[0], updateMealPlanMetadata: jest.fn() }} >
                         {children}
                     </MealPlanContext.Provider>
                 </UserProvider>
@@ -29,7 +30,7 @@ describe("meal planner component", () => {
         );
     }
 
-    test("renders correctly", async () => {
+    test("renders correct information", async () => {
         wrapProviders(<MealPlanner />);
 
         expect(screen.getByText("hamburgers")).toBeInTheDocument();
@@ -39,18 +40,72 @@ describe("meal planner component", () => {
         expect(screen.getByText("My recipe")).toBeInTheDocument();
     });
 
-    test("can click button to open/close grocery list", async () => {
+    test("renders nothing when there is no meal plan to show", async () => {
         render(
             <PopupProvider>
                 <UserProvider>
-                    <MealPlanContext.Provider value={{ currentPlan: sample_mealplans[0] }}>
-                        {/* <MealPlanContext.Provider > */}
-                            <MealPlanner />
-                        {/* </MealPlanContext.Provider> */}
+                    <MealPlanContext.Provider value={{ currentPlan: null, updateMealPlanMetadata: jest.fn() }} >
+                        <MealPlanner />
                     </MealPlanContext.Provider>
                 </UserProvider>
             </PopupProvider>
         );
+
+        expect(screen.queryByText("hamburgers")).toBeNull();
+        expect(screen.queryByText("sandwich")).toBeNull();
+        expect(screen.queryByText("TEST")).toBeNull();
+        expect(screen.queryByText("TEST2")).toBeNull();
+        expect(screen.queryByText("My recipe")).toBeNull();
+    });
+
+    test("correctly orders the days", async () => {
+        wrapProviders(<MealPlanner />);
+
+        const dayLabels = screen.getAllByTestId("day-label");
+        expect(dayLabels.length).toEqual(7);
+        expect(dayLabels[0].textContent).toEqual("Wednesday");
+        expect(dayLabels[1].textContent).toEqual("Thursday");
+        expect(dayLabels[2].textContent).toEqual("Friday");
+        expect(dayLabels[3].textContent).toEqual("Saturday");
+        expect(dayLabels[4].textContent).toEqual("Sunday");
+        expect(dayLabels[5].textContent).toEqual("Monday");
+        expect(dayLabels[6].textContent).toEqual("Tuesday");
+    });
+
+    test("can change meal plan name/start day by entering info and clicking save", async () => {
+
+        const updateString = "testing string"
+        const updateMealPlanFn = jest.fn((name, startday) => {
+            expect(name).toEqual("test-name" + updateString)
+            expect(startday).toEqual("saturday");
+        });
+        render(
+            <PopupProvider>
+                <UserProvider>
+                    <MealPlanContext.Provider value={{ currentPlan: sample_mealplans[0], updateMealPlanMetadata: updateMealPlanFn }} >
+                        <MealPlanner />
+                    </MealPlanContext.Provider>
+                </UserProvider>
+            </PopupProvider>
+        );
+
+        axios.mockImplementation(() => {
+            Promise.resolve(sample_mealplans)
+        })
+
+        const updateMpButton = screen.getByText("Save Meal Plan");
+        const mpNameTextbox = screen.getByTestId("mealplan-name");
+        const mpStartdayTextbox = screen.getByTestId("mealplan-startday");
+
+        await userEvent.type(mpNameTextbox, updateString);
+        await userEvent.selectOptions(mpStartdayTextbox, "Saturday");
+        await waitFor(() => { userEvent.click(updateMpButton, { button: 1 })});
+
+        expect(updateMealPlanFn.mock.calls.length).toEqual(1);
+    });
+
+    test("can click button to open/close grocery list", async () => {
+        wrapProviders(<MealPlanner />);
 
         global.scrollTo = jest.fn();
         await waitFor(() => { userEvent.click(screen.getByText("Grocery List"), { button: 1 }) }); // open
@@ -59,18 +114,9 @@ describe("meal planner component", () => {
         await waitFor(() => { userEvent.click(screen.getAllByText("Grocery List")[1], { button: 1 }) }); // close
         expect(screen.queryByText("Add Custom Ingredient")).toBeNull(); // ensure grocery list not present
     });
+
     test("can click button to open/close weekly totals", async () => {
-        render(
-            <PopupProvider>
-                <UserProvider>
-                    <MealPlanContext.Provider value={{ currentPlan: sample_mealplans[0] }}>
-                        {/* <MealPlanContext.Provider > */}
-                            <MealPlanner />
-                        {/* </MealPlanContext.Provider> */}
-                    </MealPlanContext.Provider>
-                </UserProvider>
-            </PopupProvider>
-        );
+        wrapProviders(<MealPlanner />);
 
         global.scrollTo = jest.fn();
         await waitFor(() => { userEvent.click(screen.getByText("Weekly Totals"), { button: 1 }) });
@@ -88,6 +134,8 @@ const sample_mealplans = [
         username: "axel",
         date: 1606790331505,
         customIngredients: [],
+        startday: "wednesday",
+        name: "test-name",
         sunday: {
             breakfast: [],
             lunch: [],

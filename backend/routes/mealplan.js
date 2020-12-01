@@ -32,6 +32,13 @@ router.post("/", function (req, res, next) {
 	    let username = tokenInfo.usr;
 		let startdate = req.body.startdate;
 		if (!startdate) throw 400;
+
+        let epochStartDate = parseInt(startdate); // milliseconds since epoch
+        let startDate = new Date(epochStartDate);
+        let endDate = new Date(new Date(startDate).setDate(startDate.getDate() + 7));
+        let formattedDateText = (startDate.getMonth() + 1) + "/" + startDate.getDate() + "-" + (endDate.getMonth() + 1) + "/" + endDate.getDate();
+        const defaultMealPlanName = "Week of " + formattedDateText;
+
 	    let entry = {username: username, date: startdate,
 			 sunday: { breakfast: [], lunch: [], dinner: [] },
 			 monday: { breakfast: [], lunch: [], dinner: [] },
@@ -40,7 +47,9 @@ router.post("/", function (req, res, next) {
 			 thursday: { breakfast: [], lunch: [], dinner: [] },
 			 friday: { breakfast: [], lunch: [], dinner: [] },
 			 saturday: { breakfast: [], lunch: [], dinner: [] },
-			 customIngredients: []
+			 customIngredients: [],
+			 startday: "sunday",
+			 name: defaultMealPlanName
 		};
 	    db.get()
 		.collection("mealplans")
@@ -66,6 +75,8 @@ router.put("/:mealplanid", function (req, res, next) {
 		
 		let body = req.body;
 		let updates = {};
+		if (body.name) updates["name"] = body.name;
+		if (body.startday) updates["startday"] = body.startday;
 		if (body.sunday) updates["sunday"] = body.sunday;
 		if (body.monday) updates["monday"] = body.monday;
 		if (body.tuesday) updates["tuesday"] = body.tuesday;
