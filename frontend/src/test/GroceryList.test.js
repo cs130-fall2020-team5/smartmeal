@@ -33,13 +33,13 @@ describe("grocery list component", () => {
     test("grocery list correctly displays items", async () => {
         wrapProviders( <GroceryList mealPlan={ sample_mealplans[0] }/> )
 
-        expect(screen.getByText("meat")).toBeInTheDocument();
-        expect(screen.getByText("bread")).toBeInTheDocument();
-        expect(screen.getByText("mustard")).toBeInTheDocument();
-        expect(screen.getByText("fettuccine")).toBeInTheDocument();
-        expect(screen.getByText("bean coffee")).toBeInTheDocument();
-        expect(screen.getByText("bean sprouts")).toBeInTheDocument();
-        expect(screen.getByText("noodle")).toBeInTheDocument();
+        expect(screen.getByText(/meat/)).toBeInTheDocument();
+        expect(screen.getByText(/bread/)).toBeInTheDocument();
+        expect(screen.getByText(/mustard/)).toBeInTheDocument();
+        expect(screen.getByText(/fettuccine/)).toBeInTheDocument();
+        expect(screen.getByText(/bean coffee/)).toBeInTheDocument();
+        expect(screen.getByText(/bean sprouts/)).toBeInTheDocument();
+        expect(screen.getByText(/noodle/)).toBeInTheDocument();
 
     });
 
@@ -47,12 +47,12 @@ describe("grocery list component", () => {
         wrapProviders( <GroceryList mealPlan={ sample_mealplans[0] }/> )
 
         expect(screen.getByTestId("meat-qty").textContent).toEqual("meat (4 oz)");
-        expect(screen.getByTestId("bread-qty").textContent).toEqual("1324 g");
-        expect(screen.getByTestId("mustard-qty").textContent).toEqual("3 oz");
-        expect(screen.getByTestId("fettuccine-qty").textContent).toEqual("3 bag");
-        expect(screen.getByTestId("bean coffee-qty").textContent).toEqual("3 oz");
-        expect(screen.getByTestId("bean sprouts-qty").textContent).toEqual("3 cup");
-        expect(screen.getByTestId("noodle-qty").textContent).toEqual("123 serving");
+        expect(screen.getByTestId("bread-qty").textContent).toEqual("bread (1324 g)");
+        expect(screen.getByTestId("mustard-qty").textContent).toEqual("mustard (3 oz)");
+        expect(screen.getByTestId("fettuccine-qty").textContent).toEqual("fettuccine (3 bag)");
+        expect(screen.getByTestId("bean coffee-qty").textContent).toEqual("bean coffee (3 oz)");
+        expect(screen.getByTestId("bean sprouts-qty").textContent).toEqual("bean sprouts (3 cup)");
+        expect(screen.getByTestId("noodle-qty").textContent).toEqual("noodle (123 serving)");
     });
 
     test("clicking the save button closes the grocery list", async () => {
