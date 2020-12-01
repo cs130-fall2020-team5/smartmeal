@@ -94,7 +94,7 @@ class RecipeSuggest extends React.Component {
     else{
       ingre=[{name:'apple', qty:'1', units:'oz',possibleUnits:['oz','unit','kg']},{name:'pineapple', qty:'3', units:'kg',possibleUnits:['plate','unit','kg']}];
     }
-    this.props.onChange(ingre);
+    this.props.onChange2(ingre);
   };
   
 
@@ -317,18 +317,15 @@ const RecipePopup = ({ recipe }) => {
           <Col>
           <div>
           <RecipeSuggest
-          id="type-c"
-          placeholder="Type 'c'"
+          id="type-recipe"
           token={loginToken}
-          onChange={(ingredient_fileds) => handlePopulateIngredients(ingredient_fileds)}
+          onChange2={(ingredient_fileds) => handlePopulateIngredients(ingredient_fileds)}
+          type="text"
+          className="form-control text-center"
+          placeholder="Recipe Name"
+          value={recipeName}
+          onChange={event => setRecipeName(event.target.value)}
         />
-                  <button
-            className="btn btn-primary mr-2"
-            type="button"
-            onClick={() => handleAddFields()}
-          >
-            Add Ingredient
-          </button>
         </div>
           </Col>
           <Col>
