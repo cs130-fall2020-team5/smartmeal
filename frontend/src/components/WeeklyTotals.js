@@ -58,7 +58,7 @@ export default function WeeklyTotals({ mealPlan, onClose }) {
                         <div className="grocery-item">Protein: {nutritionInformation.protein} g</div>
                         <div className="grocery-item">Price: ${nutritionInformation.price}</div>
                     </div>
-                    <Button onClick={updateAndClose}>Exit</Button>
+                    <Button style={{ "margin-top": "15px" }} onClick={updateAndClose}>Exit</Button>
                 </div>
             </div>
         </div>
