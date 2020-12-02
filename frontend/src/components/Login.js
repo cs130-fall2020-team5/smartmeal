@@ -18,32 +18,41 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="Login">
-            <Form onSubmit={login}>
-                <Form.Group>
-                    <Form.Label>Username</Form.Label>
-                    <Form.Control data-testid="username" type="text" placeholder="Enter username" onChange={ e => setFormState({...formState, username: e.target.value})}/>
-                </Form.Group>
+        <div>
+          <div className="login-header">
+            <div className="login-header-text">
+              <h1>
+                Plan, Shop, <b>SmartMeal</b>.
+              </h1>
+            </div>
+          </div>
 
-                <Form.Group controlId="formBasicPassword">
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control data-testid="password" type="password" placeholder="Password" onChange={ e => setFormState({...formState, password: e.target.value})}/>
-                </Form.Group>
+          <div className="Login login-background">
+              <Form onSubmit={login}>
+                  <Form.Group>
+                      <Form.Label>Username</Form.Label>
+                      <Form.Control data-testid="username" type="text" placeholder="Enter username" onChange={ e => setFormState({...formState, username: e.target.value})}/>
+                  </Form.Group>
 
-                <>
-                    <Button variant="primary" type="submit">
-                        Login
-                    </Button>
-                    <Button variant="link" onClick={goToRegister}> New User? Register </Button>
-                </>
+                  <Form.Group controlId="formBasicPassword">
+                      <Form.Label>Password</Form.Label>
+                      <Form.Control data-testid="password" type="password" placeholder="Password" onChange={ e => setFormState({...formState, password: e.target.value})}/>
+                  </Form.Group>
 
-                { errorMessage && <div>
-                    <br/>
-                    <p style={{"color": "red"}}>Error: { errorMessage }</p>
-                </div> }
+                  <>
+                      <Button variant="primary" type="submit">
+                          Login
+                      </Button>
+                      <Button variant="link" onClick={goToRegister}> New User? Register </Button>
+                  </>
 
-            </Form>
+                  { errorMessage && <div>
+                      <br/>
+                      <p style={{"color": "red"}}>Error: { errorMessage }</p>
+                  </div> }
 
+              </Form>
+          </div>
         </div>
     );
 }

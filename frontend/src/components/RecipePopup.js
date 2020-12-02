@@ -232,13 +232,15 @@ const RecipePopup = ({ recipe }) => {
         for (const ingredient of ingredientList){
           values.push({name: ingredient.name, amount: ingredient.amount, unit: ingredient.unit, possibleUnits: ingredient.possibleUnits ? ingredient.possibleUnits : [] });
         }
-        return values;
+      }
+      else {
+        values.push({name: '', qty:'', units:'', possibleUnits:[]});
       }
     }
     else {
         values.push({name: '', amount:'', unit:'', possibleUnits:[]});
-        return values;
     }
+    return values;
   }
 
   const [ingredientFields, setIngredientFields] = useState(isExistingRecipe(recipe));
