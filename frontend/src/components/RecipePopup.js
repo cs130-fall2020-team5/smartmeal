@@ -245,6 +245,7 @@ const RecipePopup = ({ recipe }) => {
   const [recipeName, setRecipeName] = useState(recipe.name);
 
   function updateMealplan(recipe_id, recipe_name, ingredient_list){
+    var isExistingRecipe=recipe_id.length?true:false;
     console.log("1.1recipe._id", recipe_id);
     axios({
       method: recipe_id.length ? "PUT" : "POST",
@@ -260,7 +261,7 @@ const RecipePopup = ({ recipe }) => {
     }).then((res) => {
       //console.log("2new one", recipe_id);
       //console.log("3recipe._id",recipe_id.length? recipe_id: res.data.id);
-      updateCurrentMealPlan({ name: recipeName, ingredientList: ingredientFields, _id: recipe_id.length? recipe_id: res.data.id }, isExistingRecipe);
+      updateCurrentMealPlan({ name: recipeName, ingredientList: ingredientFields, _id: recipe_id.length? recipe_id: res.data.id }, true);
     }).catch((err) =>{
       console.log("Failed to save new recipe: ", err);
     })

@@ -94,8 +94,12 @@ function MealPlanProvider({ children }) {
     }
 
     function updateCurrentMealPlan(newRecipe, isUpdateToExistingMeal) {
+        console.log(newRecipe, isUpdateToExistingMeal);
         let newMealPlan = JSON.parse(JSON.stringify(currentPlan))
         if (isUpdateToExistingMeal) {
+          //newMealPlan[popupDay][popupTime].push(newRecipe);
+
+            console.log(popupDay, popupTime);
             for (let meal in newMealPlan[popupDay][popupTime]) {
                 if (newMealPlan[popupDay][popupTime][meal]._id === newRecipe._id) {
                     newMealPlan[popupDay][popupTime][meal] = newRecipe;
