@@ -222,6 +222,7 @@ const RecipePopup = ({ recipe }) => {
 
   const { saveButtonClicked, cancelButtonClicked } = useContext(PopupContext);
   const { updateCurrentMealPlan } = useContext(MealPlanContext);
+  const { removeMeal } = useContext(MealPlanContext);
 
   const isExistingRecipe = ( recipe ) => {
     const values = [];
@@ -245,26 +246,26 @@ const RecipePopup = ({ recipe }) => {
   const [recipeName, setRecipeName] = useState(recipe.name);
 
   function updateMealplan(recipe_id, recipe_name, ingredient_list){
-    var isExistingRecipe=recipe_id.length?true:false;
     console.log("1.1recipe._id", recipe_id);
+
+    const isExistingRecipe = recipe_id ? true : false;
+    console.log(isExistingRecipe);
     axios({
-      method: recipe_id.length ? "PUT" : "POST",
-      url: "http://localhost:3000/recipe/" + recipe_id,
-      headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer " + loginToken
-      },
-      data: {
-          name: recipe_name,
-          ingredients: JSON.stringify(ingredient_list)
-      }
-    }).then((res) => {
-      //console.log("2new one", recipe_id);
-      //console.log("3recipe._id",recipe_id.length? recipe_id: res.data.id);
-      updateCurrentMealPlan({ name: recipeName, ingredientList: ingredientFields, _id: recipe_id.length? recipe_id: res.data.id }, true);
-    }).catch((err) =>{
-      console.log("Failed to save new recipe: ", err);
-    })
+        method: isExistingRecipe ? "PUT" : "POST",
+        url: "http://localhost:3000/recipe/" + recipe_id,
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + loginToken
+        },
+        data: {
+            name: recipe_name,
+            ingredients: JSON.stringify(ingredient_list)
+        }
+      }).then((res) => {
+        updateCurrentMealPlan({ name: recipeName, ingredientList: ingredientFields, _id: isExistingRecipe ? recipe_id : res.data.id }, isExistingRecipe)
+      }).catch((err) =>{
+        console.log("Failed to save new recipe: ", err);
+      })
   }
 
   function saveRecipe(recipe_name, ingredient_list) {
@@ -332,6 +333,11 @@ const RecipePopup = ({ recipe }) => {
       setIngredientFields(isExistingRecipe({ name: recipe.name, ingredientList: recipe.ingredients }))
       setRecipeName(recipe.name);
   };
+
+  const handleDeleteMeal = () => {
+    removeMeal(recipe._id);
+    cancelButtonClicked();
+  }
 
   return (
     <>
@@ -421,14 +427,14 @@ const RecipePopup = ({ recipe }) => {
             type="button"
             onClick={() => handleAddFields()}
           >
-            Add Ingredient
+            Add
           </button>
           <button
             className="btn btn-primary mr-2"
             type="button"
             onClick={() => handleRemoveFields()}
           >
-            Remove Ingredient
+            Remove
           </button>
           <button
             className="btn btn-primary mr-2"
@@ -443,6 +449,13 @@ const RecipePopup = ({ recipe }) => {
             onSubmit={handleSubmit}
           >
             { recipe._id ? "Update" : "Save"}
+          </button>
+          <button
+            className="btn btn-primary mr-2"
+            type="button"
+            onClick={handleDeleteMeal}
+          >
+            Delete Recipe
           </button>
         </Row>
         </Container>
