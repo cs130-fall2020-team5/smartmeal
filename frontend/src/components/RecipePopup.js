@@ -42,105 +42,6 @@ function renderSuggestion(suggestion) {
     <span>{suggestion.name}</span>
   );
 }
-function recipe_getSuggestions(value,token) {
-  const escapedValue = escapeRegexCharacters(value.trim());
-
-  if (escapedValue === '') {
-    return [];
-  }
-
-  const regex = new RegExp('^' + escapedValue, 'i');
-
-  //console.log(loginToken);
-  return axios({
-    method: "GET",
-    url: "http://localhost:3000/recipe/",
-    headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + token
-    }
-})
-.then((res) => {
-  //console.log(res.data.filter(each_recipe => regex.test(each_recipe.name)));
-  return res.data.filter(each_recipe => regex.test(each_recipe.name));
-})
-.catch((err) => {
-  console.log("Failed to do recipe search: ", err);
-  return [];
-});
-}
-
-class RecipeSuggest extends React.Component {
-  constructor() {
-    super();
-
-    this.state = {
-      value: '',
-      suggestions: []
-    };    
-  }
-
-
-  onChange = (event, { newValue, method }) => {
-    this.setState({
-      value: newValue
-    });
-    //console.log(this.state.suggestions);
-    var ingres=this.state.suggestions.filter(a=> a.name===newValue);
-    if (ingres.length===0){
-      //
-    }
-    else{
-      this.props.onChange2(ingres[0]);
-    }
-  };
-  
-
-
-  onSuggestionsFetchRequested = ({ value }) => {
-    recipe_getSuggestions(value, this.props.token)
-    .then((res) => {
-      this.setState({
-        suggestions: res
-
-      });
-
-    })
-    .catch((err) => {
-      console.log("Failed to do fetch suggestions: ", err);
-    });
-  };
-  onSuggestionsClearRequested = () => {
-    this.setState({
-      suggestions: []
-    });
-  };
-
-  render() {
-    const { value, id, placeholder, token, /*className*/ } = this.props;
-    const { suggestions } = this.state;
-    const inputProps = {
-      placeholder,
-      value,
-      //className
-      token,
-      onChange: this.onChange
-    };
-
-    
-    return (
-      <Autosuggest 
-        id={id}
-        suggestions={suggestions}
-        onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-        onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-        getSuggestionValue={getSuggestionValue}
-        renderSuggestion={renderSuggestion}
-        inputProps={inputProps} 
-      />
-    );
-  }
-}
 
 class MyAutosuggest extends React.Component {
   constructor(props) {
@@ -189,8 +90,8 @@ class MyAutosuggest extends React.Component {
   };
 
   render() {
-    const { value, id, placeholder, className } = this.props;
-    const { suggestions } = this.state;
+    const { id, placeholder, className } = this.props;
+    const { value, suggestions } = this.state;
     const inputProps = {
       placeholder,
       className,
@@ -295,10 +196,6 @@ const RecipePopup = ({ recipe }) => {
     }
   };
 
-  const handlePopulateIngredients = (recipe) => {
-      setIngredientFields(isExistingRecipe({ name: recipe.name, ingredientList: recipe.ingredients }))
-      setRecipeName(recipe.name);
-  };
 
   return (
     <>
@@ -310,18 +207,13 @@ const RecipePopup = ({ recipe }) => {
           </Col>
           {/* Change Recipe Name field to single column with max-width size */}
           <Col>
-          <div>
-          <RecipeSuggest
-          id="type-recipe"
-          token={loginToken}
-          onChange2={(ingredient_fileds) => handlePopulateIngredients(ingredient_fileds)}
-          type="text"
-          className="form-control text-center"
-          placeholder="Recipe Name"
-          value={recipeName}
-          onChange={event => setRecipeName(event.target.value)}
-        />
-        </div>
+            <input
+              type="text"
+              className="form-control text-center"
+              placeholder="Recipe Name"
+              value={recipeName}
+              onChange={event => setRecipeName(event.target.value)}
+            />
           </Col>
           <Col>
           </Col>
@@ -369,10 +261,9 @@ const RecipePopup = ({ recipe }) => {
                     <p className= "recipe-input-label">
                       {index === 0  ? "Units" : ""}
                     </p>
-
-                    <select name="unit" className="form-control text-center" value={ingredientField.unit} onChange={event => handleInputChange(index, event)}>
-                      {ingredientField.possibleUnits.map(unit => <option key={unit} value={unit}>{unit}</option> )}
-                      </select>
+                    <select name="unit" className="form-control text-center" onChange={event => handleInputChange(index, event)}>
+          {ingredientField.possibleUnits.map(unit => <option value={unit} key={unit}>{unit}</option> )}
+                    </select>
                   </div>
                 </Col>
 
