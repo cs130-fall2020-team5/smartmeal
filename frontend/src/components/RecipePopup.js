@@ -91,7 +91,6 @@ class RecipeSuggest extends React.Component {
       //
     }
     else{
-      // ingre=[{name:'apple', amount:'1', unit:'oz',possibleUnits:['oz','unit','kg']},{name:'pineapple', amount:'3', unit:'kg',possibleUnits:['plate','unit','kg']}];
       this.props.onChange2(ingres[0]);
     }
   };
@@ -297,8 +296,8 @@ const RecipePopup = ({ recipe }) => {
   };
 
   const handlePopulateIngredients = (recipe) => {
-    setIngredientFields(isExistingRecipe({ name: recipe.name, ingredientList: recipe.ingredients }))
-    setRecipeName(recipe.name);
+      setIngredientFields(isExistingRecipe({ name: recipe.name, ingredientList: recipe.ingredients }))
+      setRecipeName(recipe.name);
   };
 
   return (
@@ -370,6 +369,7 @@ const RecipePopup = ({ recipe }) => {
                     <p className= "recipe-input-label">
                       {index === 0  ? "Units" : ""}
                     </p>
+
                     <select name="unit" className="form-control text-center" value={ingredientField.unit} onChange={event => handleInputChange(index, event)}>
                       {ingredientField.possibleUnits.map(unit => <option key={unit} value={unit}>{unit}</option> )}
                       </select>
