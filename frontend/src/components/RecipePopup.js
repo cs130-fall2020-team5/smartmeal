@@ -117,8 +117,8 @@ class RecipeSuggest extends React.Component {
   };
 
   render() {
-    const { id, placeholder, token, /*className*/ } = this.props;
-    const { value, suggestions } = this.state;
+    const { value, id, placeholder, token, /*className*/ } = this.props;
+    const { suggestions } = this.state;
     const inputProps = {
       placeholder,
       value,
@@ -319,6 +319,7 @@ const RecipePopup = ({ recipe }) => {
           className="form-control text-center"
           placeholder="Recipe Name"
           value={recipeName}
+          onChange={event => setRecipeName(event.target.value)}
         />
         </div>
           </Col>
@@ -338,7 +339,6 @@ const RecipePopup = ({ recipe }) => {
                     <p className= "recipe-input-label">
                       {index === 0  ? "Ingredient" : ""}
                     </p>
-                    {console.log("myunit", ingredientField)}
                     <MyAutosuggest
                       id="ingre1"
                       placeholder="Type ingredient"
