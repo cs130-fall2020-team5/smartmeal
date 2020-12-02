@@ -39,24 +39,24 @@ describe("recipe popup component", () => {
     test("able to add a new ingredient", async () => {
         wrapProviders( <RecipePopup recipe={ { name: '', ingredientList: [] } }  /> )
 
-        await waitFor(() => { userEvent.click(screen.getByText("Add Ingredient"), { button: 1 }); });
+        await waitFor(() => { userEvent.click(screen.getByText("Add"), { button: 1 }); });
         expect(screen.getAllByTestId("fragment").length).toBe(2); 
     });
 
     test("able to remove the bottom ingredient", async () => {
         wrapProviders( <RecipePopup recipe={ { name: '', ingredientList: [] } }  /> )
 
-        await waitFor(() => { userEvent.click(screen.getByText("Add Ingredient"), { button: 1 }); });
+        await waitFor(() => { userEvent.click(screen.getByText("Add"), { button: 1 }); });
         expect(screen.getAllByTestId("fragment").length).toBe(2); 
 
-        await waitFor(() => { userEvent.click(screen.getByText("Remove Ingredient"), { button: 1 }); });
+        await waitFor(() => { userEvent.click(screen.getByText("Remove"), { button: 1 }); });
         expect(screen.getAllByTestId("fragment").length).toBe(1); 
     });
 
     test("cannot remove the last element", async () => {
         wrapProviders( <RecipePopup recipe={ { name: '', ingredientList: [] } }  /> )
 
-        await waitFor(() => { userEvent.click(screen.getByText("Remove Ingredient"), { button: 1 }); });
+        await waitFor(() => { userEvent.click(screen.getByText("Remove"), { button: 1 }); });
         expect(screen.getAllByTestId("fragment").length).toBe(1); 
     });
 

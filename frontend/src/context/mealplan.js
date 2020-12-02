@@ -93,16 +93,55 @@ function MealPlanProvider({ children }) {
         });
     }
 
+
+    function removeMeal(recipe_id) {
+      var pos=0;
+      let newMealPlan = JSON.parse(JSON.stringify(currentPlan))
+      for (let meal in newMealPlan[popupDay][popupTime]) {
+        if (newMealPlan[popupDay][popupTime][meal]._id === recipe_id) {
+          newMealPlan[popupDay][popupTime].splice(pos,1);
+        }
+        pos+=1;
+      }
+
+      axios({
+          method: "PUT",
+          url: 'http://localhost:3000/mealplan/' + currentPlan._id,
+          headers: {
+              "Content-Type": "application/json",
+              "Authorization": "Bearer " + loginToken
+          },
+          data: newMealPlan
+      })
+      .then(res => {
+          if (res.data.length < 1) {
+              setMealPlans([]);
+              setCurrentPlan(null);
+          }
+          else {
+              setMealPlans(res.data);
+              setCurrentPlan(res.data.filter(mp => mp._id === currentPlan._id)[0])
+          }
+      })
+      .catch((err) => {
+          console.log("Failed to update meal plan: ", err);
+      });
+  }
+
     function updateCurrentMealPlan(newRecipe, isUpdateToExistingMeal) {
+        console.log(newRecipe, isUpdateToExistingMeal);
+        var meal_exist=false;
         let newMealPlan = JSON.parse(JSON.stringify(currentPlan))
-        if (isUpdateToExistingMeal) {
-            for (let meal in newMealPlan[popupDay][popupTime]) {
-                if (newMealPlan[popupDay][popupTime][meal]._id === newRecipe._id) {
-                    newMealPlan[popupDay][popupTime][meal] = newRecipe;
-                }
-            }
-        } else {
-            newMealPlan[popupDay][popupTime].push(newRecipe);
+        for (let meal in newMealPlan[popupDay][popupTime]) {
+          if (newMealPlan[popupDay][popupTime][meal]._id === newRecipe._id) {
+            console.log("here",newMealPlan[popupDay][popupTime]);
+            meal_exist=true;
+            newMealPlan[popupDay][popupTime][meal] = newRecipe;
+          }
+        }
+        console.log("mealexist", meal_exist);
+        if (!meal_exist){
+        newMealPlan[popupDay][popupTime].push(newRecipe);
         }
         axios({
             method: "PUT",
@@ -195,7 +234,7 @@ function MealPlanProvider({ children }) {
     }, [getMealPlans, isLoggedIn, loginToken]);
 
     return (
-        <MealPlanContext.Provider value={{mealPlans, currentPlan, createNewMealPlan, setCheckedIngredients, newPlanSelected, updateCurrentMealPlan, updateCustomIngredients, updateMealPlanMetadata}} >
+        <MealPlanContext.Provider value={{mealPlans, currentPlan, createNewMealPlan, setCheckedIngredients, newPlanSelected, updateCurrentMealPlan, updateCustomIngredients, updateMealPlanMetadata, removeMeal}} >
             { children }
         </MealPlanContext.Provider>
     )
