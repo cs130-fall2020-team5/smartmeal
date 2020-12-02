@@ -32,6 +32,13 @@ router.post("/", function (req, res, next) {
 	    let username = tokenInfo.usr;
 		let startdate = req.body.startdate;
 		if (!startdate) throw 400;
+
+        let epochStartDate = parseInt(startdate); // milliseconds since epoch
+        let startDate = new Date(epochStartDate);
+        let endDate = new Date(new Date(startDate).setDate(startDate.getDate() + 6));
+        let formattedDateText = (startDate.getMonth() + 1) + "/" + startDate.getDate() + "-" + (endDate.getMonth() + 1) + "/" + endDate.getDate();
+        const defaultMealPlanName = "Week of " + formattedDateText;
+
 	    let entry = {username: username, date: startdate,
 			 sunday: { breakfast: [], lunch: [], dinner: [] },
 			 monday: { breakfast: [], lunch: [], dinner: [] },
@@ -39,7 +46,10 @@ router.post("/", function (req, res, next) {
 			 wednesday: { breakfast: [], lunch: [], dinner: [] },
 			 thursday: { breakfast: [], lunch: [], dinner: [] },
 			 friday: { breakfast: [], lunch: [], dinner: [] },
-			 saturday: { breakfast: [], lunch: [], dinner: [] }
+			 saturday: { breakfast: [], lunch: [], dinner: [] },
+			 customIngredients: [],
+			 startday: "sunday",
+			 name: defaultMealPlanName
 		};
 	    db.get()
 		.collection("mealplans")
@@ -65,6 +75,8 @@ router.put("/:mealplanid", function (req, res, next) {
 		
 		let body = req.body;
 		let updates = {};
+		if (body.name) updates["name"] = body.name;
+		if (body.startday) updates["startday"] = body.startday;
 		if (body.sunday) updates["sunday"] = body.sunday;
 		if (body.monday) updates["monday"] = body.monday;
 		if (body.tuesday) updates["tuesday"] = body.tuesday;
@@ -72,6 +84,7 @@ router.put("/:mealplanid", function (req, res, next) {
 		if (body.thursday) updates["thursday"] = body.thursday;
 		if (body.friday) updates["friday"] = body.friday;
 		if (body.saturday) updates["saturday"] = body.saturday;
+		if (body.customIngredients) updates["customIngredients"] = body.customIngredients;
 	    db.get()
 		.collection("mealplans")
 		.findOneAndUpdate({ _id: ObjectId(mealplanid) }, {$set: updates})
@@ -126,6 +139,19 @@ router.post("/:mealplanid/check-grocery-items", function (req, res, next) {
 					}
 				}
 			}
+
+			// Check/uncheck the custom ingredients
+			const customIngList = mealplan.customIngredients;
+			for (let ing in customIngList) {
+				if (itemsToCheck.includes(customIngList[ing].name)) {
+					mealplan.customIngredients[ing]["checked"] = true;
+				}
+
+				if (itemsToUncheck.includes(customIngList[ing].name)) {
+					mealplan.customIngredients[ing]["checked"] = false;
+				}
+			}
+
 			db.get()
 			.collection("mealplans")
 			.findOneAndUpdate({ _id: ObjectId(mealplanid) }, { $set: mealplan })

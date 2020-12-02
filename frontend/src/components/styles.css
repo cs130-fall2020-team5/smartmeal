@@ -138,6 +138,10 @@
     text-align: center;
 }
 
+.custom-item {
+  margin: auto;
+}
+
 body {
   font-family: Helvetica, sans-serif;
 }
