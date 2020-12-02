@@ -16,7 +16,7 @@ import { MealPlanContext } from "../context/mealplan";
 import { PopupContext } from "../context/popup-context";
 
 export default function MealPlanner() {
-    const { currentPlan, updateMealPlanMetadata } = useContext(MealPlanContext);
+    const { currentPlan, updateMealPlanMetadata, removeMealPlan } = useContext(MealPlanContext);
     const { showRecipePopup, recipeInfo } = useContext(PopupContext);
 
     const [ showWeeklyTotals, setShowWeeklyTotals ] = useState(false);
@@ -111,6 +111,7 @@ export default function MealPlanner() {
                         { getDaysOfWeek().map(day => generateDayColumn(day, day === currentPlan.startday)) }
                     </Row>
                     <Row style={{'float': 'right'}}>
+                        <Button className="button-row btn btn-danger" onClick={ () => { removeMealPlan(currentPlan._id); } }>Remove Mealplan</Button>
                         <Button className="button-row" disabled={showGroceryList} onClick={ () => { window.scrollTo(0, 0); setShowWeeklyTotals(!showWeeklyTotals); } }>Weekly Totals</Button>
                         <Button className="button-row" disabled={showWeeklyTotals} onClick={ () => { window.scrollTo(0, 0); setShowGroceryList(!showGroceryList); } }>Grocery List</Button>
                     </Row>
