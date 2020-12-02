@@ -74,3 +74,33 @@
         margin-left: -15rem;
     }
 }
+
+.color-nav {
+  background-color: #2d4059;
+}
+
+.login-header {
+  background-image: url("../Images/login-header-bg.jpg");
+  height: 30vh;
+  background-position:top left;
+  background-repeat: no-repeat;
+  background-size: auto;
+  position: relative;
+}
+
+.login-header-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: white;
+}
+
+.login-background {
+  background-image: url("../Images/login-bg.jpg");
+  height: 70vh;
+  background-position:top left;
+  background-repeat: no-repeat;
+  background-size: auto;
+}
