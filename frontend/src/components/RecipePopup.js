@@ -71,13 +71,13 @@ function recipe_getSuggestions(value,token) {
 }
 
 class RecipeSuggest extends React.Component {
-  constructor() {
+  constructor(props) {
     super();
 
     this.state = {
-      value: '',
+      value: props.value,
       suggestions: []
-    };    
+    };
   }
 
 
@@ -86,15 +86,18 @@ class RecipeSuggest extends React.Component {
       value: newValue
     });
     //console.log(this.state.suggestions);
+    //console.log("new", newValue, this.state.suggestions)
+    //this.props.onChange(newValue);
     var ingres=this.state.suggestions.filter(a=> a.name===newValue);
+    //console.log("new", newValue, ingres)
     if (ingres.length===0){
-      //
     }
     else{
       this.props.onChange2(ingres[0]);
     }
+    this.props.onChange(newValue);
   };
-  
+
 
 
   onSuggestionsFetchRequested = ({ value }) => {
@@ -127,16 +130,16 @@ class RecipeSuggest extends React.Component {
       onChange: this.onChange
     };
 
-    
+
     return (
-      <Autosuggest 
+      <Autosuggest
         id={id}
         suggestions={suggestions}
         onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
         onSuggestionsClearRequested={this.onSuggestionsClearRequested}
         getSuggestionValue={getSuggestionValue}
         renderSuggestion={renderSuggestion}
-        inputProps={inputProps} 
+        inputProps={inputProps}
       />
     );
   }
@@ -241,24 +244,53 @@ const RecipePopup = ({ recipe }) => {
 
   const [recipeName, setRecipeName] = useState(recipe.name);
 
-  function saveRecipe(recipe_name, ingredient_list) {
-    const isExistingRecipe = recipe._id ? true : false;
+  function updateMealplan(recipe_id, recipe_name, ingredient_list){
+    console.log("1.1recipe._id", recipe_id);
     axios({
-        method: isExistingRecipe ? "PUT" : "POST",
-        url: "http://localhost:3000/recipe/" + (isExistingRecipe ? recipe._id : ""),
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer " + loginToken
-        },
-        data: {
-            name: recipe_name,
-            ingredients: JSON.stringify(ingredient_list)
-        }
-      }).then((res) => {
-        updateCurrentMealPlan({ name: recipeName, ingredientList: ingredientFields, _id: isExistingRecipe ? recipe._id : res.data.id }, isExistingRecipe)
-      }).catch((err) =>{
-        console.log("Failed to save new recipe: ", err);
-      })
+      method: recipe_id.length ? "PUT" : "POST",
+      url: "http://localhost:3000/recipe/" + recipe_id,
+      headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + loginToken
+      },
+      data: {
+          name: recipe_name,
+          ingredients: JSON.stringify(ingredient_list)
+      }
+    }).then((res) => {
+      //console.log("2new one", recipe_id);
+      //console.log("3recipe._id",recipe_id.length? recipe_id: res.data.id);
+      updateCurrentMealPlan({ name: recipeName, ingredientList: ingredientFields, _id: recipe_id.length? recipe_id: res.data.id }, isExistingRecipe);
+    }).catch((err) =>{
+      console.log("Failed to save new recipe: ", err);
+    })
+  }
+
+  function saveRecipe(recipe_name, ingredient_list) {
+    var recipe_id="";
+    axios({
+      method: "GET",
+      url: "http://localhost:3000/recipe/",
+      headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + loginToken
+      }
+  })
+  .then((res) => {
+    //console.log(res.data.filter(each_recipe => regex.test(each_recipe.name)));
+     var matched_recipe=res.data.filter(each_recipe => recipe_name===each_recipe.name);
+     console.log("1matched",matched_recipe);
+     if (matched_recipe.length){
+       recipe_id=matched_recipe[0]._id;
+     }
+     updateMealplan(recipe_id, recipe_name, ingredient_list);
+
+  })
+  .catch((err) => {
+    console.log("Failed to do recipe search: ", err);
+  });
+
+    //isExistingRecipe = recipe_id ? true : false;
 
   }
 
@@ -314,12 +346,13 @@ const RecipePopup = ({ recipe }) => {
           <RecipeSuggest
           id="type-recipe"
           token={loginToken}
-          onChange2={(ingredient_fileds) => handlePopulateIngredients(ingredient_fileds)}
+
           type="text"
           className="form-control text-center"
           placeholder="Recipe Name"
           value={recipeName}
-          onChange={event => setRecipeName(event.target.value)}
+          onChange2={(a_recipe) => handlePopulateIngredients(a_recipe)}
+          onChange={(name_recipe) => setRecipeName(name_recipe)}
         />
         </div>
           </Col>
@@ -433,7 +466,7 @@ function spoonSearch(str) {
       ing.name = ing.name.toLowerCase();
       return ing;
     });
-    
+
     res.data.sort((first, second) => {
       return first.name > second.name;
     });
