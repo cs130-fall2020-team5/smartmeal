@@ -248,7 +248,7 @@ const RecipePopup = ({ recipe }) => {
   const [recipeName, setRecipeName] = useState(recipe.name);
 
   async function updateMealplan(recipe_id, recipe_name, ingredient_list){
-    const isExistingRecipe = recipe._id ? true : false;
+    const isExistingRecipe = recipe_id ? true : false;
     let recipe_ingredients = await populateIngredientFields(ingredient_list);
     //console.log(recipe_entry);
     axios({
@@ -306,6 +306,7 @@ const RecipePopup = ({ recipe }) => {
     if (event.target.name === "name") {
       values[index].name = event.target.value;
       values[index].possibleUnits=event.target.possibleUnits;
+      values[index].unit = event.target.possibleUnits[0];
     } else if (event.target.name === "amount") {
       values[index].amount = event.target.value;
     } else if (event.target.name === "unit") {
@@ -465,7 +466,10 @@ const RecipePopup = ({ recipe }) => {
 }
 
 
-const api_key = "db254b5cd61744d39a2deebd9c361444";
+const api_key = "4119fc6a6de3413cbfc379525c7d4e2a";
+// 4119fc6a6de3413cbfc379525c7d4e2a - axel
+// db254b5cd61744d39a2deebd9c361444 - current
+// c25140a9d4a94ed2b11bddd00a30b486 - john
 
 // gets ingredient info for each ingredient 
 async function populateIngredientFields(ingredientList){
@@ -515,7 +519,7 @@ function getIngredientInfo(iname, amount, unit){
     const isIngredient = (elt) => elt.name === iname;
     let index = search_res.data.results.findIndex(isIngredient);
     if(index === -1)
-      throw "Ingredient not found";
+      throw Error("Ingredient not found");
     let ing_id = search_res.data.results[index].id;
 
     // get the basic pricing and nutrition info 
@@ -526,17 +530,17 @@ function getIngredientInfo(iname, amount, unit){
 
       let fat_index = res.data.nutrition.nutrients.findIndex(findNutrition("Fat"));
       if(fat_index === -1)
-        throw "Fat not found";
+        throw Error("Fat not found");
       let fat = res.data.nutrition.nutrients[fat_index].amount;
 
       let cal_index = res.data.nutrition.nutrients.findIndex(findNutrition("Calories"));
       if(cal_index === -1)
-        throw "Calories not found";
+        throw Error("Calories not found");
       let calories = res.data.nutrition.nutrients[cal_index].amount;
 
       let pro_index = res.data.nutrition.nutrients.findIndex(findNutrition("Protein"));
       if(pro_index === -1)
-        throw "Protein not found";
+        throw Error("Protein not found");
       let protein = res.data.nutrition.nutrients[pro_index].amount;
 
       return {"price": price, "fat": fat, "calories": calories, "protein": protein};
