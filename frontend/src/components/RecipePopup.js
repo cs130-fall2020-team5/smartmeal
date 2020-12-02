@@ -247,8 +247,10 @@ const RecipePopup = ({ recipe }) => {
 
   const [recipeName, setRecipeName] = useState(recipe.name);
 
-  function updateMealplan(recipe_id, recipe_name, ingredient_list){
-    const isExistingRecipe = recipe_id ? true : false;
+  async function updateMealplan(recipe_id, recipe_name, ingredient_list){
+    const isExistingRecipe = recipe._id ? true : false;
+    let recipe_ingredients = await populateIngredientFields(ingredient_list);
+    //console.log(recipe_entry);
     axios({
         method: isExistingRecipe ? "PUT" : "POST",
         url: "http://localhost:3000/recipe/" + recipe_id,
@@ -257,11 +259,11 @@ const RecipePopup = ({ recipe }) => {
             "Authorization": "Bearer " + loginToken
         },
         data: {
-            name: recipe_name,
-            ingredients: JSON.stringify(ingredient_list)
+          name: recipe_name,
+          ingredients: recipe_ingredients
         }
       }).then((res) => {
-        updateCurrentMealPlan({ name: recipeName, ingredientList: ingredientFields, _id: isExistingRecipe ? recipe_id : res.data.id }, isExistingRecipe)
+        updateCurrentMealPlan({ name: recipe_name, ingredientList: recipe_ingredients, _id: isExistingRecipe ? recipe_id : res.data.id }, isExistingRecipe)
       }).catch((err) =>{
         console.log("Failed to save new recipe: ", err);
       })
@@ -462,11 +464,112 @@ const RecipePopup = ({ recipe }) => {
   );
 }
 
+
+const api_key = "db254b5cd61744d39a2deebd9c361444";
+
+// gets ingredient info for each ingredient 
+async function populateIngredientFields(ingredientList){
+  let ilist = [];
+  var i;
+  for(i = 0; i < ingredientList.length; i++){
+    let iname = ingredientList[i].name;
+    let amount = ingredientList[i].amount;
+    let unit = ingredientList[i].unit;
+    let nutrition = await getIngredientInfo(iname, amount, unit);
+    //console.log(nutrition);
+    let ingredient = combineJSON(ingredientList[i], nutrition);
+    //console.log("ingredient: " + JSON.stringify(ingredient));
+    ilist.push(ingredient);
+  }
+  //console.log({name: name, ingredients: ilist});
+  return ilist; //{name: name, ingredients: ilist};
+}
+
+// helper queries for getIngredientInfo
+function doSearch(iname){
+  return axios.get("https://api.spoonacular.com/food/ingredients/search",
+    {
+      params: {
+        apiKey: api_key,
+        query: iname
+      }
+    }).then(res => res);
+}
+function getInfo(ing_id, amount, unit){
+  return axios.get("https://api.spoonacular.com/food/ingredients/" + ing_id + "/information", 
+    {
+      params: {
+        apiKey: api_key,
+        id: ing_id,
+        amount: amount,
+        unit: unit
+      }
+    }).then(res => res);
+}
+
+// queries spoonacular for ingredient info
+function getIngredientInfo(iname, amount, unit){
+  // get id of ingredient with exact name match
+  return doSearch(iname)
+  .then(search_res => {
+    const isIngredient = (elt) => elt.name === iname;
+    let index = search_res.data.results.findIndex(isIngredient);
+    if(index === -1)
+      throw "Ingredient not found";
+    let ing_id = search_res.data.results[index].id;
+
+    // get the basic pricing and nutrition info 
+    return getInfo(ing_id, amount, unit)
+    .then(res => {
+      let price = res.data.estimatedCost.unit === "US Cents" ? (res.data.estimatedCost.value/100) : res.data.estimatedCost.value;
+      const findNutrition = (title) => (elt) => elt.title === title;
+
+      let fat_index = res.data.nutrition.nutrients.findIndex(findNutrition("Fat"));
+      if(fat_index === -1)
+        throw "Fat not found";
+      let fat = res.data.nutrition.nutrients[fat_index].amount;
+
+      let cal_index = res.data.nutrition.nutrients.findIndex(findNutrition("Calories"));
+      if(cal_index === -1)
+        throw "Calories not found";
+      let calories = res.data.nutrition.nutrients[cal_index].amount;
+
+      let pro_index = res.data.nutrition.nutrients.findIndex(findNutrition("Protein"));
+      if(pro_index === -1)
+        throw "Protein not found";
+      let protein = res.data.nutrition.nutrients[pro_index].amount;
+
+      return {"price": price, "fat": fat, "calories": calories, "protein": protein};
+    })
+    .catch(err => console.log("Error getting ingredient info"));
+  })
+  .catch(err => console.log("Error with search query"));
+}
+
+// combines two jSON objects
+function combineJSON(j1, j2){
+  const result = {};
+  let key;
+
+  for (key in j1) {
+    if(j1.hasOwnProperty(key)){
+      result[key] = j1[key];
+    }
+  }
+  for (key in j2) {
+    if(j2.hasOwnProperty(key)){
+      result[key] = j2[key];
+    }
+  }
+  //console.log(result);
+  return result;
+}
+
 function spoonSearch(str) {
   return axios.get('https://api.spoonacular.com/food/ingredients/autocomplete',
     {
       params: {
-        apiKey: "db254b5cd61744d39a2deebd9c361444",
+        apiKey: api_key,
         query: str,
         number: 50,
         metaInformation: true

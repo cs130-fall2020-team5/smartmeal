@@ -38,9 +38,9 @@ export default function DailySummary({ day }) {
 
     return (
         <div>
-            <p className="nutrition-information">Calories: {nutritionInformation.calories}</p>
-            <p className="nutrition-information">Fat: {nutritionInformation.fat}</p>
-            <p className="nutrition-information">Protein: {nutritionInformation.protein}</p>
+            <p className="nutrition-information">Calories: {nutritionInformation.calories} cal</p>
+            <p className="nutrition-information">Fat: {nutritionInformation.fat} g</p>
+            <p className="nutrition-information">Protein: {nutritionInformation.protein} g</p>
             <p className="nutrition-information">Price: ${nutritionInformation.price}</p>
         </div>
     )
