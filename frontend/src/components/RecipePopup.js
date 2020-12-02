@@ -455,7 +455,7 @@ const RecipePopup = ({ recipe }) => {
             type="button"
             onClick={handleDeleteMeal}
           >
-            Delete Recipe
+            Delete Meal
           </button>
         </Row>
         </Container>
