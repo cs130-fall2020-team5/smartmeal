@@ -10,7 +10,6 @@ const DEFAULT_NUTRITION = {
 
 export default function WeeklyTotals({ mealPlan, onClose }) {
     const [ nutritionInformation, setNutritionInformation ] = useState(DEFAULT_NUTRITION)
-    const [ formattedDateText, setFormattedDateText ] = useState("")
 
     function updateAndClose() {
         onClose();
@@ -47,19 +46,14 @@ export default function WeeklyTotals({ mealPlan, onClose }) {
         parseDay(mealPlan.sunday);
 
         setNutritionInformation({ price: price.toFixed(2), calories: Math.round(calories), protein: Math.round(protein), fat: Math.round(fat) });
-        
-        let epochStartDate = parseInt(mealPlan.date);
-        let startDate = new Date(epochStartDate);
-        let endDate = new Date(new Date(startDate).setDate(startDate.getDate() + 7));
-        setFormattedDateText((startDate.getMonth() + 1) + "/" + startDate.getDate() + "-" + (endDate.getMonth() + 1) + "/" + endDate.getDate());
 
     }, [ mealPlan ]);
 
     return (
-        <div className="modal-outline">
+        <div className="modal-outline" data-testid="weekly-totals-popup">
             <div className="modal-r">
                 <div className="modal-content">
-                    <p>Weekly Totals for {formattedDateText}</p>
+                    <p>Weekly Totals for {mealPlan.name}</p>
                     <div className="grocery-item">
                         <div className="grocery-item">Calories: {nutritionInformation.calories} cal</div>
                         <div className="grocery-item">Fat: {nutritionInformation.fat} g</div>

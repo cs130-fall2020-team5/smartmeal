@@ -8,7 +8,6 @@ import { PopupContext } from "../context/popup-context";
 import { UserContext } from "../context/user";
 import { MealPlanContext } from "../context/mealplan";
 
-
 // https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions#Using_Special_Characters
 
 function escapeRegexCharacters(str) {
@@ -26,7 +25,7 @@ function getSuggestions(value) {
 
   return spoonSearch(value)
   .then((res) => {
-    return res.data.filter(language => regex.test(language.name));
+    return res.data.filter(language => regex.test(language.name)).slice(0, 5);
   })
   .catch((err) => {
     console.log("Failed to do remote ingredient search: ", err);
@@ -42,6 +41,108 @@ function renderSuggestion(suggestion) {
   return (
     <span>{suggestion.name}</span> //
   );
+}
+function recipe_getSuggestions(value,token) {
+  const escapedValue = escapeRegexCharacters(value.trim());
+
+  if (escapedValue === '') {
+    return [];
+  }
+
+  const regex = new RegExp('^' + escapedValue, 'i');
+
+  //console.log(loginToken);
+  return axios({
+    method: "GET",
+    url: "http://localhost:3000/recipe/",
+    headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + token
+    }
+})
+.then((res) => {
+  //console.log(res.data.filter(each_recipe => regex.test(each_recipe.name)));
+  return res.data.filter(each_recipe => regex.test(each_recipe.name));
+})
+.catch((err) => {
+  console.log("Failed to do recipe search: ", err);
+  return [];
+});
+}
+
+class RecipeSuggest extends React.Component {
+  constructor(props) {
+    super();
+
+    this.state = {
+      value: props.value,
+      suggestions: []
+    };
+  }
+
+
+  onChange = (event, { newValue, method }) => {
+    this.setState({
+      value: newValue
+    });
+    //console.log(this.state.suggestions);
+    //console.log("new", newValue, this.state.suggestions)
+    //this.props.onChange(newValue);
+    var ingres=this.state.suggestions.filter(a=> a.name===newValue);
+    //console.log("new", newValue, ingres)
+    if (ingres.length===0){
+    }
+    else{
+      this.props.onChange2(ingres[0]);
+    }
+    this.props.onChange(newValue);
+  };
+
+
+
+  onSuggestionsFetchRequested = ({ value }) => {
+    recipe_getSuggestions(value, this.props.token)
+    .then((res) => {
+      this.setState({
+        suggestions: res
+
+      });
+
+    })
+    .catch((err) => {
+      console.log("Failed to do fetch suggestions: ", err);
+    });
+  };
+  onSuggestionsClearRequested = () => {
+    this.setState({
+      suggestions: []
+    });
+  };
+
+  render() {
+    const { value, id, placeholder, token, /*className*/ } = this.props;
+    const { suggestions } = this.state;
+    const inputProps = {
+      placeholder,
+      value,
+      //className
+      token,
+      onChange: this.onChange
+    };
+
+
+    return (
+      <Autosuggest
+        id={id}
+        suggestions={suggestions}
+        onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+        onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+        getSuggestionValue={getSuggestionValue}
+        renderSuggestion={renderSuggestion}
+        inputProps={inputProps}
+      />
+    );
+  }
 }
 
 class MyAutosuggest extends React.Component {
@@ -90,8 +191,8 @@ class MyAutosuggest extends React.Component {
   };
 
   render() {
-    const { id, placeholder, className } = this.props;
-    const { value, suggestions } = this.state;
+    const { value, id, placeholder, className } = this.props;
+    const { suggestions } = this.state;
     const inputProps = {
       placeholder,
       className,
@@ -120,6 +221,7 @@ const RecipePopup = ({ recipe }) => {
 
   const { saveButtonClicked, cancelButtonClicked } = useContext(PopupContext);
   const { updateCurrentMealPlan } = useContext(MealPlanContext);
+  const { removeMeal } = useContext(MealPlanContext);
 
   const isExistingRecipe = ( recipe ) => {
     const values = [];
@@ -142,13 +244,12 @@ const RecipePopup = ({ recipe }) => {
 
   const [recipeName, setRecipeName] = useState(recipe.name);
 
-  async function saveRecipe(recipe_name, ingredient_list) {
+  async function updateMealPlan(recipe_id, recipe_name, ingredient_list) {
     const isExistingRecipe = recipe._id ? true : false;
     let recipe_ingredients = await populateIngredientFields(ingredient_list);
-    //console.log(recipe_entry);
     axios({
         method: isExistingRecipe ? "PUT" : "POST",
-        url: "http://localhost:3000/recipe/" + (isExistingRecipe ? recipe._id : ""),
+        url: "http://localhost:3000/recipe/" + recipe_id,
         headers: {
             "Content-Type": "application/json",
             "Authorization": "Bearer " + loginToken
@@ -158,10 +259,35 @@ const RecipePopup = ({ recipe }) => {
           ingredients: recipe_ingredients
         }
       }).then((res) => {
-        updateCurrentMealPlan({ name: recipeName, ingredientList: recipe_ingredients, _id: isExistingRecipe ? recipe._id : res.data.id }, isExistingRecipe)
+        updateCurrentMealPlan({ name: recipe_name, ingredientList: recipe_ingredients, _id: isExistingRecipe ? recipe._id : res.data.id }, isExistingRecipe)
       }).catch((err) =>{
         console.log("Failed to save new recipe: ", err);
       })
+  }
+
+  function saveRecipe(recipe_name, ingredient_list) {
+    var recipe_id="";
+    axios({
+      method: "GET",
+      url: "http://localhost:3000/recipe/",
+      headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + loginToken
+      }
+  })
+  .then((res) => {
+     var matched_recipe=res.data.filter(each_recipe => recipe_name===each_recipe.name);
+     if (matched_recipe.length){
+       recipe_id=matched_recipe[0]._id;
+     }
+     updateMealplan(recipe_id, recipe_name, ingredient_list);
+
+  })
+  .catch((err) => {
+    console.log("Failed to do recipe search: ", err);
+  });
+
+    //isExistingRecipe = recipe_id ? true : false;
 
   }
 
@@ -198,6 +324,15 @@ const RecipePopup = ({ recipe }) => {
     }
   };
 
+  const handlePopulateIngredients = (recipe) => {
+      setIngredientFields(isExistingRecipe({ name: recipe.name, ingredientList: recipe.ingredients }))
+      setRecipeName(recipe.name);
+  };
+
+  const handleDeleteMeal = () => {
+    removeMeal(recipe._id);
+    cancelButtonClicked();
+  }
 
   return (
     <>
@@ -209,13 +344,19 @@ const RecipePopup = ({ recipe }) => {
           </Col>
           {/* Change Recipe Name field to single column with max-width size */}
           <Col>
-            <input
-              type="text"
-              className="form-control text-center"
-              placeholder="Recipe Name"
-              value={recipeName}
-              onChange={event => setRecipeName(event.target.value)}
-            />
+          <div>
+          <RecipeSuggest
+          id="type-recipe"
+          token={loginToken}
+
+          type="text"
+          className="form-control text-center"
+          placeholder="Recipe Name"
+          value={recipeName}
+          onChange2={(a_recipe) => handlePopulateIngredients(a_recipe)}
+          onChange={(name_recipe) => setRecipeName(name_recipe)}
+        />
+        </div>
           </Col>
           <Col>
           </Col>
@@ -227,7 +368,7 @@ const RecipePopup = ({ recipe }) => {
         <div className={"form-row"}>
           {ingredientFields.map((ingredientField, index) => (
             <Fragment key={`${ingredientField}~${index}`}>
-              <Row>
+              <Row data-testid="fragment">
                 <Col>
                   <div className= "form-group">
                     <p className= "recipe-input-label">
@@ -263,9 +404,10 @@ const RecipePopup = ({ recipe }) => {
                     <p className= "recipe-input-label">
                       {index === 0  ? "Units" : ""}
                     </p>
-                    <select name="unit" className="form-control text-center" onChange={event => handleInputChange(index, event)}>
-          {ingredientField.possibleUnits.map(unit => <option value={unit} key={unit}>{unit}</option> )}
-                    </select>
+
+                    <select name="unit" className="form-control text-center" value={ingredientField.unit} onChange={event => handleInputChange(index, event)}>
+                      {ingredientField.possibleUnits.map(unit => <option key={unit} value={unit}>{unit}</option> )}
+                      </select>
                   </div>
                 </Col>
 
@@ -280,14 +422,14 @@ const RecipePopup = ({ recipe }) => {
             type="button"
             onClick={() => handleAddFields()}
           >
-            Add Ingredient
+            Add
           </button>
           <button
             className="btn btn-primary mr-2"
             type="button"
             onClick={() => handleRemoveFields()}
           >
-            Remove Ingredient
+            Remove
           </button>
           <button
             className="btn btn-primary mr-2"
@@ -302,6 +444,13 @@ const RecipePopup = ({ recipe }) => {
             onSubmit={handleSubmit}
           >
             { recipe._id ? "Update" : "Save"}
+          </button>
+          <button
+            className="btn btn-primary mr-2"
+            type="button"
+            onClick={handleDeleteMeal}
+          >
+            Delete Meal
           </button>
         </Row>
         </Container>
@@ -396,11 +545,22 @@ function spoonSearch(str) {
       params: {
         apiKey: api_key,
         query: str,
-        number: 5,
+        number: 50,
         metaInformation: true
       }
     }
-  )
+  ).then((res) => {
+    res.data = res.data.map((ing) => {
+      ing.name = ing.name.toLowerCase();
+      return ing;
+    });
+
+    res.data.sort((first, second) => {
+      return first.name > second.name;
+    });
+
+    return res;
+  });
 }
 
 function combineJSON(j1, j2){
