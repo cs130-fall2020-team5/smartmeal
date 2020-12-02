@@ -24,6 +24,8 @@ export default function WeeklyTotals({ mealPlan, onClose }) {
             function parseMealPeriod(period) {
                 for (let meal of period) {
                     for (let ingredient of meal.ingredientList) {
+                        console.log("INGREDIENT: ");
+                        console.log(ingredient);
                         price += ingredient.price ? ingredient.price : 0;
                         calories += ingredient.calories ? ingredient.calories : 0;
                         protein += ingredient.protein ? ingredient.protein : 0;
@@ -59,9 +61,9 @@ export default function WeeklyTotals({ mealPlan, onClose }) {
                 <div className="modal-content">
                     <p>Weekly Totals for {formattedDateText}</p>
                     <div className="grocery-item">
-                        <div className="grocery-item">Calories: {nutritionInformation.calories}</div>
-                        <div className="grocery-item">Fat: {nutritionInformation.fat}</div>
-                        <div className="grocery-item">Protein: {nutritionInformation.protein}</div>
+                        <div className="grocery-item">Calories: {nutritionInformation.calories} cal</div>
+                        <div className="grocery-item">Fat: {nutritionInformation.fat} g</div>
+                        <div className="grocery-item">Protein: {nutritionInformation.protein} g</div>
                         <div className="grocery-item">Price: ${nutritionInformation.price}</div>
                     </div>
                     <Button onClick={updateAndClose}>Exit</Button>
