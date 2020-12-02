@@ -66,6 +66,25 @@ router.post("/", function (req, res, next) {
 	});
 });
 
+/* Remove a mealplan from mealplans */
+router.delete("/:mealplanid", function (req, res, next) {
+    isAuthenticated(req)
+	.then((tokenInfo) => {
+	    let username = tokenInfo.usr;
+	    let mealplanid = req.params.mealplanid;
+	    db.get()
+		.collection("mealplans")
+		.deleteOne({ _id: ObjectId(mealplanid), username: username })
+		.then(() => {
+			res.status(200).end();
+		})
+		.catch(() => {
+			res.status(400).json('Error: error while deleting document, ' + err);
+		})
+	})
+	.catch((err) => {res.status(401).json('Error: ' + err)});
+});
+
 /* Update a meal plan - 1 body parameter - stringified JSON representing update fields */
 router.put("/:mealplanid", function (req, res, next) {
     isAuthenticated(req)
