@@ -246,10 +246,7 @@ const RecipePopup = ({ recipe }) => {
   const [recipeName, setRecipeName] = useState(recipe.name);
 
   function updateMealplan(recipe_id, recipe_name, ingredient_list){
-    console.log("1.1recipe._id", recipe_id);
-
     const isExistingRecipe = recipe_id ? true : false;
-    console.log(isExistingRecipe);
     axios({
         method: isExistingRecipe ? "PUT" : "POST",
         url: "http://localhost:3000/recipe/" + recipe_id,
@@ -279,9 +276,7 @@ const RecipePopup = ({ recipe }) => {
       }
   })
   .then((res) => {
-    //console.log(res.data.filter(each_recipe => regex.test(each_recipe.name)));
      var matched_recipe=res.data.filter(each_recipe => recipe_name===each_recipe.name);
-     console.log("1matched",matched_recipe);
      if (matched_recipe.length){
        recipe_id=matched_recipe[0]._id;
      }
