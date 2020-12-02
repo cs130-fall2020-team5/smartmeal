@@ -158,7 +158,7 @@ const RecipePopup = ({ recipe }) => {
           ingredients: recipe_ingredients
         }
       }).then((res) => {
-        updateCurrentMealPlan({ name: recipeName, ingredientList: recipe_ingredients, _id: isExistingRecipe ? recipe._id : res.data.id }, isExistingRecipe)
+        updateCurrentMealPlan({ name: recipe_name, ingredientList: recipe_ingredients, _id: isExistingRecipe ? recipe._id : res.data.id }, isExistingRecipe)
       }).catch((err) =>{
         console.log("Failed to save new recipe: ", err);
       })

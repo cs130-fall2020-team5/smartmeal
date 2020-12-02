@@ -19,8 +19,6 @@ export default function DailySummary({ day }) {
         let price = 0, calories = 0, protein = 0, fat = 0;
         function addMealNutrition(meals) {
             for (const meal of meals) {
-                console.log(typeof(meal.ingredientList));
-                console.log(meal.ingredientList);
                 for (const ingredient of meal.ingredientList) {
                     price += ingredient.price ? ingredient.price : 0;
                     calories += ingredient.calories ? ingredient.calories : 0;
