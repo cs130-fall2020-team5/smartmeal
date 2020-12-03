@@ -134,14 +134,16 @@ function MealPlanProvider({ children }) {
         let newMealPlan = JSON.parse(JSON.stringify(currentPlan))
         for (let meal in newMealPlan[popupDay][popupTime]) {
           if (newMealPlan[popupDay][popupTime][meal]._id === newRecipe._id) {
-            console.log("here",newMealPlan[popupDay][popupTime]);
             meal_exist=true;
             newMealPlan[popupDay][popupTime][meal] = newRecipe;
           }
         }
-        console.log("mealexist", meal_exist);
         if (!meal_exist){
-        newMealPlan[popupDay][popupTime].push(newRecipe);
+            if (newMealPlan[popupDay][popupTime].length >= 5) {
+                alert("Too many different recipes for this meal period!")
+                return;
+            };
+            newMealPlan[popupDay][popupTime].push(newRecipe);
         }
         axios({
             method: "PUT",

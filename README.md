@@ -44,8 +44,10 @@ $ Get-Content C:\Users\Axel\Documents\smartmeal\backend\db\load_db.sh | .\mongo
 * Run all tests at once using `npm test` from the root directory, or run backend and frontend tests separately by running `npm test` in the respective directory
 * Backend: uses `Jest` to test API endpoints with `supertest`
   * 3 test suites, one for each set of endpoints (users API, mealplans API, recipes API)
+  * Link to directory: https://github.com/cs130-fall2020-team5/smartmeal/tree/main/backend/test
 * Frontend: uses `Jest` to test each React component using the `react-testing-library` to inspect rendered HTML
   * 6 test suites, one for each component in `src/components` (with `DailySummary` and `WeeklyTotals` combined into 1 since they are very similar)
+  * Link to directory: https://github.com/cs130-fall2020-team5/smartmeal/tree/main/frontend/src/test
 
 ### Backend tests:
 ![Sample backend testing output](./res/backend-tests.png)
