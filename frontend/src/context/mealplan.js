@@ -196,6 +196,23 @@ function MealPlanProvider({ children }) {
         });
     }
 
+    function removeMealPlan(mealPlanId) {
+        axios({
+            method: "DELETE",
+            url: 'http://localhost:3000/mealplan/' + mealPlanId,
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + loginToken
+            }
+        })
+        .then(() => {
+            getMealPlans(currentPlan ? currentPlan._id : null);
+        })
+        .catch((err) => {
+            console.log("Failed to remove meal plan: ", err);
+        });
+    }
+
     function setCheckedIngredients(mealPlanId, checked, unchecked) {
         return axios({
             method: "POST",
@@ -234,7 +251,7 @@ function MealPlanProvider({ children }) {
     }, [getMealPlans, isLoggedIn, loginToken]);
 
     return (
-        <MealPlanContext.Provider value={{mealPlans, currentPlan, createNewMealPlan, setCheckedIngredients, newPlanSelected, updateCurrentMealPlan, updateCustomIngredients, updateMealPlanMetadata, removeMeal}} >
+        <MealPlanContext.Provider value={{mealPlans, currentPlan, createNewMealPlan, removeMealPlan, setCheckedIngredients, newPlanSelected, updateCurrentMealPlan, updateCustomIngredients, updateMealPlanMetadata, removeMeal}} >
             { children }
         </MealPlanContext.Provider>
     )

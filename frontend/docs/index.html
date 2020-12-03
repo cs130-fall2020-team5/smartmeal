@@ -58,6 +58,16 @@
               
                 
                 <li><a
+                  href='#saverecipe'
+                  class="">
+                  saveRecipe
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#useeffect'
                   class="">
                   useEffect
@@ -151,6 +161,14 @@ necessary functionality to save the recipe information to the backend.</p>
   </td>
   <td class='break-word'><span>List of ingredients for recipe
 </span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>recipe.recipe</span> <code class='quiet'>any</code>
+  </td>
+  <td class='break-word'><span></span></td>
 </tr>
 
 
@@ -353,6 +371,81 @@ If the input does not exist, a single empty ingredient is returned.
           <div>
             <span class='code bold'>ingredient_list</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>>)</code>
 	    List of ingredients for recipe
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='saverecipe'>
+      saveRecipe
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>This function is called when a user clicks the 'Update' or 'Save' button.
+The function checks if the recipe name is already saved in the database and
+avoids saving multiple recipes with the same name.</p>
+
+    <div class='pre p1 fill-light mt0'>saveRecipe(recipe_name: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, ingredient_list: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>recipe_name</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    The name of the current recipe
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>ingredient_list</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>>)</code>
+	    List of ingredients for current recipe
 
           </div>
           

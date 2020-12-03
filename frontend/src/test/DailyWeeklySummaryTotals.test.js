@@ -32,27 +32,27 @@ describe("nutrition summary components", () => {
     test("daily summary contains expected values", async () => {
         wrapProviders( <DailySummary day={ sample_mealplans[0].monday }/>)
 
-        expect(screen.getByText(/^Calories: /).textContent).toEqual("Calories: 30");
-        expect(screen.getByText(/^Protein: /).textContent).toEqual("Protein: 15");
-        expect(screen.getByText(/^Fat: /).textContent).toEqual("Fat: 6");
+        expect(screen.getByText(/^Calories: /).textContent).toEqual("Calories: 30 cal");
+        expect(screen.getByText(/^Protein: /).textContent).toEqual("Protein: 15 g");
+        expect(screen.getByText(/^Fat: /).textContent).toEqual("Fat: 6 g");
         expect(screen.getByText(/^Price: /).textContent).toEqual("Price: $3.50");
     });
 
     test("daily summary correctly handles missing values", async () => {
         wrapProviders( <DailySummary day={ sample_mealplans[0].tuesday }/>)
 
-        expect(screen.getByText(/^Calories: /).textContent).toEqual("Calories: 0");
-        expect(screen.getByText(/^Protein: /).textContent).toEqual("Protein: 0");
-        expect(screen.getByText(/^Fat: /).textContent).toEqual("Fat: 0");
+        expect(screen.getByText(/^Calories: /).textContent).toEqual("Calories: 0 cal");
+        expect(screen.getByText(/^Protein: /).textContent).toEqual("Protein: 0 g");
+        expect(screen.getByText(/^Fat: /).textContent).toEqual("Fat: 0 g");
         expect(screen.getByText(/^Price: /).textContent).toEqual("Price: $0.00");
     });
 
     test("weekly summary contains expected values", async () => {
         wrapProviders( <WeeklyTotals mealPlan={ sample_mealplans[0] }/>)
 
-        expect(screen.getByText(/^Calories: /).textContent).toEqual("Calories: 60");
-        expect(screen.getByText(/^Protein: /).textContent).toEqual("Protein: 30");
-        expect(screen.getByText(/^Fat: /).textContent).toEqual("Fat: 12");
+        expect(screen.getByText(/^Calories: /).textContent).toEqual("Calories: 60 cal");
+        expect(screen.getByText(/^Protein: /).textContent).toEqual("Protein: 30 g");
+        expect(screen.getByText(/^Fat: /).textContent).toEqual("Fat: 12 g");
         expect(screen.getByText(/^Price: /).textContent).toEqual("Price: $3.50");
     });
 
@@ -60,9 +60,9 @@ describe("nutrition summary components", () => {
         const empty = { breakfast: [], lunch: [], dinner: [] };
         wrapProviders( <WeeklyTotals mealPlan={ { monday: empty, tuesday: empty, wednesday: empty, thursday: empty, friday: empty, saturday: empty, sunday: empty } }/>)
 
-        expect(screen.getByText(/^Calories: /).textContent).toEqual("Calories: 0");
-        expect(screen.getByText(/^Protein: /).textContent).toEqual("Protein: 0");
-        expect(screen.getByText(/^Fat: /).textContent).toEqual("Fat: 0");
+        expect(screen.getByText(/^Calories: /).textContent).toEqual("Calories: 0 cal");
+        expect(screen.getByText(/^Protein: /).textContent).toEqual("Protein: 0 g");
+        expect(screen.getByText(/^Fat: /).textContent).toEqual("Fat: 0 g");
         expect(screen.getByText(/^Price: /).textContent).toEqual("Price: $0.00");
     });
 });
