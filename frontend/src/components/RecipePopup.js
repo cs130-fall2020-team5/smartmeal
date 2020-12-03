@@ -302,6 +302,15 @@ const RecipePopup = ( {recipe} ) => {
     return values;
   }
 
+  /**
+    * Determines whether the input is an existing meal from the meal plan.
+    * @param { object } recipe a data structure of a recipe containing the recipies
+    * @param { string } recipe.name The name of the input recipe
+    * @param { object[] } recipe.ingredientList List of ingredients for recipe
+    * @returns { object } list of data structures that represent ingredients
+    * If the input exists, the list is populated with each ingredient's properties
+    * If the input does not exist, a single empty ingredient is returned.
+  */
   const getNutrientInfo = ( recipe ) => {
     let nutInfo = {}
     if (recipe.name !== ""){
@@ -480,6 +489,16 @@ const RecipePopup = ( {recipe} ) => {
   /// get nutrition info from spoonacular
 
   // gets ingredient info for each ingredient
+  /**
+    *This function gets ingredient info for each ingredient
+    * @param { object[] } ingredientList list of ingredients for the recipe
+    * @param { string } ingredientList[].name name of the ingredient
+    * @param { number } ingredientList[].amount pricing of ingredient
+    * @param { string } ingredientList[].unit type of units for ingredient
+    * @param { string[] } ingredientList[].possibleUnits list of possible unit types for
+    * the ingredient
+    * @returns { object[] } list of jSON objects that represent ingredient data
+  */
   async function populateIngredientFields(ingredientList){
     let ilist = [];
     var i;
@@ -497,7 +516,15 @@ const RecipePopup = ( {recipe} ) => {
     return ilist; //{name: name, ingredients: ilist};
   }
 
-  // queries spoonacular for ingredient info
+  /**
+    * This function is the wrapper function for queries to spoonacular.
+    * The function calls the doSearch and getInfo functions.
+    * @param { string } iname name of ingredient
+    * @param { number } amount numeric quantity of ingredient
+    * @param { string } unit unit of mearsurement for the ingredient
+    * @returns { object } data structure that contains the specified ingredient's
+    * price, fat, calories, and protein.
+  */
   function getIngredientInfo(iname, amount, unit){
     if (nutritionInfo[iname]) { // avoid querying spoonacular if we already have nutrition information saved
       return {"price": nutritionInfo[iname].price, "fat": nutritionInfo[iname].fat, "calories": nutritionInfo[iname].calories, "protein": nutritionInfo[iname].protein}
