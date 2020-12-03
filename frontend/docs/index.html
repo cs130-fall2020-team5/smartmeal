@@ -1,0 +1,491 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset='utf-8'>
+  <title>smartmeal 0.1.0 | Documentation</title>
+  <meta name='viewport' content='width=device-width,initial-scale=1'>
+  <link href='assets/bass.css' rel='stylesheet'>
+  <link href='assets/style.css' rel='stylesheet'>
+  <link href='assets/github.css' rel='stylesheet'>
+  <link href='assets/split.css' rel='stylesheet'>
+</head>
+<body class='documentation m0'>
+    <div class='flex'>
+      <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
+        <div class='py1 px2'>
+          <h3 class='mb0 no-anchor'>smartmeal</h3>
+          <div class='mb1'><code>0.1.0</code></div>
+          <input
+            placeholder='Filter'
+            id='filter-input'
+            class='col12 block input'
+            spellcheck='false'
+            autocapitalize='off'
+            autocorrect='off'
+            type='text' />
+          <div id='toc'>
+            <ul class='list-reset h5 py1-ul'>
+              
+                
+                <li><a
+                  href='#recipepopup'
+                  class="">
+                  RecipePopup
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#isexistingrecipe'
+                  class="">
+                  isExistingRecipe
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#updatemealplan'
+                  class="">
+                  updateMealplan
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#useeffect'
+                  class="">
+                  useEffect
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#logoutuser'
+                  class="">
+                  logoutUser
+                  
+                </a>
+                
+                </li>
+              
+            </ul>
+          </div>
+          <div class='mt1 h6 quiet'>
+            <a href='https://documentation.js.org/reading-documentation.html'>Need help reading this?</a>
+          </div>
+        </div>
+      </div>
+      <div id='split-right' class='relative overflow-auto height-viewport-100'>
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='recipepopup'>
+      RecipePopup
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>This function displays the Recipe Popup and provides the
+necessary functionality to save the recipe information to the backend.</p>
+
+    <div class='pre p1 fill-light mt0'>RecipePopup</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>recipe</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
+	    A data structure of a recipe containing the recipies
+
+          </div>
+          
+          <table class='mt1 mb2 fixed-table h5 col-12'>
+            <colgroup>
+              <col width='30%' />
+              <col width='70%' />
+            </colgroup>
+            <thead>
+              <tr class='bold fill-light'>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody class='mt1'>
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>recipe.name</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code>
+  </td>
+  <td class='break-word'><span>The name of the input recipe
+</span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>recipe.ingredientList</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>></code>
+  </td>
+  <td class='break-word'><span>List of ingredients for recipe
+</span></td>
+</tr>
+
+
+              
+            </tbody>
+          </table>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>fragment</code>:
+        GUI of Recipe Popup
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='isexistingrecipe'>
+      isExistingRecipe
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Determines whether the input is an existing meal from the meal plan.</p>
+
+    <div class='pre p1 fill-light mt0'>isExistingRecipe</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>recipe</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
+	    a data structure of a recipe containing the recipies
+
+          </div>
+          
+          <table class='mt1 mb2 fixed-table h5 col-12'>
+            <colgroup>
+              <col width='30%' />
+              <col width='70%' />
+            </colgroup>
+            <thead>
+              <tr class='bold fill-light'>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody class='mt1'>
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>recipe.name</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code>
+  </td>
+  <td class='break-word'><span>The name of the input recipe
+</span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>recipe.ingredientList</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>></code>
+  </td>
+  <td class='break-word'><span>List of ingredients for recipe
+</span></td>
+</tr>
+
+
+              
+            </tbody>
+          </table>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></code>:
+        list of data structures that represent ingredients
+If the input exists, the list is populated with each ingredient's properties
+If the input does not exist, a single empty ingredient is returned.
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='updatemealplan'>
+      updateMealplan
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>This function updates the backend with new or updated data for a recipe.</p>
+
+    <div class='pre p1 fill-light mt0'>updateMealplan(recipe_id: TBD, recipe_name: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, ingredient_list: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>recipe_id</span> <code class='quiet'>(TBD)</code>
+	    TBD
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>recipe_name</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    The name of the current recipe
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>ingredient_list</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>>)</code>
+	    List of ingredients for recipe
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='useeffect'>
+      useEffect
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Get the meal plans whenever the user logs in</p>
+
+    <div class='pre p1 fill-light mt0'>useEffect</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='logoutuser'>
+      logoutUser
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>onClick for the "logout" button</p>
+
+    <div class='pre p1 fill-light mt0'>logoutUser()</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+      </div>
+    </div>
+  <script src='assets/anchor.js'></script>
+  <script src='assets/split.js'></script>
+  <script src='assets/site.js'></script>
+</body>
+</html>

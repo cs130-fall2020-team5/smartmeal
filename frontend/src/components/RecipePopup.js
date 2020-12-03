@@ -216,7 +216,15 @@ class MyAutosuggest extends React.Component {
   }
 }
 
-const RecipePopup = ({ recipe }) => {
+/**
+  *This function displays the Recipe Popup and provides the
+  *necessary functionality to save the recipe information to the backend.
+  * @param { object } recipe A data structure of a recipe containing the recipies
+  * @param { string } recipe.name The name of the input recipe
+  * @param { object[] } recipe.ingredientList List of ingredients for recipe
+  * @returns { fragment } GUI of Recipe Popup
+*/
+const RecipePopup = ( {recipe} ) => {
 
   const { loginToken } = useContext(UserContext);
 
@@ -224,6 +232,15 @@ const RecipePopup = ({ recipe }) => {
   const { updateCurrentMealPlan } = useContext(MealPlanContext);
   const { removeMeal } = useContext(MealPlanContext);
 
+  /**
+    *Determines whether the input is an existing meal from the meal plan.
+    * @param { object } recipe a data structure of a recipe containing the recipies
+    * @param { string } recipe.name The name of the input recipe
+    * @param { object[] } recipe.ingredientList List of ingredients for recipe
+    * @returns { object } list of data structures that represent ingredients
+    * If the input exists, the list is populated with each ingredient's properties
+    * If the input does not exist, a single empty ingredient is returned.
+  */
   const isExistingRecipe = ( recipe ) => {
     const values = [];
     if (recipe.name !== ""){
@@ -247,6 +264,12 @@ const RecipePopup = ({ recipe }) => {
 
   const [recipeName, setRecipeName] = useState(recipe.name);
 
+  /**
+    *This function updates the backend with new or updated data for a recipe.
+    * @param { TBD } recipe_id TBD
+    * @param { string } recipe_name The name of the current recipe
+    * @param { object[] } ingredient_list List of ingredients for recipe
+  */
   function updateMealplan(recipe_id, recipe_name, ingredient_list){
     const isExistingRecipe = recipe_id ? true : false;
     axios({
