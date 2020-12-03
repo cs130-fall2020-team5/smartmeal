@@ -243,7 +243,21 @@ const RecipePopup = ({ recipe }) => {
     return values;
   }
 
+  const getNutrientInfo = ( recipe ) => {
+    let nutInfo = {}
+    if (recipe.name !== ""){
+      const ingredientList = recipe.ingredientList
+      if (ingredientList && ingredientList.length >= 1){
+        for (const ingredient of ingredientList){
+          nutInfo[ingredient.name] = { protein: ingredient.protein, fat: ingredient.fat, price: ingredient.price, calories: ingredient.calories };
+        }
+      }
+    }
+    return nutInfo;
+  }
+
   const [ingredientFields, setIngredientFields] = useState(isExistingRecipe(recipe));
+  const [nutritionInfo, setNutritionInfo] = useState(getNutrientInfo(recipe));
 
   const [recipeName, setRecipeName] = useState(recipe.name);
   const [errorMessage, setErrorMessage] = useState(null);
@@ -251,7 +265,6 @@ const RecipePopup = ({ recipe }) => {
   async function updateMealplan(recipe_id, recipe_name, ingredient_list){
     const isExistingRecipe = recipe_id ? true : false;
     let recipe_ingredients = await populateIngredientFields(ingredient_list);
-    //console.log(recipe_entry);
     axios({
         method: isExistingRecipe ? "PUT" : "POST",
         url: "http://localhost:3000/recipe/" + recipe_id,
@@ -302,6 +315,10 @@ const RecipePopup = ({ recipe }) => {
       setErrorMessage("All recipes must have a name");
       return;
     }
+    if (ingredientFields.length === 1 && ingredientFields[0].name === "") {
+      setErrorMessage("All recipes must have at least 1 ingredient");
+      return;
+    }
     saveRecipe(recipeName, ingredientFields);
     saveButtonClicked();
   };
@@ -312,6 +329,7 @@ const RecipePopup = ({ recipe }) => {
       values[index].name = event.target.value;
       values[index].possibleUnits=event.target.possibleUnits;
       values[index].unit = event.target.possibleUnits[0];
+      setErrorMessage("");
     } else if (event.target.name === "amount") {
       values[index].amount = event.target.value;
     } else if (event.target.name === "unit") {
@@ -321,6 +339,7 @@ const RecipePopup = ({ recipe }) => {
   };
 
   const handleAddFields = () => {
+    setErrorMessage("");
     if (ingredientFields.length >= 10) {
       alert("Too many ingredients for this meal!")
       return;
@@ -340,12 +359,75 @@ const RecipePopup = ({ recipe }) => {
 
   const handlePopulateIngredients = (recipe) => {
       setIngredientFields(isExistingRecipe({ name: recipe.name, ingredientList: recipe.ingredients }))
+      setNutritionInfo(getNutrientInfo({ name: recipe.name, ingredientList: recipe.ingredients }))
       setRecipeName(recipe.name);
   };
 
   const handleDeleteMeal = () => {
     removeMeal(recipe._id);
     cancelButtonClicked();
+  }
+
+  /// get nutrition info from spoonacular
+
+  // gets ingredient info for each ingredient 
+  async function populateIngredientFields(ingredientList){
+    let ilist = [];
+    var i;
+    for(i = 0; i < ingredientList.length; i++){
+      let iname = ingredientList[i].name;
+      let amount = ingredientList[i].amount;
+      let unit = ingredientList[i].unit;
+      let nutrition = await getIngredientInfo(iname, amount, unit);
+      //console.log(nutrition);
+      let ingredient = combineJSON(ingredientList[i], nutrition);
+      //console.log("ingredient: " + JSON.stringify(ingredient));
+      ilist.push(ingredient);
+    }
+    //console.log({name: name, ingredients: ilist});
+    return ilist; //{name: name, ingredients: ilist};
+  }
+
+  // queries spoonacular for ingredient info
+  function getIngredientInfo(iname, amount, unit){
+    if (nutritionInfo[iname]) { // avoid querying spoonacular if we already have nutrition information saved
+      return {"price": nutritionInfo[iname].price, "fat": nutritionInfo[iname].fat, "calories": nutritionInfo[iname].calories, "protein": nutritionInfo[iname].protein}
+    }
+    // get id of ingredient with exact name match
+    return doSearch(iname)
+    .then(search_res => {
+      const isIngredient = (elt) => elt.name === iname;
+      let index = search_res.data.results.findIndex(isIngredient);
+      if(index === -1)
+        throw Error("Ingredient not found");
+      let ing_id = search_res.data.results[index].id;
+
+      // get the basic pricing and nutrition info 
+      return getInfo(ing_id, amount, unit)
+      .then(res => {
+        let price = res.data.estimatedCost.unit === "US Cents" ? (res.data.estimatedCost.value/100) : res.data.estimatedCost.value;
+        const findNutrition = (title) => (elt) => elt.title === title;
+
+        let fat_index = res.data.nutrition.nutrients.findIndex(findNutrition("Fat"));
+        if(fat_index === -1)
+          throw Error("Fat not found");
+        let fat = res.data.nutrition.nutrients[fat_index].amount;
+
+        let cal_index = res.data.nutrition.nutrients.findIndex(findNutrition("Calories"));
+        if(cal_index === -1)
+          throw Error("Calories not found");
+        let calories = res.data.nutrition.nutrients[cal_index].amount;
+
+        let pro_index = res.data.nutrition.nutrients.findIndex(findNutrition("Protein"));
+        if(pro_index === -1)
+          throw Error("Protein not found");
+        let protein = res.data.nutrition.nutrients[pro_index].amount;
+
+        return {"price": price, "fat": fat, "calories": calories, "protein": protein};
+      })
+      .catch(err => console.log("Error getting ingredient info"));
+    })
+    .catch(err => console.log("Error with search query"));
   }
 
   return (
@@ -478,28 +560,10 @@ const RecipePopup = ({ recipe }) => {
 }
 
 
-const api_key = "4119fc6a6de3413cbfc379525c7d4e2a";
+const api_key = "db254b5cd61744d39a2deebd9c361444";
 // 4119fc6a6de3413cbfc379525c7d4e2a - axel
 // db254b5cd61744d39a2deebd9c361444 - current
 // c25140a9d4a94ed2b11bddd00a30b486 - john
-
-// gets ingredient info for each ingredient 
-async function populateIngredientFields(ingredientList){
-  let ilist = [];
-  var i;
-  for(i = 0; i < ingredientList.length; i++){
-    let iname = ingredientList[i].name;
-    let amount = ingredientList[i].amount;
-    let unit = ingredientList[i].unit;
-    let nutrition = await getIngredientInfo(iname, amount, unit);
-    //console.log(nutrition);
-    let ingredient = combineJSON(ingredientList[i], nutrition);
-    //console.log("ingredient: " + JSON.stringify(ingredient));
-    ilist.push(ingredient);
-  }
-  //console.log({name: name, ingredients: ilist});
-  return ilist; //{name: name, ingredients: ilist};
-}
 
 // helper queries for getIngredientInfo
 function doSearch(iname){
@@ -521,45 +585,6 @@ function getInfo(ing_id, amount, unit){
         unit: unit
       }
     }).then(res => res);
-}
-
-// queries spoonacular for ingredient info
-function getIngredientInfo(iname, amount, unit){
-  // get id of ingredient with exact name match
-  return doSearch(iname)
-  .then(search_res => {
-    const isIngredient = (elt) => elt.name === iname;
-    let index = search_res.data.results.findIndex(isIngredient);
-    if(index === -1)
-      throw Error("Ingredient not found");
-    let ing_id = search_res.data.results[index].id;
-
-    // get the basic pricing and nutrition info 
-    return getInfo(ing_id, amount, unit)
-    .then(res => {
-      let price = res.data.estimatedCost.unit === "US Cents" ? (res.data.estimatedCost.value/100) : res.data.estimatedCost.value;
-      const findNutrition = (title) => (elt) => elt.title === title;
-
-      let fat_index = res.data.nutrition.nutrients.findIndex(findNutrition("Fat"));
-      if(fat_index === -1)
-        throw Error("Fat not found");
-      let fat = res.data.nutrition.nutrients[fat_index].amount;
-
-      let cal_index = res.data.nutrition.nutrients.findIndex(findNutrition("Calories"));
-      if(cal_index === -1)
-        throw Error("Calories not found");
-      let calories = res.data.nutrition.nutrients[cal_index].amount;
-
-      let pro_index = res.data.nutrition.nutrients.findIndex(findNutrition("Protein"));
-      if(pro_index === -1)
-        throw Error("Protein not found");
-      let protein = res.data.nutrition.nutrients[pro_index].amount;
-
-      return {"price": price, "fat": fat, "calories": calories, "protein": protein};
-    })
-    .catch(err => console.log("Error getting ingredient info"));
-  })
-  .catch(err => console.log("Error with search query"));
 }
 
 // combines two jSON objects
