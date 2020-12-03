@@ -246,6 +246,7 @@ const RecipePopup = ({ recipe }) => {
   const [ingredientFields, setIngredientFields] = useState(isExistingRecipe(recipe));
 
   const [recipeName, setRecipeName] = useState(recipe.name);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   async function updateMealplan(recipe_id, recipe_name, ingredient_list){
     const isExistingRecipe = recipe_id ? true : false;
@@ -297,6 +298,10 @@ const RecipePopup = ({ recipe }) => {
 
   const handleSubmit = e => {
     e.preventDefault();
+    if (recipeName === "") {
+      setErrorMessage("All recipes must have a name");
+      return;
+    }
     saveRecipe(recipeName, ingredientFields);
     saveButtonClicked();
   };
@@ -316,6 +321,10 @@ const RecipePopup = ({ recipe }) => {
   };
 
   const handleAddFields = () => {
+    if (ingredientFields.length >= 10) {
+      alert("Too many ingredients for this meal!")
+      return;
+    };
     const values = [...ingredientFields];
     values.push({ name:'', amount:'', unit:'',possibleUnits:[] });
     setIngredientFields(values);
@@ -359,7 +368,7 @@ const RecipePopup = ({ recipe }) => {
           placeholder="Recipe Name"
           value={recipeName}
           onChange2={(a_recipe) => handlePopulateIngredients(a_recipe)}
-          onChange={(name_recipe) => setRecipeName(name_recipe)}
+          onChange={(name_recipe) => { setRecipeName(name_recipe); setErrorMessage(null); } }
         />
         </div>
           </Col>
@@ -457,6 +466,9 @@ const RecipePopup = ({ recipe }) => {
           >
             Delete Meal
           </button>
+        </Row>
+        <Row>
+          <p style={{ "color": "red", "display": `${ errorMessage ? "block" : "none"}`}}>{errorMessage}</p>
         </Row>
         </Container>
       </form>
