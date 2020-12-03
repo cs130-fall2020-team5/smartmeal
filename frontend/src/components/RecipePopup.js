@@ -9,11 +9,20 @@ import { UserContext } from "../context/user";
 import { MealPlanContext } from "../context/mealplan";
 
 // https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions#Using_Special_Characters
-
+/**
+  * This function escapes regex escapeRegexCharacters
+  * @param { string } str the string to escape
+  * @returns { string } escaped string
+*/
 function escapeRegexCharacters(str) {
   return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
+/**
+  * This function calls spoonSearch to get a list of suggestions for the input string
+  * @param { string } value the string to be autocompleted
+  * @returns { string[] } list of suggestions
+*/
 function getSuggestions(value) {
   const escapedValue = escapeRegexCharacters(value.trim());
 
@@ -33,15 +42,33 @@ function getSuggestions(value) {
   });
 }
 
+/**
+  * This function takes returns the 'name' attribute of a data structure
+  * @param { object } suggestion object that holds suggestion data
+  * @returns { string } the name within the suggestion object
+*/
 function getSuggestionValue(suggestion) {
   return suggestion.name;
 }
 
+/**
+  * This function displays a suggestion's name within a 'span' tag
+  * @param { object } suggestion object that holds suggestion data
+  * @returns { object } span tagged suggestion name
+*/
 function renderSuggestion(suggestion) {
   return (
     <span>{suggestion.name}</span>
   );
 }
+
+/**
+  * This function checks the backend database for existing recipes partially matching the
+  * input value.
+  * @param { string } value string to be matched with the database
+  * @param { string } token authorization token for backend get request
+  * @returns { object[] } list of suggested recipes from the backend
+*/
 function recipe_getSuggestions(value,token) {
   const escapedValue = escapeRegexCharacters(value.trim());
 
@@ -80,7 +107,13 @@ class RecipeSuggest extends React.Component {
     };
   }
 
-
+  /**
+    * This function detects when the value of an input element changes
+    * @param { object } event current state
+    * @param { object } obj
+    * @param { string } obj.newValue the changed value of element
+    * @param { string } obj.method method of axios HTTP request
+  */
   onChange = (event, { newValue, method }) => {
     this.setState({
       value: newValue
@@ -98,8 +131,11 @@ class RecipeSuggest extends React.Component {
     this.props.onChange(newValue);
   };
 
-
-
+  /**
+    * This function signals when suggestions should update
+    * @param { object } obj
+    * @param { object } obj.value target string to provide suggestions for
+  */
   onSuggestionsFetchRequested = ({ value }) => {
     recipe_getSuggestions(value, this.props.token)
     .then((res) => {
@@ -113,6 +149,10 @@ class RecipeSuggest extends React.Component {
       console.log("Failed to do fetch suggestions: ", err);
     });
   };
+
+  /**
+    * This function is called every time suggestions need to be cleared.
+  */
   onSuggestionsClearRequested = () => {
     this.setState({
       suggestions: []
@@ -171,6 +211,7 @@ class MyAutosuggest extends React.Component {
 
   };
 
+
   onSuggestionsFetchRequested = ({ value }) => {
     getSuggestions(value)
     .then((res) => {
@@ -219,9 +260,10 @@ class MyAutosuggest extends React.Component {
 /**
   *This function displays the Recipe Popup and provides the
   *necessary functionality to save the recipe information to the backend.
-  * @param { object } recipe A data structure of a recipe containing the recipies
-  * @param { string } recipe.name The name of the input recipe
-  * @param { object[] } recipe.ingredientList List of ingredients for recipe
+  * @param { object } obj
+  * @param { object } obj.recipe A data structure of a recipe containing the recipies
+  * @param { string } obj.recipe.name The name of the input recipe
+  * @param { object[] } obj.recipe.ingredientList List of ingredients for recipe
   * @returns { fragment } GUI of Recipe Popup
 */
 const RecipePopup = ( {recipe} ) => {
@@ -601,7 +643,15 @@ function getInfo(ing_id, amount, unit){
     }).then(res => res);
 }
 
-// queries spoonacular for ingredient info
+/**
+  * This function is the wrapper function for queries to spoonacular.
+  * The function calls the doSearch and getInfo functions.
+  * @param { string } iname name of ingredient
+  * @param { number } amount numeric quantity of ingredient
+  * @param { string } unit unit of mearsurement for the ingredient
+  * @returns { object } data structure that contains the specified ingredient's
+  * price, fat, calories, and protein.
+*/
 function getIngredientInfo(iname, amount, unit){
   // get id of ingredient with exact name match
   return doSearch(iname)
@@ -640,7 +690,12 @@ function getIngredientInfo(iname, amount, unit){
   .catch(err => console.log("Error with search query"));
 }
 
-// combines two jSON objects
+/**
+  * This function combines two jSON objects.
+  * @param { object } j1 first jSON object to combine
+  * @param { object } j2 second jSON object to combine
+  * @returns { object } combined jSon object consisting of j1+j2
+*/
 function combineJSON(j1, j2){
   const result = {};
   let key;
@@ -659,6 +714,11 @@ function combineJSON(j1, j2){
   return result;
 }
 
+/**
+  * This function queries the spoonacular API for auto-complete suggestions.
+  * @param { string } str string that needs autocomplete suggestions
+  * @returns { object } data structure of auto-complete suggestions
+*/
 function spoonSearch(str) {
   return axios.get('https://api.spoonacular.com/food/ingredients/autocomplete',
     {
