@@ -68,6 +68,76 @@
               
                 
                 <li><a
+                  href='#handlesubmit'
+                  class="">
+                  handleSubmit
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#handleinputchange'
+                  class="">
+                  handleInputChange
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#handleaddfields'
+                  class="">
+                  handleAddFields
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#handleremovefields'
+                  class="">
+                  handleRemoveFields
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#handlepopulateingredients'
+                  class="">
+                  handlePopulateIngredients
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#handledeletemeal'
+                  class="">
+                  handleDeleteMeal
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#populateingredientfields'
+                  class="">
+                  populateIngredientFields
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#useeffect'
                   class="">
                   useEffect
@@ -414,9 +484,8 @@ If the input does not exist, a single empty ingredient is returned.
   </div>
   
 
-  <p>This function is called when a user clicks the 'Update' or 'Save' button.
-The function checks if the recipe name is already saved in the database and
-avoids saving multiple recipes with the same name.</p>
+  <p>This function checks if the recipe name is already saved in the database and
+avoids saving multiple recipes with the same name before saving to the database.</p>
 
     <div class='pre p1 fill-light mt0'>saveRecipe(recipe_name: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, ingredient_list: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>>)</div>
   
@@ -456,6 +525,529 @@ avoids saving multiple recipes with the same name.</p>
 
   
 
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='handlesubmit'>
+      handleSubmit
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>This function is called when a user clicks the 'Update' or 'Save' button.
+It calls saveRecipe to save data in the backend, and then calls saveButtonClicked
+to close the popup.</p>
+
+    <div class='pre p1 fill-light mt0'>handleSubmit</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>e</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
+	    Current state of HTML element
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='handleinputchange'>
+      handleInputChange
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>This function is called whenever an ingredient field is changed.
+The function determines what object is being modified and updates the list
+of ingredient fields to include the input change.</p>
+
+    <div class='pre p1 fill-light mt0'>handleInputChange</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>index</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    The index of the ingredientField in ingredientFields
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>event</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
+	    Current state of HTML element
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='handleaddfields'>
+      handleAddFields
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>This function is called when the user clicks the Add button to add another
+row of ingredient fields.
+The function pushes an empty ingredientField object onto the ingredientFields list.</p>
+
+    <div class='pre p1 fill-light mt0'>handleAddFields</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='handleremovefields'>
+      handleRemoveFields
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>This function is called when the user clicks the Remove button to remove
+the lowest row of ingredient fields.
+The function pops an ingredientField object off the ingredientFields list.</p>
+
+    <div class='pre p1 fill-light mt0'>handleRemoveFields</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='handlepopulateingredients'>
+      handlePopulateIngredients
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>This function is called when the user modifies the Recipe Name textbox.
+The ingredientFields data structure is set to the return of the isExistingRecipe function.
+The recipeName string is set to recipe.name.</p>
+
+    <div class='pre p1 fill-light mt0'>handlePopulateIngredients</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>recipe</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
+	    a data structure of a recipe containing the recipies
+
+          </div>
+          
+          <table class='mt1 mb2 fixed-table h5 col-12'>
+            <colgroup>
+              <col width='30%' />
+              <col width='70%' />
+            </colgroup>
+            <thead>
+              <tr class='bold fill-light'>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody class='mt1'>
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>recipe.name</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code>
+  </td>
+  <td class='break-word'><span>The name of the input recipe
+</span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>recipe.ingredientList</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>></code>
+  </td>
+  <td class='break-word'><span>List of ingredients for recipe
+</span></td>
+</tr>
+
+
+              
+            </tbody>
+          </table>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='handledeletemeal'>
+      handleDeleteMeal
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>This function is called when the user clicks the Delete Meal button to remove
+the recipe from the weekly meal plan.
+The removeMeal function is called to locate and remove the recipe from the meal plan.
+The cancelButtonClicked function is called to close the popup without saving.</p>
+
+    <div class='pre p1 fill-light mt0'>handleDeleteMeal</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='populateingredientfields'>
+      populateIngredientFields
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>This function gets ingredient info for each ingredient</p>
+
+    <div class='pre p1 fill-light mt0'>populateIngredientFields(ingredientList: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>ingredientList</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>>)</code>
+	    list of ingredients for the recipe
+
+          </div>
+          
+          <table class='mt1 mb2 fixed-table h5 col-12'>
+            <colgroup>
+              <col width='30%' />
+              <col width='70%' />
+            </colgroup>
+            <thead>
+              <tr class='bold fill-light'>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody class='mt1'>
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>ingredientList[].name</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code>
+  </td>
+  <td class='break-word'><span>name of the ingredient
+</span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>ingredientList[].amount</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>
+  </td>
+  <td class='break-word'><span>pricing of ingredient
+</span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>ingredientList[].unit</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code>
+  </td>
+  <td class='break-word'><span>type of units for ingredient
+</span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>ingredientList[].possibleUnits</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>></code>
+  </td>
+  <td class='break-word'><span>list of possible unit types for
+the ingredient
+</span></td>
+</tr>
+
+
+              
+            </tbody>
+          </table>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>></code>:
+        list of jSON objects that represent ingredient info
+
+      
+    
   
 
   

@@ -266,7 +266,7 @@ const RecipePopup = ( {recipe} ) => {
 
   /**
     *This function updates the backend with new or updated data for a recipe.
-    * @param { TBD } recipe_id TBD
+    * @param { ??? } recipe_id ???
     * @param { string } recipe_name The name of the current recipe
     * @param { object[] } ingredient_list List of ingredients for recipe
   */
@@ -293,9 +293,8 @@ const RecipePopup = ( {recipe} ) => {
   }
 
   /**
-    * This function is called when a user clicks the 'Update' or 'Save' button.
-    * The function checks if the recipe name is already saved in the database and
-    * avoids saving multiple recipes with the same name.
+    * This function checks if the recipe name is already saved in the database and
+    * avoids saving multiple recipes with the same name before saving to the database.
     * @param { string } recipe_name The name of the current recipe
     * @param { object[] } ingredient_list List of ingredients for current recipe
   */
@@ -325,12 +324,25 @@ const RecipePopup = ( {recipe} ) => {
 
   }
 
+  /**
+    * This function is called when a user clicks the 'Update' or 'Save' button.
+    * It calls saveRecipe to save data in the backend, and then calls saveButtonClicked
+    * to close the popup.
+    * @param { object } e Current state of HTML element
+  */
   const handleSubmit = e => {
     e.preventDefault();
     saveRecipe(recipeName, ingredientFields);
     saveButtonClicked();
   };
 
+  /**
+    * This function is called whenever an ingredient field is changed.
+    * The function determines what object is being modified and updates the list
+    * of ingredient fields to include the input change.
+    * @param { number } index The index of the ingredientField in ingredientFields
+    * @param { object } event Current state of HTML element
+  */
   const handleInputChange = (index, event) => {
     const values = [...ingredientFields];
     if (event.target.name === "name") {
@@ -345,13 +357,24 @@ const RecipePopup = ( {recipe} ) => {
     setIngredientFields(values);
   };
 
+  /**
+    * This function is called when the user clicks the Add button to add another
+    * row of ingredient fields.
+    * The function pushes an empty ingredientField object onto the ingredientFields list.
+  */
   const handleAddFields = () => {
     const values = [...ingredientFields];
     values.push({ name:'', amount:'', unit:'',possibleUnits:[] });
     setIngredientFields(values);
   };
 
-  const handleRemoveFields = (ing) => {
+
+  /**
+    * This function is called when the user clicks the Remove button to remove
+    * the lowest row of ingredient fields.
+    * The function pops an ingredientField object off the ingredientFields list.
+  */
+  const handleRemoveFields = () => {
     const values = [...ingredientFields];
     if (values.length > 1) {
       values.pop();
@@ -359,11 +382,25 @@ const RecipePopup = ( {recipe} ) => {
     }
   };
 
+  /**
+    * This function is called when the user modifies the Recipe Name textbox.
+    * The ingredientFields data structure is set to the return of the isExistingRecipe function.
+    * The recipeName string is set to recipe.name.
+    * @param { object } recipe a data structure of a recipe containing the recipies
+    * @param { string } recipe.name The name of the input recipe
+    * @param { object[] } recipe.ingredientList List of ingredients for recipe
+  */
   const handlePopulateIngredients = (recipe) => {
       setIngredientFields(isExistingRecipe({ name: recipe.name, ingredientList: recipe.ingredients }))
       setRecipeName(recipe.name);
   };
 
+  /**
+    * This function is called when the user clicks the Delete Meal button to remove
+    * the recipe from the weekly meal plan.
+    * The removeMeal function is called to locate and remove the recipe from the meal plan.
+    * The cancelButtonClicked function is called to close the popup without saving.
+  */
   const handleDeleteMeal = () => {
     removeMeal(recipe._id);
     cancelButtonClicked();
@@ -501,7 +538,16 @@ const api_key = "c25140a9d4a94ed2b11bddd00a30b486";
 // db254b5cd61744d39a2deebd9c361444 - current
 // c25140a9d4a94ed2b11bddd00a30b486 - john
 
-// gets ingredient info for each ingredient
+/**
+  *This function gets ingredient info for each ingredient
+  * @param { object[] } ingredientList list of ingredients for the recipe
+  * @param { string } ingredientList[].name name of the ingredient
+  * @param { number } ingredientList[].amount pricing of ingredient
+  * @param { string } ingredientList[].unit type of units for ingredient
+  * @param { string[] } ingredientList[].possibleUnits list of possible unit types for
+  * the ingredient
+  * @returns { object[] } list of jSON objects that represent ingredient data
+*/
 async function populateIngredientFields(ingredientList){
   let ilist = [];
   var i;
@@ -519,7 +565,12 @@ async function populateIngredientFields(ingredientList){
   return ilist; //{name: name, ingredients: ilist};
 }
 
-// helper queries for getIngredientInfo
+/**
+  * This function performs a get request that queries the Spoonacular API for ingredients
+  * with the name: of the input parameter.
+  * @param { string } iname name of ingredient
+  * @returns { object } response object for the query
+*/
 function doSearch(iname){
   return axios.get("https://api.spoonacular.com/food/ingredients/search",
     {
@@ -529,6 +580,15 @@ function doSearch(iname){
       }
     }).then(res => res);
 }
+
+/**
+  * This function performs a get request that queries the Spoonacular API for nutrition information
+  * of a particular ingredient ID.
+  * @param { ??? } ing_id ID of ingredient
+  * @param { number } amount numeric quantity of ingredient
+  * @param { string } unit unit of mearsurement for the ingredient
+  * @returns { object } response object for the query
+*/
 function getInfo(ing_id, amount, unit){
   return axios.get("https://api.spoonacular.com/food/ingredients/" + ing_id + "/information",
     {
