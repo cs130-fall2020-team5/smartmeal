@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Button } from "react-bootstrap";
+import  { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 // context
 import { MealPlanContext } from "../context/mealplan";
@@ -35,6 +36,12 @@ export default function GroceryList({ mealPlan, onClose }) {
                     <input className="check-grocery-item" type="checkbox" id={key + "-checkbox"} onChange={() => onCheckItem(key)} checked={attributes.checked ? true : false}/>
                     <label data-testid={key + "-qty"} className="label-grocery-item" htmlFor={key + "-checkbox"}>{key} ({amount} {attributes.unit})</label>
                     <span className="price-grocery-item">${attributes.price.toFixed(2)}</span>
+                    {attributes.isCustom && 
+                        <span onClick={() => removeCustomGroceryItem(key)} className="grocery-item-delete">
+                            <FontAwesomeIcon icon="trash"/>
+                            <span className="grocery-item-tooltip">click to delete custom item</span>
+                        </span>
+                    }
                 </div>
             );
 
@@ -49,6 +56,45 @@ export default function GroceryList({ mealPlan, onClose }) {
         );
 
         return items;
+    }
+
+    function getCheckedItems() {
+        let checked = [];
+        let unchecked = [];
+        for (let key in shoppingList) {
+            const attributes = shoppingList[key];
+            if (attributes.checked) {
+                checked.push(key);
+            } else {
+                unchecked.push(key);
+            }
+        }
+        return { checked: checked, unchecked: unchecked }
+    }
+
+    function removeCustomGroceryItem(itemName) {
+        // set what we've checked so far otherwise we lose it
+
+        const { checked, unchecked } = getCheckedItems();
+
+        setCheckedIngredients(mealPlan._id, checked, unchecked)
+            .then(() => {
+                // now forward the new custom ingredient
+                let customIngredients = mealPlan.customIngredients;
+                for (let i = 0; i < customIngredients.length; i++) {
+                    let ing = customIngredients[i];
+                    if (checked.filter(key => key === ing.name).length > 0) {
+                        ing.checked = true;
+                    } else {
+                        ing.checked = false;
+                    }
+
+                    if (ing.name === itemName) {
+                        customIngredients.splice(i, 1)
+                    }
+                }
+                updateCustomIngredients(customIngredients);
+            })
     }
 
     function handleInput(event) {
@@ -70,16 +116,7 @@ export default function GroceryList({ mealPlan, onClose }) {
     function newCustomIngredient() {
 
         // set what we've checked so far otherwise we lose it
-        let checked = [];
-        let unchecked = [];
-        for (let key in shoppingList) {
-            const attributes = shoppingList[key];
-            if (attributes.checked) {
-                checked.push(key);
-            } else {
-                unchecked.push(key);
-            }
-        }
+        const { checked, unchecked } = getCheckedItems();
 
         setCheckedIngredients(mealPlan._id, checked, unchecked)
             .then(() => {
@@ -110,22 +147,11 @@ export default function GroceryList({ mealPlan, onClose }) {
     }
 
     function updateAndClose() {
-
-        let checked = [];
-        let unchecked = [];
-        for (let key in shoppingList) {
-            const attributes = shoppingList[key];
-            if (attributes.checked) {
-                checked.push(key);
-            } else {
-                unchecked.push(key);
-            }
-        }
-
+        const { checked, unchecked } = getCheckedItems();
         setCheckedIngredients(mealPlan._id, checked, unchecked);
-
         onClose();
     }
+
     useEffect(() => {
         
         let ingredients = [];
@@ -154,6 +180,7 @@ export default function GroceryList({ mealPlan, onClose }) {
 
         // Push custom ingredients
         for (let ing of mealPlan.customIngredients) {
+            ing.isCustom = true;
             ingredients.push(ing);
         }
 
@@ -168,7 +195,7 @@ export default function GroceryList({ mealPlan, onClose }) {
                 groceryItem.price += ingredient.price ? parseFloat(ingredient.price) : 0; // may need to adjust/multiply by amount
                 // IMPORTANT: units may differ between different ingredients, possibly will need to convert so amount is correct
             } else {
-                shoppingList[ingredient.name] = { amount: ingredient.amount ? parseFloat(ingredient.amount) : 0, unit: ingredient.unit, price: ingredient.price ? parseFloat(ingredient.price) : 0, checked: ingredient.checked };
+                shoppingList[ingredient.name] = { amount: ingredient.amount ? parseFloat(ingredient.amount) : 0, unit: ingredient.unit, price: ingredient.price ? parseFloat(ingredient.price) : 0, checked: ingredient.checked, isCustom: ingredient.isCustom };
             }
         }
 

@@ -11,9 +11,10 @@ import "./styles/index.css";
 
 // icons
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faBars } from '@fortawesome/free-solid-svg-icons'
+import { faBars, faTrash } from '@fortawesome/free-solid-svg-icons'
  
 library.add(faBars);
+library.add(faTrash);
 
 ReactDOM.render(
     <React.StrictMode>
