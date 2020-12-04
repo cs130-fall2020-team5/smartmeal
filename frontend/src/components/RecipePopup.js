@@ -198,13 +198,13 @@ class IngredientAutosuggest extends React.Component {
 }
 
 /**
-  * This component displays the Recipe Popup and provides the
-  * necessary functionality to allow user input, query Spoonacular, and save the recipe information to the backend.
+  * Displays the Recipe Popup, handles user input data, and provides
+  * functionality to save the changes of recipe information to the backend.
   * @param { object } obj
-  * @param { object } obj.recipe A data structure of a recipe containing the recipies
-  * @param { string } obj.recipe.name The name of the input recipe
-  * @param { object[] } obj.recipe.ingredientList array of ingredients for recipe
-  * @returns { JSX } HTML of Recipe Popup
+  * @param { object } obj.recipe object with attributes that define a recipe
+  * @param { string } obj.recipe.name name of the recipe
+  * @param { object[] } obj.recipe.ingredientList array of ingredients for the recipe
+  * @returns { JSX } HTML element of Recipe Popup
 */
 const RecipePopup = ( {recipe} ) => {
 
@@ -215,9 +215,9 @@ const RecipePopup = ( {recipe} ) => {
   const { removeMeal, removeRecipe } = useContext(MealPlanContext);
 
   /**
-    * Determines whether the input is an existing meal from the meal plan.
-    * @param { object } recipe a data structure of a recipe containing the recipies
-    * @param { string } recipe.name The name of the input recipe
+    *Determines whether the input is an existing meal from the meal plan.
+    * @param { object } recipe object with attributes that define a recipe
+    * @param { string } recipe.name The name of the recipe
     * @param { object[] } recipe.ingredientList array of ingredients for recipe
     * @returns { ingredientList } list of ingredients
     * If the input exists, the list is populated with each ingredient's properties
@@ -302,7 +302,7 @@ const RecipePopup = ( {recipe} ) => {
   }
 
   /**
-    * This function checks if the recipe name is already saved in the database 
+    * This function checks if the recipe name is already saved in the database
     * (to avoid saving multiple recipes with the same name) before saving to the database.
     * @param { string } recipe_name The name of the current recipe
     * @param { object[] } ingredient_list List of ingredients for current recipe
@@ -445,7 +445,7 @@ const RecipePopup = ( {recipe} ) => {
     cancelButtonClicked();
   }
 
-  const handleDeleteRecipe = () => {
+  const handleForgetRecipe = () => {
     removeRecipe(recipe._id);
     removeMeal(recipe._id);
     cancelButtonClicked();
@@ -453,7 +453,7 @@ const RecipePopup = ( {recipe} ) => {
 
   /// get nutrition info from spoonacular
 
-  // gets ingredient info for each ingredient 
+  // gets ingredient info for each ingredient
   /**
     *This function gets ingredient info for each ingredient
     * @param { object[] } ingredientList array of ingredients for the recipe
@@ -647,7 +647,7 @@ const RecipePopup = ( {recipe} ) => {
             { recipe._id ? "Update" : "Save"}
           </button>
         </Row>
-        
+
         <Row style={{'float': 'left', 'width': '100%', 'padding-left': '10px'}}>
           <button
             className="btn btn-danger mr-2"
@@ -659,9 +659,9 @@ const RecipePopup = ( {recipe} ) => {
           <button
             className="btn btn-danger mr-2"
             type="button"
-            onClick={handleDeleteRecipe}
+            onClick={handleForgetRecipe}
           >
-            Delete Recipe
+            Forget Recipe
           </button>
         </Row>
         <Row>

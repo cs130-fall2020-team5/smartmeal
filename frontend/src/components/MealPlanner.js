@@ -16,7 +16,10 @@ import { MealPlanContext } from "../context/mealplan";
 import { PopupContext } from "../context/popup-context";
 
 /**
-  * This component generates the weekly calendar and populates it with the user's previously saved meals.
+  *   <p>Generates the meal plan calendar and populates it with the user's previously saved meals.</p>
+  *   <p>Allows users to customize the name and start day of the plan.</p>
+  *   <p>Displays weekly totals, grocery list, and recipe popups if their respective buttons are clicked.</p>
+  *
   * @returns { JSX } element containing HTML for the weekly meal planner and flag checks for displaying popup windows
 */
 export default function MealPlanner() {
@@ -94,7 +97,7 @@ export default function MealPlanner() {
 
     /**
       * Renders a column that represents a day of the week and populates the column with meal period boxes
-      * that contains the user's saved meals for the day. Each column consists of 3 `MealPeriodBoxes` for the 3 meal 
+      * that contains the user's saved meals for the day. Each column consists of 3 `MealPeriodBoxes` for the 3 meal
       * periods, plus a `DailySummary` component.
       * @param { string } day day of the week to be genereated
       * @param { boolean } shouldIncludeMealPeriodLabels flag used so that the meal period labels
