@@ -245,9 +245,6 @@ function MealPlanProvider({ children }) {
         }
     }
 
-    /**
-     * Get the meal plans whenever the user logs in
-     */
     useEffect(() => {
         if (isLoggedIn) getMealPlans(null);
     }, [getMealPlans, isLoggedIn, loginToken]);

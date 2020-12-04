@@ -5,6 +5,14 @@ import  { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // context
 import { MealPlanContext } from "../context/mealplan";
 
+/**
+  * This function displays the popup for the grocery list when a user clicks the
+  * 'Grocery List' button.
+  * @param { object } obj
+  * @param { mealplan } obj.mealPlan data structure for the current weekly meal plan
+  * @param { function } obj.onClose function to stop displaying the popup window
+  * @returns { JSX } Returns the HTML for the grocery popup
+*/
 export default function GroceryList({ mealPlan, onClose }) {
     const { setCheckedIngredients, updateCustomIngredients } = useContext(MealPlanContext);
 
@@ -15,6 +23,7 @@ export default function GroceryList({ mealPlan, onClose }) {
         amount: "",
         unit: ""
     });
+
 
     function generateGroceryListItems() {
         const items = [];
@@ -30,13 +39,13 @@ export default function GroceryList({ mealPlan, onClose }) {
             if (amount.charAt(amount.length - 1) === '0') { // remove tenths place trailing zero + decimal point
                 amount = amount.substring(0, amount.length - 2);
             }
-            
+
             items.push(
                 <div key={key} className="grocery-item">
                     <input className="check-grocery-item" type="checkbox" id={key + "-checkbox"} onChange={() => onCheckItem(key)} checked={attributes.checked ? true : false}/>
                     <label data-testid={key + "-qty"} className="label-grocery-item" htmlFor={key + "-checkbox"}>{key} ({amount} {attributes.unit})</label>
                     <span className="price-grocery-item">${attributes.price.toFixed(2)}</span>
-                    {attributes.isCustom && 
+                    {attributes.isCustom &&
                         <span onClick={() => removeCustomGroceryItem(key)} className="grocery-item-delete">
                             <FontAwesomeIcon icon="trash"/>
                             <span className="grocery-item-tooltip">click to delete custom item</span>
@@ -58,6 +67,12 @@ export default function GroceryList({ mealPlan, onClose }) {
         return items;
     }
 
+    /**
+     * Iterates through the shopping list and sorts the items into checked and unchecked lists.
+     * @returns Tuple of checked and unchecked items
+     * @memberof GroceryList
+     * @inner
+    */
     function getCheckedItems() {
         let checked = [];
         let unchecked = [];
@@ -72,6 +87,12 @@ export default function GroceryList({ mealPlan, onClose }) {
         return { checked: checked, unchecked: unchecked }
     }
 
+    /**
+     * Remove a custom ingregient from the grocery list
+     * @param { string } itemName name of item to remove from list
+     * @memberof GroceryList
+     * @inner
+    */
     function removeCustomGroceryItem(itemName) {
         // set what we've checked so far otherwise we lose it
 
@@ -97,6 +118,12 @@ export default function GroceryList({ mealPlan, onClose }) {
             })
     }
 
+    /**
+     * Determines what type of input has changed and updates the customList accordingly.
+     * @param { object } event current state of the target
+     * @memberof GroceryList
+     * @inner
+    */
     function handleInput(event) {
         if (event.target.name === "name") {
             setCustomList({...customList, name: event.target.value});
@@ -113,6 +140,11 @@ export default function GroceryList({ mealPlan, onClose }) {
         }
     }
 
+    /**
+     * Adds a new custom ingredient to the list of custom ingredients.
+     * @memberof GroceryList
+     * @inner
+    */
     function newCustomIngredient() {
 
         // set what we've checked so far otherwise we lose it
@@ -146,6 +178,11 @@ export default function GroceryList({ mealPlan, onClose }) {
         setShoppingList(newShoppingList);
     }
 
+    /**
+     * Save the current state of the grocery list and close the popup
+     * @memberof GroceryList
+     * @inner
+    */
     function updateAndClose() {
         const { checked, unchecked } = getCheckedItems();
         setCheckedIngredients(mealPlan._id, checked, unchecked);
@@ -153,10 +190,25 @@ export default function GroceryList({ mealPlan, onClose }) {
     }
 
     useEffect(() => {
-        
+
         let ingredients = [];
 
+        /**
+          * Calls parseMealPeriod for each period of the day.
+          * @param { object } day object that has breakfast, lunch, and dinner attributes
+          * @memberof GroceryList
+          * @inner
+        */
         function parseDay(day) {
+
+            /**
+              * For each ingredient in each recipe in the meal period, add the price
+              * and nutrition amounts to the weekly total
+              * @param { object } period list of meals such that each meal has an ingredient list,
+              * and each ingredient list has price and nutrition facts
+              * @memberof GroceryList
+              * @inner
+            */
             function parseMealPeriod(period) {
                 for (let meal of period) {
                     for (let ingredient of meal.ingredientList) {

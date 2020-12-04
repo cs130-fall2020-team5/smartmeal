@@ -2,6 +2,10 @@ import React from "react";
 
 import './styles.css'
 
+/**
+  * This function is called to display the About page
+  * @returns { JSX } Returns the HTML for the About page
+*/
 export default function AboutPage() {
     return (
         <div className="main-text">

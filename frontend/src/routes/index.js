@@ -12,6 +12,11 @@ import { UserProvider } from "../context/user";
 import { MealPlanProvider } from "../context/mealplan";
 import { PopupProvider } from "../context/popup-context";
 
+/**
+  * Formats the navbar and sets its elements' hyperlinks.
+  * Routes the user to the webpages that they click on.
+  * @returns { <Router> } Returns the <Router> code for page navigation
+*/
 export default function router() {
     return (
         <Router>

@@ -21,7 +21,7 @@ function escapeRegexCharacters(str) {
 /**
   * This function calls spoonSearch to get a list of suggestions for the input string
   * @param { string } value the string to be autocompleted
-  * @returns { string[] } list of suggestions
+  * @returns { string[] } array of suggestions
 */
 function getSuggestions(value) {
   const escapedValue = escapeRegexCharacters(value.trim());
@@ -67,7 +67,7 @@ function renderSuggestion(suggestion) {
   * input value.
   * @param { string } value string to be matched with the database
   * @param { string } token authorization token for backend get request
-  * @returns { object[] } list of suggested recipes from the backend
+  * @returns { object[] } array of suggested recipes from the backend
 */
 function recipe_getSuggestions(value,token) {
   const escapedValue = escapeRegexCharacters(value.trim());
@@ -97,6 +97,9 @@ function recipe_getSuggestions(value,token) {
 });
 }
 
+/**
+  * @class
+*/
 class RecipeSuggest extends React.Component {
   constructor(props) {
     super();
@@ -185,6 +188,9 @@ class RecipeSuggest extends React.Component {
   }
 }
 
+/**
+  * @class
+*/
 class MyAutosuggest extends React.Component {
   constructor(props) {
     super();
@@ -195,6 +201,13 @@ class MyAutosuggest extends React.Component {
     };
   }
 
+  /**
+    * This function detects when the value of an input element changes
+    * @param { object } event current state
+    * @param { object } obj
+    * @param { string } obj.newValue the changed value of element
+    * @param { string } obj.method method of axios HTTP request
+  */
   onChange = (event, { newValue, method }) => {
     this.setState({
       value: newValue
@@ -211,7 +224,11 @@ class MyAutosuggest extends React.Component {
 
   };
 
-
+  /**
+    * This function signals when suggestions should update
+    * @param { object } obj
+    * @param { object } obj.value target string to provide suggestions for
+  */
   onSuggestionsFetchRequested = ({ value }) => {
     getSuggestions(value)
     .then((res) => {
@@ -226,6 +243,9 @@ class MyAutosuggest extends React.Component {
     });
   };
 
+  /**
+    * This function is called every time suggestions need to be cleared.
+  */
   onSuggestionsClearRequested = () => {
     this.setState({
       suggestions: []
@@ -258,13 +278,13 @@ class MyAutosuggest extends React.Component {
 }
 
 /**
-  *This function displays the Recipe Popup and provides the
-  *necessary functionality to save the recipe information to the backend.
+  * This function displays the Recipe Popup and provides the
+  * necessary functionality to save the recipe information to the backend.
   * @param { object } obj
   * @param { object } obj.recipe A data structure of a recipe containing the recipies
   * @param { string } obj.recipe.name The name of the input recipe
-  * @param { object[] } obj.recipe.ingredientList List of ingredients for recipe
-  * @returns { fragment } GUI of Recipe Popup
+  * @param { object[] } obj.recipe.ingredientList array of ingredients for recipe
+  * @returns { JSX } HTML of Recipe Popup
 */
 const RecipePopup = ( {recipe} ) => {
 
@@ -278,10 +298,12 @@ const RecipePopup = ( {recipe} ) => {
     *Determines whether the input is an existing meal from the meal plan.
     * @param { object } recipe a data structure of a recipe containing the recipies
     * @param { string } recipe.name The name of the input recipe
-    * @param { object[] } recipe.ingredientList List of ingredients for recipe
-    * @returns { object } list of data structures that represent ingredients
+    * @param { object[] } recipe.ingredientList array of ingredients for recipe
+    * @returns { ingredientList } list of ingredients
     * If the input exists, the list is populated with each ingredient's properties
     * If the input does not exist, a single empty ingredient is returned.
+    * @memberof RecipePopup
+    * @inner
   */
   const isExistingRecipe = ( recipe ) => {
     const values = [];
@@ -303,13 +325,13 @@ const RecipePopup = ( {recipe} ) => {
   }
 
   /**
-    * Determines whether the input is an existing meal from the meal plan.
+    * Fetches the nutritional information for all ingredients in a recipe
     * @param { object } recipe a data structure of a recipe containing the recipies
     * @param { string } recipe.name The name of the input recipe
-    * @param { object[] } recipe.ingredientList List of ingredients for recipe
-    * @returns { object } list of data structures that represent ingredients
-    * If the input exists, the list is populated with each ingredient's properties
-    * If the input does not exist, a single empty ingredient is returned.
+    * @param { object[] } recipe.ingredientList array of ingredients for recipe
+    * @returns { dictionary } dictionary with ingredients mapped to nutrion facts
+    * @memberof RecipePopup
+    * @inner
   */
   const getNutrientInfo = ( recipe ) => {
     let nutInfo = {}
@@ -332,9 +354,11 @@ const RecipePopup = ( {recipe} ) => {
 
   /**
     *This function updates the backend with new or updated data for a recipe.
-    * @param { ??? } recipe_id ???
+    * @param { string } recipe_id Identifier for a recipe
     * @param { string } recipe_name The name of the current recipe
     * @param { object[] } ingredient_list List of ingredients for recipe
+    * @memberof RecipePopup
+    * @inner
   */
   async function updateMealplan(recipe_id, recipe_name, ingredient_list){
     const isExistingRecipe = recipe_id ? true : false;
@@ -362,6 +386,8 @@ const RecipePopup = ( {recipe} ) => {
     * avoids saving multiple recipes with the same name before saving to the database.
     * @param { string } recipe_name The name of the current recipe
     * @param { object[] } ingredient_list List of ingredients for current recipe
+    * @memberof RecipePopup
+    * @inner
   */
   function saveRecipe(recipe_name, ingredient_list) {
     var recipe_id="";
@@ -394,6 +420,8 @@ const RecipePopup = ( {recipe} ) => {
     * It calls saveRecipe to save data in the backend, and then calls saveButtonClicked
     * to close the popup.
     * @param { object } e Current state of HTML element
+    * @memberof RecipePopup
+    * @inner
   */
   const handleSubmit = e => {
     e.preventDefault();
@@ -415,6 +443,8 @@ const RecipePopup = ( {recipe} ) => {
     * of ingredient fields to include the input change.
     * @param { number } index The index of the ingredientField in ingredientFields
     * @param { object } event Current state of HTML element
+    * @memberof RecipePopup
+    * @inner
   */
   const handleInputChange = (index, event) => {
     const values = [...ingredientFields];
@@ -435,6 +465,8 @@ const RecipePopup = ( {recipe} ) => {
     * This function is called when the user clicks the Add button to add another
     * row of ingredient fields.
     * The function pushes an empty ingredientField object onto the ingredientFields list.
+    * @memberof RecipePopup
+    * @inner
   */
   const handleAddFields = () => {
     setErrorMessage("");
@@ -452,6 +484,8 @@ const RecipePopup = ( {recipe} ) => {
     * This function is called when the user clicks the Remove button to remove
     * the lowest row of ingredient fields.
     * The function pops an ingredientField object off the ingredientFields list.
+    * @memberof RecipePopup
+    * @inner
   */
   const handleRemoveFields = () => {
     const values = [...ingredientFields];
@@ -468,6 +502,8 @@ const RecipePopup = ( {recipe} ) => {
     * @param { object } recipe a data structure of a recipe containing the recipies
     * @param { string } recipe.name The name of the input recipe
     * @param { object[] } recipe.ingredientList List of ingredients for recipe
+    * @memberof RecipePopup
+    * @inner
   */
   const handlePopulateIngredients = (recipe) => {
       setIngredientFields(isExistingRecipe({ name: recipe.name, ingredientList: recipe.ingredients }))
@@ -480,24 +516,25 @@ const RecipePopup = ( {recipe} ) => {
     * the recipe from the weekly meal plan.
     * The removeMeal function is called to locate and remove the recipe from the meal plan.
     * The cancelButtonClicked function is called to close the popup without saving.
+    * @memberof RecipePopup
+    * @inner
   */
   const handleDeleteMeal = () => {
     removeMeal(recipe._id);
     cancelButtonClicked();
   }
 
-  /// get nutrition info from spoonacular
-
-  // gets ingredient info for each ingredient
   /**
     *This function gets ingredient info for each ingredient
-    * @param { object[] } ingredientList list of ingredients for the recipe
+    * @param { object[] } ingredientList array of ingredients for the recipe
     * @param { string } ingredientList[].name name of the ingredient
     * @param { number } ingredientList[].amount pricing of ingredient
     * @param { string } ingredientList[].unit type of units for ingredient
-    * @param { string[] } ingredientList[].possibleUnits list of possible unit types for
+    * @param { string[] } ingredientList[].possibleUnits array of possible unit types for
     * the ingredient
-    * @returns { object[] } list of jSON objects that represent ingredient data
+    * @returns { object[] } array of jSON objects that represent ingredient data
+    * @memberof RecipePopup
+    * @inner
   */
   async function populateIngredientFields(ingredientList){
     let ilist = [];
@@ -524,6 +561,8 @@ const RecipePopup = ( {recipe} ) => {
     * @param { string } unit unit of mearsurement for the ingredient
     * @returns { object } data structure that contains the specified ingredient's
     * price, fat, calories, and protein.
+    * @memberof RecipePopup
+    * @inner
   */
   function getIngredientInfo(iname, amount, unit){
     if (nutritionInfo[iname]) { // avoid querying spoonacular if we already have nutrition information saved
@@ -720,7 +759,7 @@ function doSearch(iname){
 /**
   * This function performs a get request that queries the Spoonacular API for nutrition information
   * of a particular ingredient ID.
-  * @param { ??? } ing_id ID of ingredient
+  * @param { string } ing_id ID of ingredient
   * @param { number } amount numeric quantity of ingredient
   * @param { string } unit unit of mearsurement for the ingredient
   * @returns { object } response object for the query
