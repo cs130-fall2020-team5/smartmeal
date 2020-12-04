@@ -4,7 +4,10 @@ import React, { useContext } from 'react';
 import { PopupContext } from "../context/popup-context";
 
 /**
-  * Renders a meal box for the provided period in the weekly planner
+  * <pre>
+  * Generates a meal box for the provided period in the current plan.
+  * Creates a recipe popup button for each meal within the period.
+  * </pre>
   * @param { object } obj
   * @param { string } obj.day day of week in planner
   * @param { string } obj.time meal time of day (Breakfast, Lunch, Dinner)

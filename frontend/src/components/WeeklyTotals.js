@@ -9,11 +9,12 @@ const DEFAULT_NUTRITION = {
 }
 
 /**
-  * Renders the weekly totals popup
+  * Calculates the nutrition and price totals in the current meal plan.
+  * Displays the weekly totals in a popup window.
   * @param { object } obj
   * @param { mealPlan } obj.mealPlan data structure for the current weekly meal plan
-  * @param { function } obj.onClose function to stop displaying the popup window
-  * @returns { JSX } Returns the HTML for the weekly totals popup
+  * @param { function } obj.onClose function to close the popup window
+  * @returns { JSX } HTML element for the weekly totals popup
 */
 export default function WeeklyTotals({ mealPlan, onClose }) {
     const [ nutritionInformation, setNutritionInformation ] = useState(DEFAULT_NUTRITION)

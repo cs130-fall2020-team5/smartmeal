@@ -349,8 +349,8 @@
   </div>
   
 
-  <p>This function calculates the nutritional information for a given day and displays
-the data in a <div> element.</p>
+  <p>This function calculates the nutritional information for a given day and generates
+a div element with the data.</p>
 
     <div class='pre p1 fill-light mt0'>new DailySummary(obj: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</div>
   
@@ -1307,7 +1307,10 @@ and each ingredient list has price and nutrition facts
   </div>
   
 
-  <p>Renders a meal box for the provided period in the weekly planner</p>
+  <pre>
+Generates a meal box for the provided period in the current plan.
+Creates a recipe popup button for each meal within the period.
+</pre>
 
     <div class='pre p1 fill-light mt0'>new MealPeriodBox(obj: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>): JSX</div>
   
@@ -1484,7 +1487,9 @@ and each ingredient list has price and nutrition facts
   </div>
   
 
-  <p>Generates the weekly calendar and populates it with the user's previously saved meals.</p>
+  <p>Generates the meal plan calendar and populates it with the user's previously saved meals.</p>
+  <p>Allows users to customize the name and start day of the plan.</p>
+  <p>Displays weekly totals, grocery list, and recipe popups if their respective buttons are clicked.</p>
 
     <div class='pre p1 fill-light mt0'>new MealPlanner(): JSX</div>
   
@@ -2907,8 +2912,8 @@ input value.</p>
   </div>
   
 
-  <p>This function displays the Recipe Popup and provides the
-necessary functionality to save the recipe information to the backend.</p>
+  <p>Displays the Recipe Popup, handles user input data, and provides
+functionality to save the changes of recipe information to the backend.</p>
 
     <div class='pre p1 fill-light mt0'>RecipePopup</div>
   
@@ -2947,7 +2952,7 @@ necessary functionality to save the recipe information to the backend.</p>
                 <tr>
   <td class='break-word'><span class='code bold'>obj.recipe</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></code>
   </td>
-  <td class='break-word'><span>A data structure of a recipe containing the recipies
+  <td class='break-word'><span>object with attributes that define a recipe
 </span></td>
 </tr>
 
@@ -2955,7 +2960,7 @@ necessary functionality to save the recipe information to the backend.</p>
     <tr>
   <td class='break-word'><span class='code bold'>obj.recipe.name</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code>
   </td>
-  <td class='break-word'><span>The name of the input recipe
+  <td class='break-word'><span>name of the recipe
 </span></td>
 </tr>
 
@@ -2964,7 +2969,7 @@ necessary functionality to save the recipe information to the backend.</p>
     <tr>
   <td class='break-word'><span class='code bold'>obj.recipe.ingredientList</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>></code>
   </td>
-  <td class='break-word'><span>array of ingredients for recipe
+  <td class='break-word'><span>array of ingredients for the recipe
 </span></td>
 </tr>
 
@@ -2987,7 +2992,7 @@ necessary functionality to save the recipe information to the backend.</p>
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code>JSX</code>:
-        HTML of Recipe Popup
+        HTML element of Recipe Popup
 
       
     
@@ -3039,7 +3044,7 @@ necessary functionality to save the recipe information to the backend.</p>
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>recipe</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
-	    a data structure of a recipe containing the recipies
+	    object with attributes that define a recipe
 
           </div>
           
@@ -3059,7 +3064,7 @@ necessary functionality to save the recipe information to the backend.</p>
                 <tr>
   <td class='break-word'><span class='code bold'>recipe.name</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code>
   </td>
-  <td class='break-word'><span>The name of the input recipe
+  <td class='break-word'><span>The name of the recipe
 </span></td>
 </tr>
 
@@ -4320,7 +4325,8 @@ of a particular ingredient ID.</p>
   </div>
   
 
-  <p>Renders the weekly totals popup</p>
+  <p>Calculates the nutrition and price totals in the current meal plan.
+Displays the weekly totals in a popup window.</p>
 
     <div class='pre p1 fill-light mt0'>new WeeklyTotals(obj: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>): JSX</div>
   
@@ -4368,7 +4374,7 @@ of a particular ingredient ID.</p>
                 <tr>
   <td class='break-word'><span class='code bold'>obj.onClose</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a></code>
   </td>
-  <td class='break-word'><span>function to stop displaying the popup window
+  <td class='break-word'><span>function to close the popup window
 </span></td>
 </tr>
 
@@ -4388,7 +4394,7 @@ of a particular ingredient ID.</p>
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code>JSX</code>:
-        Returns the HTML for the weekly totals popup
+        HTML element for the weekly totals popup
 
       
     
@@ -5540,8 +5546,8 @@ into a sidebar</p>
   </div>
   
 
-  <p>Formats the navbar and sets its elements' hyperlinks
-Routes the user to the webpages that they navigate to.</p>
+  <p>Formats the navbar and sets its elements' hyperlinks.
+Routes the user to the webpages that they click on.</p>
 
     <div class='pre p1 fill-light mt0'>router()</div>
   

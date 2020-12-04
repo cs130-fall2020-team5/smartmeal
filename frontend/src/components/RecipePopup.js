@@ -278,13 +278,13 @@ class MyAutosuggest extends React.Component {
 }
 
 /**
-  * This function displays the Recipe Popup and provides the
-  * necessary functionality to save the recipe information to the backend.
+  * Displays the Recipe Popup, handles user input data, and provides
+  * functionality to save the changes of recipe information to the backend.
   * @param { object } obj
-  * @param { object } obj.recipe A data structure of a recipe containing the recipies
-  * @param { string } obj.recipe.name The name of the input recipe
-  * @param { object[] } obj.recipe.ingredientList array of ingredients for recipe
-  * @returns { JSX } HTML of Recipe Popup
+  * @param { object } obj.recipe object with attributes that define a recipe
+  * @param { string } obj.recipe.name name of the recipe
+  * @param { object[] } obj.recipe.ingredientList array of ingredients for the recipe
+  * @returns { JSX } HTML element of Recipe Popup
 */
 const RecipePopup = ( {recipe} ) => {
 
@@ -296,8 +296,8 @@ const RecipePopup = ( {recipe} ) => {
 
   /**
     *Determines whether the input is an existing meal from the meal plan.
-    * @param { object } recipe a data structure of a recipe containing the recipies
-    * @param { string } recipe.name The name of the input recipe
+    * @param { object } recipe object with attributes that define a recipe
+    * @param { string } recipe.name The name of the recipe
     * @param { object[] } recipe.ingredientList array of ingredients for recipe
     * @returns { ingredientList } list of ingredients
     * If the input exists, the list is populated with each ingredient's properties
@@ -736,15 +736,12 @@ const RecipePopup = ( {recipe} ) => {
 
 
 const api_key = "db254b5cd61744d39a2deebd9c361444";
-// 4119fc6a6de3413cbfc379525c7d4e2a - axel
-// db254b5cd61744d39a2deebd9c361444 - current
-// c25140a9d4a94ed2b11bddd00a30b486 - john
 
 /**
   * This function performs a get request that queries the Spoonacular API for ingredients
-  * with the name: of the input parameter.
+  * with the same name as the input parameter.
   * @param { string } iname name of ingredient
-  * @returns { object } response object for the query
+  * @returns { jSON } ingredient object whose name exactly matches input name
 */
 function doSearch(iname){
   return axios.get("https://api.spoonacular.com/food/ingredients/search",
@@ -761,8 +758,8 @@ function doSearch(iname){
   * of a particular ingredient ID.
   * @param { string } ing_id ID of ingredient
   * @param { number } amount numeric quantity of ingredient
-  * @param { string } unit unit of mearsurement for the ingredient
-  * @returns { object } response object for the query
+  * @param { string } unit unit of measurement for the ingredient
+  * @returns { jSON } price, possible units, and nutrition facts for ingredient
 */
 function getInfo(ing_id, amount, unit){
   return axios.get("https://api.spoonacular.com/food/ingredients/" + ing_id + "/information",
@@ -803,7 +800,7 @@ function getInfo(ing_id, amount, unit){
 /**
   * This function queries the spoonacular API for auto-complete suggestions.
   * @param { string } str string that needs autocomplete suggestions
-  * @returns { object } data structure of auto-complete suggestions
+  * @returns { jSON } list of ingredient suggestions for input prefix
 */
 function spoonSearch(str) {
   return axios.get('https://api.spoonacular.com/food/ingredients/autocomplete',
@@ -824,7 +821,6 @@ function spoonSearch(str) {
     res.data.sort((first, second) => {
       return first.name > second.name;
     });
-
     return res;
   });
 }

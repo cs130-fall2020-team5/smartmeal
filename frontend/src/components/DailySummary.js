@@ -8,8 +8,8 @@ const DEFAULT_NUTRITION = {
 }
 
 /**
-  * This function calculates the nutritional information for a given day and displays
-  * the data in a <div> element.
+  * This function calculates the nutritional information for a given day and generates
+  * a div element with the data.
   * @param { object } obj
   * @param { object } obj.day data structure consisting of meal period objects
   * @param { object } obj.day.breakfast list of meals for breakfast period

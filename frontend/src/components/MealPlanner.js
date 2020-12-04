@@ -16,7 +16,10 @@ import { MealPlanContext } from "../context/mealplan";
 import { PopupContext } from "../context/popup-context";
 
 /**
-  * Generates the weekly calendar and populates it with the user's previously saved meals.
+  *   <p>Generates the meal plan calendar and populates it with the user's previously saved meals.</p>
+  *   <p>Allows users to customize the name and start day of the plan.</p>
+  *   <p>Displays weekly totals, grocery list, and recipe popups if their respective buttons are clicked.</p>
+  *
   * @returns { JSX } element containing HTML for the weekly meal planner and flag checks for displaying popup windows
 */
 export default function MealPlanner() {
