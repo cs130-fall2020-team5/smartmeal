@@ -3,11 +3,24 @@ import React, { useContext } from 'react';
 //Context
 import { PopupContext } from "../context/popup-context";
 
+/**
+  * Renders a meal box for the provided period in the weekly planner
+  * @param { object } obj
+  * @param { string } obj.day day of week in planner
+  * @param { string } obj.time meal time of day (Breakfast, Lunch, Dinner)
+  * @param { meals } obj.meals list of recipes
+  * @returns { JSX } div element containing meal buttons
+*/
 export default function MealPeriodBox({ day, time, meals }) {
   const {recipeButtonClicked} = useContext(PopupContext);
 
     // each meal period ('Day' in our class diagram) should have an array of 'Recipe's
-
+    /**
+      * Creates a list of buttons for existing meals as well as a button for create a new meal
+      * @returns { Array<button> } list of buttons for the existing meals and an extra button for creating new meals
+      * @memberof MealPeriodBox
+      * @inner
+    */
     function getMeals() {
         const mealButtons = [];
 

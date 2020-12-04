@@ -4,15 +4,30 @@ import { Button, Form } from "react-bootstrap";
 // context
 import { UserContext } from "../context/user";
 
+/**
+  * This function is called to display the Register page
+  * @returns { JSX } Returns the HTML for the Register page
+*/
 export default function Register() {
     const { attemptRegister, errorMessage } = useContext(UserContext);
     const [ formState, setFormState ] = useState({ username: "", password: ""});
 
+    /**
+      * Checks if the user has provided valid register credentials
+      * @param { object } e Form event
+      * @memberof Register
+      * @inner
+    */
     function register(e) {
         e.preventDefault();
         attemptRegister(formState.username, formState.password);
     }
 
+    /**
+      * Take the user to the Login page
+      * @memberof Register
+      * @inner
+    */
     function goToLogin() {
         window.location.href = "/";
     }

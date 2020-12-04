@@ -8,18 +8,49 @@ const DEFAULT_NUTRITION = {
     price: 0
 }
 
+/**
+  * Renders the weekly totals popup
+  * @param { object } obj
+  * @param { mealPlan } obj.mealPlan data structure for the current weekly meal plan
+  * @param { function } obj.onClose function to stop displaying the popup window
+  * @returns { JSX } Returns the HTML for the weekly totals popup
+*/
 export default function WeeklyTotals({ mealPlan, onClose }) {
     const [ nutritionInformation, setNutritionInformation ] = useState(DEFAULT_NUTRITION)
 
+    /**
+     * Calls function to close weekly planner popup
+     * @memberof WeeklyTotals
+     * @inner
+    */
     function updateAndClose() {
         onClose();
     }
 
+    /**
+     * @memberof WeeklyTotals
+     * @inner
+    */
     useEffect(() => {
 
         let price = 0, calories = 0, protein = 0, fat = 0;
 
+        /**
+          * Calls parseMealPeriod for each period of the day.
+          * @param { object } day object that has breakfast, lunch, and dinner attributes
+          * @memberof WeeklyTotals
+          * @inner
+        */
         function parseDay(day) {
+
+            /**
+              * For each ingredient in each recipe in the meal period, add the price
+              * and nutrition amounts to the weekly total
+              * @param { object } period list of meals such that each meal has an ingredient list,
+              * and each ingredient list has price and nutrition facts
+              * @memberof WeeklyTotals
+              * @inner
+            */
             function parseMealPeriod(period) {
                 for (let meal of period) {
                     for (let ingredient of meal.ingredientList) {

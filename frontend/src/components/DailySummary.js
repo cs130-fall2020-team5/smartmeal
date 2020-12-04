@@ -7,9 +7,22 @@ const DEFAULT_NUTRITION = {
     price: 0
 }
 
+/**
+  * This function calculates the nutritional information for a given day and displays
+  * the data in a <div> element.
+  * @param { object } obj
+  * @param { object } obj.day data structure consisting of meal period objects
+  * @param { object } obj.day.breakfast list of meals for breakfast period
+  * @param { object } obj.day.lunch list of meals for lunch period
+  * @param { object } obj.day.dinner list of meals for dinner period
+*/
 export default function DailySummary({ day }) {
     const [ nutritionInformation, setNutritionInformation ] = useState(DEFAULT_NUTRITION)
 
+    /**
+      * @memberof DailySummary
+      * @inner
+    */
     useEffect(() => {
         if (!day) {
             setNutritionInformation(DEFAULT_NUTRITION);
@@ -17,6 +30,16 @@ export default function DailySummary({ day }) {
         }
 
         let price = 0, calories = 0, protein = 0, fat = 0;
+
+        /**
+          * This function iterates through a list of meals and sums the nutritional
+          * data respectively.
+          * @param { object[] } meals
+          * @param { object[] } meals[].ingredientList data structure consisting of meal's
+          * ingredients
+          * @memberof DailySummary
+          * @inner
+        */
         function addMealNutrition(meals) {
             for (const meal of meals) {
                 for (const ingredient of meal.ingredientList) {
@@ -34,7 +57,7 @@ export default function DailySummary({ day }) {
 
         setNutritionInformation({ price: price.toFixed(2), calories: Math.round(calories), protein: Math.round(protein), fat: Math.round(fat) });
 
-    }, [ day ]); 
+    }, [ day ]);
 
     return (
         <div>

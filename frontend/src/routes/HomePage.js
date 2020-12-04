@@ -12,6 +12,11 @@ import Login from "../components/Login";
 import { UserContext } from "../context/user";
 import { MealPlanContext } from "../context/mealplan";
 
+/**
+  * This function is called and will display either the meal planner page or the login page,
+  * depending on whether the user is logged in or not.
+  * @returns { JSX } Returns JSX that determines if the user is logged in.
+*/
 export default function HomePage() {
     const { isLoggedIn } = useContext(UserContext);
     const { mealPlans, currentPlan, createNewMealPlan, newPlanSelected } = useContext(MealPlanContext);
@@ -20,13 +25,21 @@ export default function HomePage() {
     const [ sideBarButtons, setSideBarButtons ] = useState([]);
 
     /**
-     * onClick for the "logout" button
-     */
+     * Clears the local storage and returns user to login page
+     * @memberof HomePage
+     * @inner
+    */
     function logoutUser() {
         localStorage.clear();
         window.location.href = '/';
     }
 
+    /**
+     * Creates buttons corresponding to each meal plan the user has and formats the buttons
+     * into a sidebar 
+     * @memberof HomePage
+     * @inner
+    */
     useEffect(() => {
         if (mealPlans.length < 1) setSideBarButtons([]);
 
