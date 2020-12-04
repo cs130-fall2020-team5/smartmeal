@@ -7,10 +7,10 @@ const SESSION_JWT = "SESSION_JWT";
 const UserContext = createContext();
 
 /**
-  * Creates a context provider and passes functions to it as its value
+  * Creates a UserContext to store data relating to user login sessions.
   * Triggers rerenders with latest context value passed to the provider
   * @param { object } obj
-  * @param { object } obj.children functions to be used in the tree below the provider
+  * @param { object } obj.children child components to be rendered in the DOM below the provider
   * @returns { object } returns a context provider for user login
 */
 function UserProvider({ children }) {
@@ -19,7 +19,7 @@ function UserProvider({ children }) {
     const [ errorMessage, setErrorMessage ] = useState("");
 
     /**
-      *
+      * Observer hook that is called to update the user's login state whenever their login token changes.
       * @memberof UserProvider
       * @inner
     */
@@ -37,7 +37,7 @@ function UserProvider({ children }) {
 
     /**
       * Verify a username and password with a POST request. If the verfication is successful,
-      * set the user's login token with SESSION_JWT. Otherwise notify user, that log in has failed.
+      * set the user's login token with SESSION_JWT. Otherwise notify user that log in has failed.
       * @param { string } username username input by the user
       * @param { string } password password input by the user
       * @memberof UserProvider
@@ -69,7 +69,7 @@ function UserProvider({ children }) {
     }
 
     /**
-      * Verify a username and password was registered with a POST request. If the verfication is successful,
+      * Register a new user with a POST request. If the verfication is successful,
       * notify the user that they are registered. Otherwise notify user, that the username already exists.
       * @param { string } username username input by the user
       * @param { string } password password input by the user
@@ -100,30 +100,8 @@ function UserProvider({ children }) {
             })
     }
 
-    /**
-      * Test that requests to the backend are working
-      * @memberof UserProvider
-      * @inner
-    */
-    function testMethod() {
-        axios({
-                method: "GET",
-                url: 'http://localhost:3000/users/example',
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": "Bearer " + loginToken
-                }
-            })
-            .then(res => {
-                //
-            })
-            .catch(err => {
-                //
-            })
-    }
-
     return (
-        <UserContext.Provider value={{isLoggedIn, errorMessage, attemptLogin, attemptRegister, testMethod, loginToken}} >
+        <UserContext.Provider value={{isLoggedIn, errorMessage, attemptLogin, attemptRegister, loginToken}} >
             { children }
         </UserContext.Provider>
     )

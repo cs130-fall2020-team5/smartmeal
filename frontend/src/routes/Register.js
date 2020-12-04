@@ -5,7 +5,7 @@ import { Button, Form } from "react-bootstrap";
 import { UserContext } from "../context/user";
 
 /**
-  * This function is called to display the Register page
+  * This component displays the Register page for new user creation
   * @returns { JSX } Returns the HTML for the Register page
 */
 export default function Register() {
@@ -14,7 +14,7 @@ export default function Register() {
 
     /**
       * Checks if the user has provided valid register credentials
-      * @param { object } e Form event
+      * @param { object } e current state of the element that was updated
       * @memberof Register
       * @inner
     */

@@ -3,10 +3,10 @@ import React, { useState, createContext } from "react";
 const PopupContext = createContext();
 
 /**
-  * Creates a context provider and passes functions to it as its value
+  * Creates a PopupContext to store state for the RecipePopup. Provides a central module to manage data flow between the RecipePopup and MealPlanner
   * Triggers rerenders with latest context value passed to the provider
   * @param { object } obj
-  * @param { object } obj.children functions to be used in the tree below the provider
+  * @param { object } obj.children child components to be rendered in the DOM below the provider
   * @returns { object } returns a context provider for popups
 */
 function PopupProvider({ children }) {

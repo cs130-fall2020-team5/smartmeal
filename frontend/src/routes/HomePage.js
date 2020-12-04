@@ -13,9 +13,9 @@ import { UserContext } from "../context/user";
 import { MealPlanContext } from "../context/mealplan";
 
 /**
-  * This function is called and will display either the meal planner page or the login page,
+  * This component displays either the meal planner page or the login page,
   * depending on whether the user is logged in or not.
-  * @returns { JSX } Returns JSX that determines if the user is logged in.
+  * @returns { JSX } Returns HTML for either the MealPlanner or Login page
 */
 export default function HomePage() {
     const { isLoggedIn } = useContext(UserContext);
@@ -35,6 +35,7 @@ export default function HomePage() {
     }
 
     /**
+      * Observer hook that is called whenever the list of meal plans for the user changes
      * Creates buttons corresponding to each meal plan the user has and formats the buttons
      * into a sidebar 
      * @memberof HomePage
@@ -81,7 +82,6 @@ export default function HomePage() {
             ) : (
                 <Login />
             )}
-            {/* <Button onClick={testMethod}>Test Button</Button> */}
         </div>
     );
 }

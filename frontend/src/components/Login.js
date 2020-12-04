@@ -5,17 +5,17 @@ import { Button, Form } from "react-bootstrap";
 import { UserContext } from "../context/user";
 
 /**
-  * This function is called to display the login page
+  * This component renders the login page
   * @returns { JSX } Returns the HTML for the login page
 */
-export default function LoginPage() {
+export default function Login() {
     const { attemptLogin, errorMessage } = useContext(UserContext);
     const [ formState, setFormState ] = useState({ username: "", password: ""});
 
     /**
-      * Checks if the user has provided valid login credentials
-      * @param { object } e Form event
-      * @memberof LoginPage
+      * Attempt to log in by checking if the user has provided valid login credentials
+      * @param { object } e current state of the target input element
+      * @memberof Login
       * @inner
     */
     function login(e) {
@@ -25,7 +25,7 @@ export default function LoginPage() {
 
     /**
       * Take the user to the Register page
-      * @memberof LoginPage
+      * @memberof Login
       * @inner
     */
     function goToRegister() {

@@ -1456,9 +1456,7 @@ This meal box contains the list of meals the user has planned for this meal peri
   </div>
   
 
-  <p>Generates the meal plan calendar and populates it with the user's previously saved meals.</p>
-  <p>Allows users to customize the name and start day of the plan.</p>
-  <p>Displays weekly totals, grocery list, and recipe popups if their respective buttons are clicked.</p>
+  <p>This component generates the weekly calendar and populates it with the user's previously saved meals.</p>
 
     <div class='pre p1 fill-light mt0'>new MealPlanner(): JSX</div>
   
@@ -1882,8 +1880,8 @@ are only included in the leftmost column (i.e. "breakfast", "lunch", "dinner", a
   </div>
   
 
-  <p>Displays the Recipe Popup, handles user input data, and provides
-functionality to save the changes of recipe information to the backend.</p>
+  <p>This component displays the Recipe Popup and provides the
+necessary functionality to allow user input, query Spoonacular, and save the recipe information to the backend.</p>
 
     <div class='pre p1 fill-light mt0'>RecipePopup</div>
   
@@ -1922,7 +1920,7 @@ functionality to save the changes of recipe information to the backend.</p>
                 <tr>
   <td class='break-word'><span class='code bold'>obj.recipe</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></code>
   </td>
-  <td class='break-word'><span>object with attributes that define a recipe
+  <td class='break-word'><span>A data structure of a recipe containing the recipies
 </span></td>
 </tr>
 
@@ -1930,7 +1928,7 @@ functionality to save the changes of recipe information to the backend.</p>
     <tr>
   <td class='break-word'><span class='code bold'>obj.recipe.name</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code>
   </td>
-  <td class='break-word'><span>name of the recipe
+  <td class='break-word'><span>The name of the input recipe
 </span></td>
 </tr>
 
@@ -1939,7 +1937,7 @@ functionality to save the changes of recipe information to the backend.</p>
     <tr>
   <td class='break-word'><span class='code bold'>obj.recipe.ingredientList</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>></code>
   </td>
-  <td class='break-word'><span>array of ingredients for the recipe
+  <td class='break-word'><span>array of ingredients for recipe
 </span></td>
 </tr>
 
@@ -1962,7 +1960,7 @@ functionality to save the changes of recipe information to the backend.</p>
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code>JSX</code>:
-        HTML element of Recipe Popup
+        HTML of Recipe Popup
 
       
     
@@ -2709,7 +2707,7 @@ functionality to save the changes of recipe information to the backend.</p>
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>recipe</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
-	    object with attributes that define a recipe
+	    a data structure of a recipe containing the recipies
 
           </div>
           
@@ -2729,7 +2727,7 @@ functionality to save the changes of recipe information to the backend.</p>
                 <tr>
   <td class='break-word'><span class='code bold'>recipe.name</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code>
   </td>
-  <td class='break-word'><span>The name of the recipe
+  <td class='break-word'><span>The name of the input recipe
 </span></td>
 </tr>
 
@@ -3674,8 +3672,7 @@ price, fat, calories, and protein.
   </div>
   
 
-  <p>Calculates the nutrition and price totals in the current meal plan.
-Displays the weekly totals in a popup window.</p>
+  <p>This component displays the weekly totals popup</p>
 
     <div class='pre p1 fill-light mt0'>new WeeklyTotals(obj: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>): JSX</div>
   
@@ -3714,7 +3711,7 @@ Displays the weekly totals in a popup window.</p>
                 <tr>
   <td class='break-word'><span class='code bold'>obj.mealPlan</span> <code class='quiet'>mealPlan</code>
   </td>
-  <td class='break-word'><span>data structure for the current weekly meal plan
+  <td class='break-word'><span>data structure for the current weekly meal plan to display informatino for
 </span></td>
 </tr>
 
@@ -3723,7 +3720,7 @@ Displays the weekly totals in a popup window.</p>
                 <tr>
   <td class='break-word'><span class='code bold'>obj.onClose</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a></code>
   </td>
-  <td class='break-word'><span>function to close the popup window
+  <td class='break-word'><span>function to stop displaying the popup window
 </span></td>
 </tr>
 
@@ -3743,7 +3740,7 @@ Displays the weekly totals in a popup window.</p>
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code>JSX</code>:
-        HTML element for the weekly totals popup
+        Returns the HTML for the weekly totals popup
 
       
     
