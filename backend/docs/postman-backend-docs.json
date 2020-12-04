@@ -1,0 +1,1213 @@
+{
+	"info": {
+		"_postman_id": "649feb83-9d66-4ffa-b9d7-25284071ce8d",
+		"name": "SmartMeal Backend API Documentation",
+		"description": "Collection of routes that make up the backend component to `SmartMeal`. There are 3 main routes:\n* `users`: handles everything related to account management (e.g. logging in)\n* `mealplan`: handles meal plans for each user\n* `recipe`: handles recipes that the user creates\n\nAll URL routes should be appended to the server's URL. When developing this application locally, this is `localhost:3000`, and as such, this is the URL shown throughout this API documentation.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Users Endpoints",
+			"item": [
+				{
+					"name": "Create a new user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "my-username",
+									"description": "this user's username",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "my-password",
+									"description": "this user's password",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{api_host}}/users/new",
+							"host": [
+								"{{api_host}}"
+							],
+							"path": [
+								"users",
+								"new"
+							]
+						},
+						"description": "Create a new user by providing a username and password. Usernames must be unique; if the provided username already exists, then an error is returned. Possible return codes:\n* `201`: new user successfully created\n* `400`: user with this username already exists"
+					},
+					"response": []
+				},
+				{
+					"name": "Log in",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "my-username",
+									"description": "the user to log in to",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "my-password",
+									"description": "the corresponding password",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{api_host}}/users/login",
+							"host": [
+								"{{api_host}}"
+							],
+							"path": [
+								"users",
+								"login"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "my-username",
+									"description": "the name of the user to log in to",
+									"disabled": true
+								},
+								{
+									"key": "password",
+									"value": "my-password",
+									"description": "the corresponding password for this user",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Log in to a particular user. Possible return HTTP codes:\n* `200`: successful log in\n* `401`: bad username/password combination"
+					},
+					"response": [
+						{
+							"name": "/users/login",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "username",
+											"value": "my-username",
+											"description": "the user to log in to",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "my-password",
+											"description": "the corresponding password",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{API_HOST}}/users/login",
+									"host": [
+										"{{API_HOST}}"
+									],
+									"path": [
+										"users",
+										"login"
+									],
+									"query": [
+										{
+											"key": "username",
+											"value": "my-username",
+											"description": "the name of the user to log in to",
+											"disabled": true
+										},
+										{
+											"key": "password",
+											"value": "my-password",
+											"description": "the corresponding password for this user",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "170"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"aa-VhMsMSrCRDme5UEUGJrkzmp86Jc\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 20 Nov 2020 21:40:45 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"jwt\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MDU5MTU2NDUuODk2LCJ1c3IiOiJteS11c2VybmFtZSIsImlhdCI6MTYwNTkwODQ0NX0.B0k9S8h7R46wGBr-cttafChqXk3y8TSBpeDCFzhpfSE\"\n}"
+						}
+					]
+				}
+			],
+			"description": "This is the set of API requests can be made to the users route. These API routes enable users to log in and be authenticated, and create a new account if they have none yet.",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "bf2a4673-a397-4dc4-a818-0a4bc807937a",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "60237ba9-d3e2-4059-acbf-08e5e9d3c586",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Mealplan Endpoints",
+			"item": [
+				{
+					"name": "Get a user's meal plans",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_host}}/mealplan",
+							"host": [
+								"{{api_host}}"
+							],
+							"path": [
+								"mealplan"
+							]
+						},
+						"description": "Get all of the user's meal plans. Possible return values:\n* `200`: successfully found meal plans, returns the list of meal plans for this user\n* `401`: failed to authenticate user"
+					},
+					"response": [
+						{
+							"name": "/mealplan",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": []
+								},
+								"url": {
+									"raw": "{{API_HOST}}/mealplan",
+									"host": [
+										"{{API_HOST}}"
+									],
+									"path": [
+										"mealplan"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "1437"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"59d-PkyZVxdpmY2k/P1979zEalrLIf4\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 20 Nov 2020 22:26:00 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"_id\": \"5fb8427073a4d434824813ef\",\n        \"username\": \"smallberg\",\n        \"date\": 1606170352838,\n        \"sunday\": {\n            \"breakfast\": [],\n            \"lunch\": [],\n            \"dinner\": []\n        },\n        \"monday\": {\n            \"breakfast\": [],\n            \"lunch\": [],\n            \"dinner\": []\n        },\n        \"tuesday\": {\n            \"breakfast\": [],\n            \"lunch\": [],\n            \"dinner\": []\n        },\n        \"wednesday\": {\n            \"breakfast\": [],\n            \"lunch\": [],\n            \"dinner\": []\n        },\n        \"thursday\": {\n            \"breakfast\": [],\n            \"lunch\": [],\n            \"dinner\": []\n        },\n        \"friday\": {\n            \"breakfast\": [],\n            \"lunch\": [],\n            \"dinner\": []\n        },\n        \"saturday\": {\n            \"breakfast\": [],\n            \"lunch\": [],\n            \"dinner\": []\n        }\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "Create a new meal plan",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "startdate",
+									"value": "1606160215119",
+									"description": "the start date for the meal plan, in milliseconds since the UNIX Epoch",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{api_host}}/mealplan",
+							"host": [
+								"{{api_host}}"
+							],
+							"path": [
+								"mealplan"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						},
+						"description": "Create a new meal plan. Possible return HTTP codes:\n* `201`: successfully created the new meal plan\n* `400`: malformed request (missing start date)\n* `401`: failed to authenticate user"
+					},
+					"response": [
+						{
+							"name": "Create a new meal plan",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "startdate",
+											"value": "1606160215119",
+											"description": "the start date for the meal plan, in milliseconds since the UNIX Epoch",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{API_HOST}}/mealplan",
+									"host": [
+										"{{API_HOST}}"
+									],
+									"path": [
+										"mealplan"
+									],
+									"query": [
+										{
+											"key": "",
+											"value": null,
+											"disabled": true
+										}
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "33"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"21-oexhVTldzZNeQ10kGWVpwlIp5Wg\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 20 Nov 2020 23:26:38 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"5fb850ae73a4d434824813f0\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Update an existing meal plan",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "monday",
+									"value": "{ breakfast: [ { name: \"cereal\", ingredientList: [ { name: \"milk\" }, { name: \"cereal\" } ] } ], \n                                     lunch: [ { name: \"sandwich\", ingredientList: [ { name: \"bread\" }, { name: \"cheese\" }, { name: \"ham\" } ] } ], \n                                     dinner: [ { name: \"pasta\", ingredientList: [ { name: \"noodles\" }, { name: \"tomato sauce\"} ] } ] } }",
+									"description": "Formatted JSON as described above. This example updates only Monday's meals; non-specified days are left as-is.\n",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{api_host}}/mealplan/:mealplan_id",
+							"host": [
+								"{{api_host}}"
+							],
+							"path": [
+								"mealplan",
+								":mealplan_id"
+							],
+							"variable": [
+								{
+									"key": "mealplan_id",
+									"value": "{{mealplan_id}}",
+									"description": "id of the meal plan to update"
+								}
+							]
+						},
+						"description": "Create a new meal plan. Possible return HTTP codes:\n* `201`: successfully created the new meal plan, returns all meal plans for this user\n* `401`: failed to authenticate user\n\nRequest body must include properly formatted JSON. Body should be formatted as follows:\n```\n{ monday: { breakfast: [ ...list of recipes... ], lunch: [ ...list of recipes... ], dinner: [ ...list of recipes... ] }, \n  tuesday: ...,\n  ...\n  sunday: ... }\n```\n\nwhere recipes are as follows:\n```\n{ name: \"recipe_name\", ingredientList: [ { name: \"ingredient_name\", calories: 1, protein: 1, price: 1.00, ... }, ... ] }\n```\n\nThese recipes can be easily obtained in a proper format using the `recipe` endpoints (specifically `GET /recipe`), the API for which is defined below. Note that each day (Monday - Sunday) are optional; non-specified days will not be updated and are left as is. This allows the caller to selectively update certain days."
+					},
+					"response": [
+						{
+							"name": "Update an existing meal plan",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "monday",
+											"value": "{ breakfast: [ { name: \"cereal\", ingredientList: [ { name: \"milk\" }, { name: \"cereal\" } ] } ], \n                                     lunch: [ { name: \"sandwich\", ingredientList: [ { name: \"bread\" }, { name: \"cheese\" }, { name: \"ham\" } ] } ], \n                                     dinner: [ { name: \"pasta\", ingredientList: [ { name: \"noodles\" }, { name: \"tomato sauce\"} ] } ] } }",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{api_host}}/mealplan/{{mealplan_id}}",
+									"host": [
+										"{{api_host}}"
+									],
+									"path": [
+										"mealplan",
+										"{{mealplan_id}}"
+									],
+									"query": [
+										{
+											"key": "",
+											"value": null,
+											"disabled": true
+										}
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "2233"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"8b9-PsauuOZsoHYu4FtfUPjL1dc0cmw\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 20 Nov 2020 23:32:43 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"_id\": \"5fb8427073a4d434824813ef\",\n        \"username\": \"smallberg\",\n        \"date\": 1606170352838,\n        \"sunday\": {\n            \"breakfast\": [],\n            \"lunch\": [],\n            \"dinner\": []\n        },\n        \"monday\": {\n            \"breakfast\": [\n                {\n                    \"name\": \"cereal\",\n                    \"ingredientList\": [\n                        {\n                            \"name\": \"milk\",\n                            \"calories\": 10,\n                            \"fat\": 15,\n                            \"protein\": 10,\n                            \"price\": 2.56,\n                            \"unit\": \"liters\",\n                            \"amount\": 0.2\n                        },\n                        {\n                            \"name\": \"cereal\",\n                            \"calories\": 20,\n                            \"fat\": 3,\n                            \"unit\": \"kilograms\",\n                            \"amount\": 0.1,\n                            \"price\": 1.5\n                        }\n                    ]\n                }\n            ],\n            \"lunch\": [\n                {\n                    \"name\": \"sandwich\",\n                    \"ingredientList\": [\n                        {\n                            \"name\": \"bread\",\n                            \"unit\": \"loaf\",\n                            \"amount\": 1\n                        },\n                        {\n                            \"name\": \"cheese\",\n                            \"unit\": \"oz\",\n                            \"amount\": 4\n                        },\n                        {\n                            \"name\": \"ham\",\n                            \"unit\": \"oz\",\n                            \"amount\": 10\n                        }\n                    ]\n                }\n            ],\n            \"dinner\": [\n                {\n                    \"name\": \"pasta\",\n                    \"ingredientList\": [\n                        {\n                            \"name\": \"noodles\",\n                            \"amount\": 1,\n                            \"unit\": \"lbs\"\n                        },\n                        {\n                            \"name\": \"tomato sauce\",\n                            \"unit\": \"fl. oz\",\n                            \"amount\": 5\n                        }\n                    ]\n                }\n            ]\n        },\n        \"tuesday\": {\n            \"breakfast\": [\n                {\n                    \"name\": \"cereal\",\n                    \"ingredientList\": [\n                        {\n                            \"name\": \"milk\",\n                            \"calories\": 10,\n                            \"fat\": 15,\n                            \"protein\": 10,\n                            \"price\": 2.56,\n                            \"unit\": \"liters\",\n                            \"amount\": 0.2\n                        },\n                        {\n                            \"name\": \"cereal\",\n                            \"calories\": 20,\n                            \"fat\": 3,\n                            \"unit\": \"kilograms\",\n                            \"amount\": 0.1,\n                            \"price\": 1.5\n                        }\n                    ]\n                }\n            ],\n            \"lunch\": [\n                {\n                    \"name\": \"sandwich\",\n                    \"ingredientList\": [\n                        {\n                            \"name\": \"bread\",\n                            \"unit\": \"loaf\",\n                            \"amount\": 1\n                        },\n                        {\n                            \"name\": \"cheese\",\n                            \"unit\": \"oz\",\n                            \"amount\": 4\n                        },\n                        {\n                            \"name\": \"ham\",\n                            \"unit\": \"oz\",\n                            \"amount\": 10\n                        }\n                    ]\n                }\n            ],\n            \"dinner\": [\n                {\n                    \"name\": \"pasta\",\n                    \"ingredientList\": [\n                        {\n                            \"name\": \"noodles\",\n                            \"amount\": 1,\n                            \"unit\": \"lbs\"\n                        },\n                        {\n                            \"name\": \"tomato sauce\",\n                            \"unit\": \"fl. oz\",\n                            \"amount\": 5\n                        }\n                    ]\n                }\n            ]\n        },\n        \"wednesday\": {\n            \"breakfast\": [],\n            \"lunch\": [],\n            \"dinner\": []\n        },\n        \"thursday\": {\n            \"breakfast\": [],\n            \"lunch\": [],\n            \"dinner\": []\n        },\n        \"friday\": {\n            \"breakfast\": [],\n            \"lunch\": [],\n            \"dinner\": []\n        },\n        \"saturday\": {\n            \"breakfast\": [],\n            \"lunch\": [],\n            \"dinner\": []\n        }\n    },\n    {\n        \"_id\": \"5fb851a673a4d434824813f1\",\n        \"username\": \"smallberg\",\n        \"date\": \"1606160215119\",\n        \"sunday\": {\n            \"breakfast\": [],\n            \"lunch\": [],\n            \"dinner\": []\n        },\n        \"monday\": \"{ breakfast: [ { name: \\\"cereal\\\", ingredientList: [ { name: \\\"milk\\\" }, { name: \\\"cereal\\\" } ] } ], \\n                                     lunch: [ { name: \\\"sandwich\\\", ingredientList: [ { name: \\\"bread\\\" }, { name: \\\"cheese\\\" }, { name: \\\"ham\\\" } ] } ], \\n                                     dinner: [ { name: \\\"pasta\\\", ingredientList: [ { name: \\\"noodles\\\" }, { name: \\\"tomato sauce\\\"} ] } ] } }\",\n        \"tuesday\": {\n            \"breakfast\": [],\n            \"lunch\": [],\n            \"dinner\": []\n        },\n        \"wednesday\": {\n            \"breakfast\": [],\n            \"lunch\": [],\n            \"dinner\": []\n        },\n        \"thursday\": {\n            \"breakfast\": [],\n            \"lunch\": [],\n            \"dinner\": []\n        },\n        \"friday\": {\n            \"breakfast\": [],\n            \"lunch\": [],\n            \"dinner\": []\n        },\n        \"saturday\": {\n            \"breakfast\": [],\n            \"lunch\": [],\n            \"dinner\": []\n        }\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "Check off items in a grocery list",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "checked",
+									"value": "[ \"tomato sauce\", \"bread\" ]",
+									"description": "list of items to check off",
+									"type": "text"
+								},
+								{
+									"key": "unchecked",
+									"value": "[ \"pasta\", \"cheese\" ]",
+									"description": "list of items to uncheck",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{api_host}}/mealplan/:mealplan_id/check-grocery-items",
+							"host": [
+								"{{api_host}}"
+							],
+							"path": [
+								"mealplan",
+								":mealplan_id",
+								"check-grocery-items"
+							],
+							"variable": [
+								{
+									"description": "id of the meal plan to update",
+									"key": "mealplan_id",
+									"value": "{{mealplan_id}}"
+								}
+							]
+						},
+						"description": "Check off items(or uncheck previously checked items) in the grocery list associated with this meal plan. Possible return values:\n* `200`: successfully checked off the items\n* `400`: malformed request\n* `401`: failed to authenticate user\n\nRequest body must include properly formatted JSON. Body should be formatted as follows:\n```\n{ checked: [ \"name_of_ingredient_to_check\", \"next_ingredient_to_check\", ... ] }\n{ unchecked: [ \"name_of_ingredient_to_uncheck\", \"next_ingredient_to_uncheck\", ... ] }\n```\n\nUnspecified items are left alone."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a meal plan",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{api_host}}/mealplan/5fc9978efb7b5011282ce0e9",
+							"host": [
+								"{{api_host}}"
+							],
+							"path": [
+								"mealplan",
+								"5fc9978efb7b5011282ce0e9"
+							]
+						},
+						"description": "Delete a meal plan from the user's collection of meal plans. Returns HTTP status code based on the outcome:\n* `200`: successfully deleted\n* `401`: unauthenticated, cannot delete"
+					},
+					"response": [
+						{
+							"name": "Delete a meal plan",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{api_host}}/mealplan/5fc9978efb7b5011282ce0e9",
+									"host": [
+										"{{api_host}}"
+									],
+									"path": [
+										"mealplan",
+										"5fc9978efb7b5011282ce0e9"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 04 Dec 2020 17:46:56 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Content-Length",
+									"value": "0"
+								}
+							],
+							"cookie": [],
+							"body": null
+						}
+					]
+				}
+			],
+			"description": "This collection of routes enables creation and modification of meal plans for a user, and handles manipulation of the database through this API.",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "4a4e2383-8340-4a5d-bcfa-7e4d61436c54",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "7fcd3d15-cecf-4543-bff7-dd7bc62ed781",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Recipe Endpoints",
+			"item": [
+				{
+					"name": "Get all recipes for a user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_host}}/recipe",
+							"host": [
+								"{{api_host}}"
+							],
+							"path": [
+								"recipe"
+							]
+						},
+						"description": "Gets all of the recipes associated with this user. Possible return HTTP status codes and body values:\n* `200`: contains an array of recipes for the user\n* `401`: failed to authenticate"
+					},
+					"response": [
+						{
+							"name": "Get a user's saved recipes",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{api_host}}/recipe",
+									"host": [
+										"{{api_host}}"
+									],
+									"path": [
+										"recipe"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "221"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"dd-/2tERwFIitlBlqncZnDoAp+IfVg\""
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 25 Nov 2020 21:49:33 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"_id\": \"5fbed0f6a0d1631b5dc02a2e\",\n        \"username\": \"smallberg\",\n        \"name\": \"sandwich\",\n        \"ingredients\": [\n            {\n                \"name\": \"bread\",\n                \"qty\": \"1\",\n                \"units\": \"slice\"\n            },\n            {\n                \"name\": \"ham\",\n                \"qty\": \"1\",\n                \"units\": \"slice\"\n            },\n            {\n                \"name\": \"cheese\",\n                \"qty\": \"2\",\n                \"units\": \"slice\"\n            }\n        ]\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "Add a new recipe",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "lasagna",
+									"description": "recipe name",
+									"type": "text"
+								},
+								{
+									"key": "ingredients",
+									"value": "[ { name: \"noodles\" }, { name: \"marinara sauce\" }, { name: \"ground beef\"  } ]",
+									"description": "list of ingredients for this recipe",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{api_host}}/recipe",
+							"host": [
+								"{{api_host}}"
+							],
+							"path": [
+								"recipe"
+							]
+						},
+						"description": "Add a new recipe to this user's collection. Possible return HTTP status codes and values:\n* `201`: recipe successfully inserted, returns the id of the inserted recipe\n* `400`: malformed request, (missing body parameters)\n* `401`: failed to authenticate to insert recipe"
+					},
+					"response": [
+						{
+							"name": "Add a new recipe for a user",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "lasagna",
+											"description": "recipe name",
+											"type": "text"
+										},
+										{
+											"key": "ingredients",
+											"value": "[ { name: \"noodles\" }, { name: \"marinara sauce\" }, { name: \"ground beef\"  } ]",
+											"description": "list of ingredients for this recipe",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{api_host}}/recipe",
+									"host": [
+										"{{api_host}}"
+									],
+									"path": [
+										"recipe"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "33"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"21-mvwDs4RP1k4CCkDbfyfHaYXxPZU\""
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 25 Nov 2020 21:46:13 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"5fbed0a5a0d1631b5dc02a2d\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get a specific recipe",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_host}}/recipe/:recipeid",
+							"host": [
+								"{{api_host}}"
+							],
+							"path": [
+								"recipe",
+								":recipeid"
+							],
+							"variable": [
+								{
+									"key": "recipeid",
+									"value": "5fbed0f6a0d1631b5dc02a2e",
+									"description": "the id of the recipe to retrieve"
+								}
+							]
+						},
+						"description": "Provide an id to get a specific recipe for this user. Possible return HTTP status codes and values:\n* `200`: success, returns the recipe associated with this id, or an empty document if none was found\n* `401`: failed to authenticate"
+					},
+					"response": [
+						{
+							"name": "Get a specific recipe for a user",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{api_host}}/recipe/:recipeid",
+									"host": [
+										"{{api_host}}"
+									],
+									"path": [
+										"recipe",
+										":recipeid"
+									],
+									"variable": [
+										{
+											"key": "recipeid",
+											"value": "5fbed0f6a0d1631b5dc02a2e",
+											"description": "the id of the recipe to retrieve"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "219"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"db-4FYzIy8yXGDQcpy+6BfTcvR3Vxo\""
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 25 Nov 2020 23:00:04 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"_id\": \"5fbed0f6a0d1631b5dc02a2e\",\n    \"username\": \"smallberg\",\n    \"name\": \"sandwich\",\n    \"ingredients\": [\n        {\n            \"name\": \"bread\",\n            \"qty\": \"1\",\n            \"units\": \"slice\"\n        },\n        {\n            \"name\": \"ham\",\n            \"qty\": \"1\",\n            \"units\": \"slice\"\n        },\n        {\n            \"name\": \"cheese\",\n            \"qty\": \"2\",\n            \"units\": \"slice\"\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Update a specific recipe",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "lasagna",
+									"description": "the name to give this recipe",
+									"type": "text"
+								},
+								{
+									"key": "ingredients",
+									"value": "[ { name: \"bell peppers\" }, { name: \"noodles\"}, { name: \"marinara sauce\"}, { name: \"ground beef\" } ]",
+									"description": "the set of ingredients for this recipe",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{api_host}}/recipe/:recipeid",
+							"host": [
+								"{{api_host}}"
+							],
+							"path": [
+								"recipe",
+								":recipeid"
+							],
+							"variable": [
+								{
+									"key": "recipeid",
+									"value": "5fbed0f6a0d1631b5dc02a2e",
+									"description": "the id of the recipe to update"
+								}
+							]
+						},
+						"description": "Update a user's recipe with a new name or new set of ingredients. Possible return HTTP status codes and values:\n* `200`: recipe successfully updated, returns all of this user's recipes\n* `400`: malformed request, missing body parameters\n* `401`: failed to authenticate user"
+					},
+					"response": [
+						{
+							"name": "Update a specific recipe",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "lasagna",
+											"description": "the name to give this recipe",
+											"type": "text"
+										},
+										{
+											"key": "ingredients",
+											"value": "[ { name: \"bell peppers\" }, { name: \"noodles\"}, { name: \"marinara sauce\"}, { name: \"ground beef\" } ]",
+											"description": "the set of ingredients for this recipe",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{api_host}}/recipe/:recipeid",
+									"host": [
+										"{{api_host}}"
+									],
+									"path": [
+										"recipe",
+										":recipeid"
+									],
+									"variable": [
+										{
+											"key": "recipeid",
+											"value": "5fbed0f6a0d1631b5dc02a2e",
+											"description": "the id of the recipe to update"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "201"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"c9-ZoN8Ll0QQpIVXf0QweS83QiD9XA\""
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 25 Nov 2020 23:13:30 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"_id\": \"5fbed0f6a0d1631b5dc02a2e\",\n        \"username\": \"smallberg\",\n        \"name\": \"lasagna\",\n        \"ingredients\": [ \n            { \n                \"name\": \"bell peppers\" \n            }, \n            { \n                \"name\": \"noodles\" \n            }, \n            { \n                \"name\": \"marinara sauce\" \n            }, \n            { \n                \"name\": \"ground beef\" \n            } \n        ]\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "Remove a recipe",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{api_host}}/recipe/:recipeid",
+							"host": [
+								"{{api_host}}"
+							],
+							"path": [
+								"recipe",
+								":recipeid"
+							],
+							"variable": [
+								{
+									"key": "recipeid",
+									"value": "5fbed0f6a0d1631b5dc02a2e"
+								}
+							]
+						},
+						"description": "Delete this recipe from this user's set of saved recipes. Possible return HTTP status codes and values:\n* `200`: successfully deleted, or a recipe with this id never existed in the first place\n* `401`: failed to authenticate user"
+					},
+					"response": []
+				}
+			],
+			"description": "This collection of routes enables creation, deletion, and modification of a user's saved custom recipes, and handles manipulation of the database through this API.",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "3f4ec6ab-f2ed-4f29-9e66-8fc9c474180b",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "8994aaf9-d0d5-4177-8ea9-43b37631c1e9",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "e95b8a02-5a43-4350-8114-5ac3c6a70386",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "1f14f03b-7cc3-4f28-bd4a-9b9cab576087",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "415321c9-30aa-49b6-850e-484d283bdee2",
+			"key": "api_host",
+			"value": "localhost:3000"
+		},
+		{
+			"id": "da09aa3c-fb23-4133-b933-32ebd103d048",
+			"key": "mealplan_id",
+			"value": "5fb851a673a4d434824813f1"
+		},
+		{
+			"id": "430d941e-5245-441b-a14a-e6caf84fae02",
+			"key": "token",
+			"value": "JSON web token"
+		}
+	],
+	"protocolProfileBehavior": {}
+}
