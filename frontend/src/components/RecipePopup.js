@@ -222,7 +222,7 @@ const RecipePopup = ({ recipe }) => {
 
   const { saveButtonClicked, cancelButtonClicked } = useContext(PopupContext);
   const { updateCurrentMealPlan } = useContext(MealPlanContext);
-  const { removeMeal } = useContext(MealPlanContext);
+  const { removeMeal, removeRecipe } = useContext(MealPlanContext);
 
   const isExistingRecipe = ( recipe ) => {
     const values = [];
@@ -364,6 +364,12 @@ const RecipePopup = ({ recipe }) => {
   };
 
   const handleDeleteMeal = () => {
+    removeMeal(recipe._id);
+    cancelButtonClicked();
+  }
+
+  const handleDeleteRecipe = () => {
+    removeRecipe(recipe._id);
     removeMeal(recipe._id);
     cancelButtonClicked();
   }
@@ -512,7 +518,7 @@ const RecipePopup = ({ recipe }) => {
           ))}
         </div>
 
-        <Row style={{'float': 'right'}}>
+        <Row style={{'float': 'left', 'width': '100%', 'padding-bottom': '5px', 'padding-left': '10px'}}>
           <button
             className="btn btn-primary mr-2"
             type="button"
@@ -541,12 +547,22 @@ const RecipePopup = ({ recipe }) => {
           >
             { recipe._id ? "Update" : "Save"}
           </button>
+        </Row>
+        
+        <Row style={{'float': 'left', 'width': '100%', 'padding-left': '10px'}}>
           <button
-            className="btn btn-primary mr-2"
+            className="btn btn-danger mr-2"
             type="button"
             onClick={handleDeleteMeal}
           >
             Delete Meal
+          </button>
+          <button
+            className="btn btn-danger mr-2"
+            type="button"
+            onClick={handleDeleteRecipe}
+          >
+            Delete Recipe
           </button>
         </Row>
         <Row>
