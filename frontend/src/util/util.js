@@ -1,10 +1,5 @@
 import axios from "axios";
 
-// const api_key = "db254b5cd61744d39a2deebd9c361444";
-// 4119fc6a6de3413cbfc379525c7d4e2a - axel
-// db254b5cd61744d39a2deebd9c361444 - current
-// c25140a9d4a94ed2b11bddd00a30b486 - john
-
 /** @module util */
 
 /**
