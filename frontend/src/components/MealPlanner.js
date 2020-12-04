@@ -15,6 +15,10 @@ import WeeklyTotals from "./WeeklyTotals";
 import { MealPlanContext } from "../context/mealplan";
 import { PopupContext } from "../context/popup-context";
 
+/**
+  * Generates the weekly calendar and populates it with the user's previously saved meals.
+  * @returns { JSX } element containing HTML for the weekly meal planner and flag checks for displaying popup windows
+*/
 export default function MealPlanner() {
     const { currentPlan, updateMealPlanMetadata, removeMealPlan } = useContext(MealPlanContext);
     const { showRecipePopup, recipeInfo } = useContext(PopupContext);
@@ -24,6 +28,10 @@ export default function MealPlanner() {
     const [ mealPlanName, setMealPlanName ] = useState("");
     const [ mealPlanStartDay, setMealPlanStartDay ] = useState("");
 
+    /**
+      * @memberof MealPlanner
+      * @inner
+    */
     useEffect(() => {
         if (currentPlan) {
             setMealPlanName(currentPlan.name ? currentPlan.name : "");
@@ -31,6 +39,12 @@ export default function MealPlanner() {
         }
     }, [ currentPlan ])
 
+    /**
+      * Sets the order in which the days of the week are displayed in the planner
+      * @returns { string[] } days ordered according to the current plan's start day
+      * @memberof MealPlanner
+      * @inner
+    */
     function getDaysOfWeek() {
         let defaultDays = [ "sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday" ];
 
@@ -48,18 +62,45 @@ export default function MealPlanner() {
         return defaultDays;
     }
 
+    /**
+      * Sets flag to display Weekly Totals popup to false
+      * @memberof MealPlanner
+      * @inner
+    */
     function onCloseWeeklyTotals() {
         setShowWeeklyTotals(false);
     }
 
+    /**
+      * Sets flag to display Grocery List popup to false
+      * @memberof MealPlanner
+      * @inner
+    */
     function onCloseGroceryList() {
         setShowGroceryList(false);
     }
 
+    /**
+      * Capitalize first letter in a string
+      * @param { string } word string to be capitalized
+      * @returns { string } capitalized input string
+      * @memberof MealPlanner
+      * @inner
+    */
     function capitalize(word) {
         return word.charAt(0).toUpperCase() + word.slice(1, word.length)
     }
 
+    /**
+      * Renders a column that represents a day of the week and populates the column with meal period boxes
+      * that contains the user's saved meals for the day.
+      * @param { string } day day of the week to be genereated
+      * @param { boolean } shouldIncludeMealPeriodLabels flag used so that the meal period labels
+      * are only included in the leftmost column
+      * @returns { JSX } <Col> element that contains the populated meal period boxes for the day
+      * @memberof MealPlanner
+      * @inner
+    */
     function generateDayColumn(day, shouldIncludeMealPeriodLabels = false) {
 
         return (

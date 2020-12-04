@@ -2,6 +2,13 @@ import React, { useState, createContext } from "react";
 
 const PopupContext = createContext();
 
+/**
+  * Creates a context provider and passes functions to it as its value
+  * Triggers rerenders with latest context value passed to the provider
+  * @param { object } obj
+  * @param { object } obj.children functions to be used in the tree below the provider
+  * @returns { object } returns a context provider for popups
+*/
 function PopupProvider({ children }) {
   const [ showRecipePopup, setShowRecipePopup ] = useState(false);
   const [ popupDay, setPopupDay ] = useState("");
@@ -10,6 +17,16 @@ function PopupProvider({ children }) {
     { name: '', ingredientList: [] }
   ]);
 
+  /**
+    * Toggles the showRecipe flag to display the popup and populates the recipe info with the appropriate data
+    * @param { string } day the day associated with the column of the recipe button that was clicked
+    * @param { string } time the meal period that the clicked button resides in
+    * @param { object } recipe object that holds data of recipe
+    * @param { string } recipe.name name of recipe
+    * @param { object[] } recipe.ingredientList array of ingredient objects
+    * @memberof PopupProvider
+    * @inner
+  */
   function recipeButtonClicked(day, time, recipe) {
     setShowRecipePopup(!showRecipePopup);
     if (recipe !== null){
@@ -21,10 +38,20 @@ function PopupProvider({ children }) {
     setPopupTime(time);
   }
 
+  /**
+    * Toggles the showRecipe flag and stops displaying the recipe popup
+    * @memberof PopupProvider
+    * @inner
+  */
   function saveButtonClicked() {
     setShowRecipePopup(!showRecipePopup);
   }
 
+  /**
+    * Toggles the showRecipe flag and stops displaying the recipe popup
+    * @memberof PopupProvider
+    * @inner
+  */
   function cancelButtonClicked() {
     setShowRecipePopup(!showRecipePopup);
   }
