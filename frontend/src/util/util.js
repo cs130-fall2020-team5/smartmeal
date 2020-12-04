@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const api_key = "db254b5cd61744d39a2deebd9c361444";
+// const api_key = "db254b5cd61744d39a2deebd9c361444";
 // 4119fc6a6de3413cbfc379525c7d4e2a - axel
 // db254b5cd61744d39a2deebd9c361444 - current
 // c25140a9d4a94ed2b11bddd00a30b486 - john
@@ -18,7 +18,7 @@ export function spoonSearch(str) {
     return axios
         .get("https://api.spoonacular.com/food/ingredients/autocomplete", {
             params: {
-                apiKey: api_key,
+                apiKey: process.env.REACT_APP_API_KEY,
                 query: str,
                 number: 50,
                 metaInformation: true,
@@ -82,7 +82,7 @@ export function getInfo(ing_id, amount, unit) {
                 "/information",
             {
                 params: {
-                    apiKey: api_key,
+                    apiKey: process.env.REACT_APP_API_KEY,
                     id: ing_id,
                     amount: amount,
                     unit: unit,
@@ -104,7 +104,7 @@ export function doSearch(iname) {
     return axios
         .get("https://api.spoonacular.com/food/ingredients/search", {
             params: {
-                apiKey: api_key,
+                apiKey: process.env.REACT_APP_API_KEY,
                 query: iname,
             },
         })
