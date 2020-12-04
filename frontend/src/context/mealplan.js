@@ -7,12 +7,25 @@ import { PopupContext } from "../context/popup-context";
 
 const MealPlanContext = createContext();
 
+/**
+  * Creates a MealPlanContext to store state for the MealPlan. Provides a central module to manage data flow between the MealPlanner, MealPlannerBox, DailySummary, and WeeklyTotals, 
+  * Triggers rerenders with latest context value passed to the provider
+  * @param { object } obj
+  * @param { object } obj.children child components to be rendered in the DOM below the provider
+  * @returns { object } returns a context provider for popups
+*/
 function MealPlanProvider({ children }) {
     const { isLoggedIn, loginToken } = useContext(UserContext);
     const { popupDay, popupTime } = useContext(PopupContext);
     const [ mealPlans, setMealPlans ] = useState([]);
     const [ currentPlan, setCurrentPlan ] = useState(null);
 
+    /**
+     * Get all of the user's meal plans from the backend and updates our state
+     * @param { string } currentId is the id of the currently selected plan, used to ensure the same plan is displayed on screen after the state update
+     * @memberof MealPlanProvider
+     * @inner
+     */
     const getMealPlans = useCallback((currentId) => {
         axios({
             method: "GET",
@@ -43,6 +56,12 @@ function MealPlanProvider({ children }) {
         });
     }, [loginToken]);
 
+    /**
+     * Updates the custom ingredients contained in a meal plan by issuing a request to the backend
+     * @param { object[] } customIngredients the new list of custom ingredients to store
+     * @memberof MealPlanProvider
+     * @inner
+     */
     function updateCustomIngredients(customIngredients) {
         axios({
             method: "PUT",
@@ -68,6 +87,13 @@ function MealPlanProvider({ children }) {
         });
     }
 
+    /**
+     * Updates metadata about the meal plan, namely its name and starting day
+     * @param { string } name name to give the plan
+     * @param { string } startday which day this meal plan should now start on
+     * @memberof MealPlanProvider
+     * @inner
+     */
     function updateMealPlanMetadata(name, startday) {
         axios({
             method: "PUT",
@@ -93,7 +119,12 @@ function MealPlanProvider({ children }) {
         });
     }
 
-
+    /**
+     * Removes a meal from the currently active meal plan
+     * @param { string } recipe_id the id of the recipe in the meal plan to remove
+     * @memberof MealPlanProvider
+     * @inner
+     */
     function removeMeal(recipe_id) {
       var pos=0;
       let newMealPlan = JSON.parse(JSON.stringify(currentPlan))
@@ -128,6 +159,13 @@ function MealPlanProvider({ children }) {
       });
   }
 
+  /**
+   * Update the meal plan with a new meal for a given meal period. The day and meal period to add this new meal to is known by accessing the PopupContext.
+   * @param { object } newRecipe the new recipe to add to the meal plan 
+   * @param { boolean } isUpdateToExistingMeal whether this recipe should replace one that matches its id, or be appended as a new recipe
+     * @memberof MealPlanProvider
+     * @inner
+   */
     function updateCurrentMealPlan(newRecipe, isUpdateToExistingMeal) {
         console.log(newRecipe, isUpdateToExistingMeal);
         var meal_exist=false;
@@ -169,6 +207,11 @@ function MealPlanProvider({ children }) {
         });
     }
 
+    /**
+     * Create a new meal plan and then fetches all meal plans from the backend.
+     * @memberof MealPlanProvider
+     * @inner
+     */
     function createNewMealPlan() {
 
         // get the next Monday
@@ -198,6 +241,12 @@ function MealPlanProvider({ children }) {
         });
     }
 
+    /**
+     * Delete a meal plan from this user's account
+     * @param { string } mealPlanId id of the meal plan to delete
+     * @memberof MealPlanProvider
+     * @inner
+     */
     function removeMealPlan(mealPlanId) {
         axios({
             method: "DELETE",
@@ -215,6 +264,12 @@ function MealPlanProvider({ children }) {
         });
     }
 
+    /**
+     * Delete a recipe from this user's account, meaning it will no longer be autosuggested when creating new meals
+     * @param { string } recipeId id of the recipe to delete
+     * @memberof MealPlanProvider
+     * @inner
+     */
     function removeRecipe(recipeId) {
         axios({
             method: "DELETE",
@@ -232,6 +287,15 @@ function MealPlanProvider({ children }) {
         });
     }
 
+    /**
+     * Check ingredients off in the user's grocery list, and then update state by fetching the user's meal plans.
+     * Precondition: `checked` and `unchecked` must be mutually exclusive, or the behavior is undefined.
+     * @param { string } mealPlanId id of the meal plan to update the grocery list for 
+     * @param { string[] } checked list of ingredient names to check off 
+     * @param { string[] } unchecked list of ingredient names to uncheck
+     * @memberof MealPlanProvider
+     * @inner
+     */
     function setCheckedIngredients(mealPlanId, checked, unchecked) {
         return axios({
             method: "POST",
@@ -254,6 +318,12 @@ function MealPlanProvider({ children }) {
         });
     }
 
+    /**
+     * Change the currently displayed meal plan. This function should be called whenever the user clicks on a new plan in the side bar.
+     * @param { string } planId the id of the meal plan to display
+     * @memberof MealPlanProvider
+     * @inner
+     */
     function newPlanSelected(planId) {
         for (let mp of mealPlans) {
             if (mp._id === planId) {
@@ -262,6 +332,12 @@ function MealPlanProvider({ children }) {
         }
     }
 
+    
+    /**
+      * Observer hook that is called to automatically get the user's mealplans whenever they log in.
+      * @memberof MealPlanProvider
+      * @inner
+    */
     useEffect(() => {
         if (isLoggedIn) getMealPlans(null);
     }, [getMealPlans, isLoggedIn, loginToken]);

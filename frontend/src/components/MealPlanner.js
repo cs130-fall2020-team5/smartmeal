@@ -16,7 +16,7 @@ import { MealPlanContext } from "../context/mealplan";
 import { PopupContext } from "../context/popup-context";
 
 /**
-  * Generates the weekly calendar and populates it with the user's previously saved meals.
+  * This component generates the weekly calendar and populates it with the user's previously saved meals.
   * @returns { JSX } element containing HTML for the weekly meal planner and flag checks for displaying popup windows
 */
 export default function MealPlanner() {
@@ -29,6 +29,7 @@ export default function MealPlanner() {
     const [ mealPlanStartDay, setMealPlanStartDay ] = useState("");
 
     /**
+      * Observer hook that is called to update the meal plan information whenever the mealplan changes.
       * @memberof MealPlanner
       * @inner
     */
@@ -40,7 +41,7 @@ export default function MealPlanner() {
     }, [ currentPlan ])
 
     /**
-      * Sets the order in which the days of the week are displayed in the planner
+      * Gets the order in which the days of the week are displayed in the planner
       * @returns { string[] } days ordered according to the current plan's start day
       * @memberof MealPlanner
       * @inner
@@ -93,11 +94,12 @@ export default function MealPlanner() {
 
     /**
       * Renders a column that represents a day of the week and populates the column with meal period boxes
-      * that contains the user's saved meals for the day.
+      * that contains the user's saved meals for the day. Each column consists of 3 `MealPeriodBoxes` for the 3 meal 
+      * periods, plus a `DailySummary` component.
       * @param { string } day day of the week to be genereated
       * @param { boolean } shouldIncludeMealPeriodLabels flag used so that the meal period labels
-      * are only included in the leftmost column
-      * @returns { JSX } <Col> element that contains the populated meal period boxes for the day
+      * are only included in the leftmost column (i.e. "breakfast", "lunch", "dinner", and "daily summary")
+      * @returns { JSX } `column` element that contains the populated meal period boxes for the day
       * @memberof MealPlanner
       * @inner
     */

@@ -8,8 +8,9 @@ const DEFAULT_NUTRITION = {
 }
 
 /**
-  * This function calculates the nutritional information for a given day and displays
-  * the data in a <div> element.
+  * This component calculates the nutritional information for a given day and displays
+  * the data in a div element. Works by iterating over all the meals for a given day, summing up the
+  * nutritional values across all ingredients, and displaying the final result.
   * @param { object } obj
   * @param { object } obj.day data structure consisting of meal period objects
   * @param { object } obj.day.breakfast list of meals for breakfast period
@@ -20,6 +21,7 @@ export default function DailySummary({ day }) {
     const [ nutritionInformation, setNutritionInformation ] = useState(DEFAULT_NUTRITION)
 
     /**
+      * Observer hook that is called to update the nutrition and price values whenever the mealplan changes.
       * @memberof DailySummary
       * @inner
     */

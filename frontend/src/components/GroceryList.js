@@ -6,7 +6,7 @@ import  { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { MealPlanContext } from "../context/mealplan";
 
 /**
-  * This function displays the popup for the grocery list when a user clicks the
+  * This component displays the popup for the grocery list when a user clicks the
   * 'Grocery List' button.
   * @param { object } obj
   * @param { mealplan } obj.mealPlan data structure for the current weekly meal plan
@@ -25,6 +25,12 @@ export default function GroceryList({ mealPlan, onClose }) {
     });
 
 
+    /**
+     * Generates the JSX for each grocery list item.
+     * @returns { JSX[] } array of div elements containing the list of grocery items
+     * @memberof GroceryList
+     * @inner
+     */
     function generateGroceryListItems() {
         const items = [];
         let totalPrice = 0, checkedPrice = 0;
@@ -68,7 +74,7 @@ export default function GroceryList({ mealPlan, onClose }) {
     }
 
     /**
-     * Iterates through the shopping list and sorts the items into checked and unchecked lists.
+     * Iterates through the shopping list and sorts the items into checked and unchecked lists based on whether the user checked them off.
      * @returns Tuple of checked and unchecked items
      * @memberof GroceryList
      * @inner
@@ -119,8 +125,8 @@ export default function GroceryList({ mealPlan, onClose }) {
     }
 
     /**
-     * Determines what type of input has changed and updates the customList accordingly.
-     * @param { object } event current state of the target
+     * Determines what type of input has changed and updates the current custom ingredient accordingly.
+     * @param { object } event current state of the target input element
      * @memberof GroceryList
      * @inner
     */
@@ -141,7 +147,8 @@ export default function GroceryList({ mealPlan, onClose }) {
     }
 
     /**
-     * Adds a new custom ingredient to the list of custom ingredients.
+     * Adds a new custom ingredient to the list of grocery items in the list. Gathers input variables from state variables set by `handleInput()`
+     * Issues API requests to the backend to save this new item.
      * @memberof GroceryList
      * @inner
     */
@@ -189,26 +196,18 @@ export default function GroceryList({ mealPlan, onClose }) {
         onClose();
     }
 
+
+    /**
+      * Observer hook that is called to update the quantity and price values whenever the mealplan changes.
+      * @memberof DailySummary
+      * @inner
+    */
     useEffect(() => {
 
         let ingredients = [];
 
-        /**
-          * Calls parseMealPeriod for each period of the day.
-          * @param { object } day object that has breakfast, lunch, and dinner attributes
-          * @memberof GroceryList
-          * @inner
-        */
         function parseDay(day) {
 
-            /**
-              * For each ingredient in each recipe in the meal period, add the price
-              * and nutrition amounts to the weekly total
-              * @param { object } period list of meals such that each meal has an ingredient list,
-              * and each ingredient list has price and nutrition facts
-              * @memberof GroceryList
-              * @inner
-            */
             function parseMealPeriod(period) {
                 for (let meal of period) {
                     for (let ingredient of meal.ingredientList) {
