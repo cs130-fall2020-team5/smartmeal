@@ -445,7 +445,7 @@ const RecipePopup = ( {recipe} ) => {
     cancelButtonClicked();
   }
 
-  const handleDeleteRecipe = () => {
+  const handleForgetRecipe = () => {
     removeRecipe(recipe._id);
     removeMeal(recipe._id);
     cancelButtonClicked();
@@ -659,9 +659,9 @@ const RecipePopup = ( {recipe} ) => {
           <button
             className="btn btn-danger mr-2"
             type="button"
-            onClick={handleDeleteRecipe}
+            onClick={handleForgetRecipe}
           >
-            Delete Recipe
+            Forget Recipe
           </button>
         </Row>
         <Row>
