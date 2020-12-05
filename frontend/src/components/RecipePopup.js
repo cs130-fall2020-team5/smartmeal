@@ -375,8 +375,20 @@ const RecipePopup = ( {recipe} ) => {
       setErrorMessage("");
     } else if (event.target.name === "amount") {
       values[index].amount = event.target.value;
+      let name = values[index].name;
+      if (nutritionInfo[name]) {
+        let newNutritionInfo = JSON.parse(JSON.stringify(nutritionInfo))
+        delete newNutritionInfo[name];
+        setNutritionInfo(newNutritionInfo);
+      }
     } else if (event.target.name === "unit") {
       values[index].unit = event.target.value;
+      let name = values[index].name;
+      if (nutritionInfo[name]) {
+        let newNutritionInfo = JSON.parse(JSON.stringify(nutritionInfo))
+        delete newNutritionInfo[name];
+        setNutritionInfo(newNutritionInfo);
+      }
     }
     setIngredientFields(values);
   };
