@@ -166,8 +166,7 @@ function MealPlanProvider({ children }) {
      * @memberof MealPlanProvider
      * @inner
    */
-    function updateCurrentMealPlan(newRecipe, isUpdateToExistingMeal) {
-        console.log(newRecipe, isUpdateToExistingMeal);
+    function updateCurrentMealPlan(newRecipe) {
         var meal_exist=false;
         let newMealPlan = JSON.parse(JSON.stringify(currentPlan))
         for (let meal in newMealPlan[popupDay][popupTime]) {
