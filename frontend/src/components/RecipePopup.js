@@ -281,10 +281,9 @@ const RecipePopup = ( {recipe} ) => {
     * @inner
   */
   async function updateMealplan(recipe_id, recipe_name, ingredient_list){
-    const isExistingRecipe = recipe_id ? true : false;
     let recipe_ingredients = await populateIngredientFields(ingredient_list);
     axios({
-        method: isExistingRecipe ? "PUT" : "POST",
+        method: recipe_id.length? "PUT" : "POST",
         url: "http://localhost:3000/recipe/" + recipe_id,
         headers: {
             "Content-Type": "application/json",
@@ -295,7 +294,7 @@ const RecipePopup = ( {recipe} ) => {
           ingredients: recipe_ingredients
         }
       }).then((res) => {
-        updateCurrentMealPlan({ name: recipe_name, ingredientList: recipe_ingredients, _id: isExistingRecipe ? recipe_id : res.data.id }, isExistingRecipe)
+        updateCurrentMealPlan({ name: recipe_name, ingredientList: recipe_ingredients, _id: recipe_id.length ? recipe_id : res.data.id })
       }).catch((err) =>{
         console.log("Failed to save new recipe: ", err);
       })
