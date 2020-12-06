@@ -2709,7 +2709,7 @@ functionality to save the changes of recipe information to the backend.</p>
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>recipe</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
-	    object with attributes that define a recipe
+	    object with name and ingredientList attributes
 
           </div>
           
@@ -2759,7 +2759,7 @@ functionality to save the changes of recipe information to the backend.</p>
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code>ingredientList</code>:
         list of ingredients
-If the input exists, the list is populated with each ingredient's properties
+If the input exists, the list is populated with each ingredient's properties.
 If the input does not exist, a single empty ingredient is returned.
 
       
@@ -3299,7 +3299,7 @@ The function pops an ingredientField object off the ingredientFields list.</p>
 
   <p>This function is called when the user modifies the Recipe Name textbox.
 The ingredientFields data structure is set to the return of the isExistingRecipe function.
-The recipeName string is set to recipe.name.</p>
+The recipeName string is set to recipe.name</p>
 
     <div class='pre p1 fill-light mt0'>handlePopulateIngredients</div>
   
