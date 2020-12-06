@@ -216,11 +216,11 @@ const RecipePopup = ( {recipe} ) => {
 
   /**
     *Determines whether the input is an existing meal from the meal plan.
-    * @param { object } recipe object with attributes that define a recipe
+    * @param { object } recipe object with name and ingredientList attributes
     * @param { string } recipe.name The name of the recipe
     * @param { object[] } recipe.ingredientList array of ingredients for recipe
     * @returns { ingredientList } list of ingredients
-    * If the input exists, the list is populated with each ingredient's properties
+    * If the input exists, the list is populated with each ingredient's properties.
     * If the input does not exist, a single empty ingredient is returned.
     * @memberof RecipePopup
     * @inner
@@ -430,7 +430,7 @@ const RecipePopup = ( {recipe} ) => {
   /**
     * This function is called when the user modifies the Recipe Name textbox.
     * The ingredientFields data structure is set to the return of the isExistingRecipe function.
-    * The recipeName string is set to recipe.name.
+    * The recipeName string is set to recipe.name
     * @param { object } recipe a data structure of a recipe containing the recipies
     * @param { string } recipe.name The name of the input recipe
     * @param { object[] } recipe.ingredientList List of ingredients for recipe
@@ -462,9 +462,7 @@ const RecipePopup = ( {recipe} ) => {
     cancelButtonClicked();
   }
 
-  /// get nutrition info from spoonacular
 
-  // gets ingredient info for each ingredient
   /**
     *This function gets ingredient info for each ingredient
     * @param { object[] } ingredientList array of ingredients for the recipe
